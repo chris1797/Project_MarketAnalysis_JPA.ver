@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="com.ezen.demo.mappers.FileuploadMapper">
+	
+	<insert id="insertUpload" parameterType="com.ezen.demo.model.Fileupload">
+	<!-- <selectKey> 안에 있는 SELECT 문장이 먼저(BEFORE) 실행되어 upload_num.NEXTVAL 값이 추출되어 keyProperty="num" 으로 지시되는 UploadVO.num 에 할당된다.-->
+	      <selectKey keyProperty="num" resultType="integer" order="BEFORE">
+	      <!--  시퀀스 값을 가져오는 것 -->
+	          	SELECT upload_num.NEXTVAL FROM DUAL
+	      </selectKey>
+				INSERT INTO upload_tb(num, writer, udate, comments) 
+				VALUES(#{num}, #{writer}, sysdate, #{comments})
+	</insert>
+	
+	<insert id="insertAttach" parameterType="com.ezen.demo.model.AttachVO">
+				INSERT INTO attach_tb(num, pnum, fname, fpath) 
+				VALUES(attach_num.NEXTVAL, #{pnum}, #{fname}, #{fpath})
+	</insert>
+	
+	<select id="getList" resultType="map">
+				SELECT u.num
+				    AS num, writer, udate, comments, a.num
+				    AS fnum, pnum, fname
+				  FROM upload_tb u
+	   LEFT OUTER JOIN attach_tb a
+		            ON u.num=a.pnum
+	</select>
+	
+	<select id="getFname" parameterType="Integer" resultType="String">
+				SELECT fname
+				  FROM attach_tb
+				 WHERE num=#{num}
+	</select>
+	
+	<select id="getDetailByNum" parameterType="Integer" resultType="map">
+				SELECT u.num
+				    AS num, writer, udate, comments, a.num
+				    AS fnum, fname
+				  FROM upload_tb u
+	   LEFT OUTER JOIN attach_tb a
+				    ON u.num = a.pnum
+				 WHERE u.num=#{num}
+	</select>
+	
+	<delete id="remove" parameterType="Integer">
+				DELETE FROM attach_tb WHERE num=#{num}
+	</delete>
+	
+	<update id="insertMultiAttach" parameterType="java.util.List">
+    		INSERT INTO attach_tb (num, pnum, fname, fpath)
+    		SELECT ATTACH_NUM.NEXTVAL AS num, t.* FROM
+    		(
+    			<foreach collection="list" item="item" index="index" separator="union all">
+         			SELECT #{item.pnum}, #{item.fname}, #{item.fpath} FROM DUAL
+    			</foreach>
+    		) t
+	</update>
+	
+	<delete id="deleteAttach" parameterType="Integer">
+		DELETE FROM attach_tb WHERE num=#{num}
+	</delete>
+	
+	<select id="getAttachByPnum" parameterType="Integer" resultType="String">
+		DELETE FROM attach_tb WHERE num=#{num}
+	</select>
+	
+	<delete id="deleteAttInfo" parameterType="Integer">
+		DELETE FROM attach_tb WHERE pnum=#{num}
+	</delete>
+	
+	<delete id="deleteUpload" parameterType="Integer">
+		DELETE FROM upload_tb WHERE num=#{num}
+	</delete>
+	
+
+</mapper>
