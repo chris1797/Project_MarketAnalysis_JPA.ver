@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mac.demo.mappers.BoardMapper">
+
+	<insert id="save" parameterType="com.mac.demo.model.Board">
+		INSERT INTO free_board(num,nickname,title,contents,wdate,pcode) VALUES(BOARD_NUM.NEXTVAL,#{nicknameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac})
+	</insert>
+
+	<select id="getList" resultType="com.mac.demo.model.Board">
+		SELECT * FROM free_board
+	</select>
+	
+	<select id="getAdsList" resultType="com.mac.demo.model.Board">
+		SELECT * FROM ads_board
+	</select>
+	
+	<select id="getNoticeList" resultType="com.mac.demo.model.Board">
+		SELECT * FROM notice_board
+	</select>
+	
+	<select id="getDetail" resultType="com.mac.demo.model.Board">
+		SELECT * FROM free_board WHERE num=#{num}
+	</select>
+
+	<update id="edit" parameterType="com.mac.demo.model.Board">
+		UPDATE free_board SET title=#{title}, contents=#{contents} WHERE num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="com.mac.demo.model.Board">
+		DELETE FROM free_board WHERE num=#{num}
+	</delete>
+
+</mapper>
