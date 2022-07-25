@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.thymeleaf.standard.expression.AdditionSubtractionExpression;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.mappers.BoardMapper;
 import com.mac.demo.model.Board;
+import com.mac.demo.service.BoardService;
 
 @RequestMapping("/board")
 @Controller
@@ -27,6 +29,9 @@ public class BoardController {
 
 	@Autowired
 	private BoardMapper dao;
+	
+	@Autowired
+	private BoardService svc;
 	
 //	커뮤니티메인화면
 	@GetMapping("/main")
@@ -43,7 +48,7 @@ public class BoardController {
 		board.setPcodeMac(0);
 		board.setNicknameMac("이재훈");
 		model.addAttribute("board", board);
-		return "/board/boardInputForm";
+		return "thymeleaf/board/boardInputForm";
 	}
 	
 //  게시글 저장
@@ -68,16 +73,17 @@ public class BoardController {
 	@GetMapping("/list")
 	public String getList(Model model) {
 
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
-		
-		model.addAttribute("pageInfo",pageinfo);
-		
+//		PageHelper.startPage(i, dao.getList().size()/3);
+//		PageInfo<Board> pageInfo = new PageInfo<>(dao.getList());
 		List<Board> list = dao.getList();
+		for(int i=0; i < list.size(); i++) {
+			System.out.println(list.get(i).toString());
+		}
+
+//		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("list", list);
-		System.out.println("list"+list);
-		return "board/boardList";
+		
+		return "thymeleaf/board/free_boardList";
 	}
 	
 //	공지게시판(미완성 type속성을 notice로 주면될듯)

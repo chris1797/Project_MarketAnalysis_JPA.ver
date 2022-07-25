@@ -1,17 +1,19 @@
 package com.mac.demo.model;
 
 
+
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class Board {
 	
-	int numMac;
-	String nicknameMac;
-	String titleMac;
-	String contentsMac;
-	java.sql.Date wdateMac;
-	int pcodeMac;
+	private int numMac;
+	private String nicknameMac;
+	private String titleMac;
+	private String contentsMac;
+	private java.sql.Date wdateMac;
+	private int pcodeMac;
 	
 	
 	public int getNumMac() {

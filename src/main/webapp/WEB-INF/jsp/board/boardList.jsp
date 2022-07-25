@@ -143,10 +143,10 @@ tr:hover {
 			</tr>
 			<c:forEach var="b" items="${list}">
 				<tr>
-					<td>${b.num}</td>
-					<td>${b.title}</td>
-					<td>${b.author}</td>
-					<td>${b.wdate}</td>
+					<td>${b.numMac}</td>
+					<td>${b.titleMac}</td>
+					<td>${b.nicknameMac}</td>
+					<td>${b.wdateMac}</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -163,6 +163,15 @@ tr:hover {
 				<button type="reset">취소</button>
 				<button type="submit">검색</button>
 			</div>
+	<c:forEach var="i" items="${pageInfo.navigatepageNums}">
+		<c:choose>
+			<c:when test="${i==pageInfo.pageNum}">
+				[${i}]
+			</c:when>			<c:otherwise>
+				[<a href="/mybatis/board/${i}">${i}</a>]
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
 		</form>
 	</main>
 	<footer class="text-muted py-5">
