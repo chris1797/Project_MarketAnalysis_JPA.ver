@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.thymeleaf.standard.expression.AdditionSubtractionExpression;
@@ -48,21 +49,26 @@ public class BoardController {
 		board.setPcodeMac(0);
 		board.setNicknameMac("이재훈");
 		model.addAttribute("board", board);
-		return "thymeleaf/board/boardInputForm";
+		return "thymeleaf/board/board_inputform";
 	}
 	
-//  게시글 저장
+
+//	게시글 저장
+//	추후 로그인 체크 구현 완료 후 수정 예정
 	@PostMapping("/save")
 	@ResponseBody
 	public Map<String, Object> save(Board board, @SessionAttribute(name = "uid", required = false) String uid) {
-//		board.setPcode(0);
 		Map<String, Object> map = new HashMap<String, Object>();
-//		if (uid == null) {
-//			map.put("saved", false);
-//			map.put("msg", "로그인 후에 사용할 수 있습니다");
-//			return map;
-//		}
-		
+/*
+		board.setPcode(0);
+		if (uid == null) {
+			map.put("saved", false);
+			map.put("msg", "로그인 후에 사용할 수 있습니다");
+			return map;
+		}
+*/
+		board.setPcodeMac(0);
+		board.setNicknameMac("재훈");
 		boolean saved = dao.save(board)>0;
 
 		map.put("saved", saved);
@@ -70,7 +76,7 @@ public class BoardController {
 	}
 	
 //	자유게시판
-	@GetMapping("/list")
+	@GetMapping("/free/list")
 	public String getList(Model model) {
 
 //		PageHelper.startPage(i, dao.getList().size()/3);
@@ -86,43 +92,20 @@ public class BoardController {
 		return "thymeleaf/board/free_boardList";
 	}
 	
-//	공지게시판(미완성 type속성을 notice로 주면될듯)
-	@GetMapping("/notice")
-	public String getNoticeList(Model model) {
-
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
-		
-		model.addAttribute("pageInfo",pageinfo);
-		
-		List<Board> list = dao.getList();
-		model.addAttribute("list", list);
-		return "board/noticeList";
-	}
-	
-//	광고게시판(미완성 type속성을 ads로 주면될듯)
-	@GetMapping("/ads")
-	public String getAdsList(Model model) {
-
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
-		
-		model.addAttribute("pageInfo",pageinfo);
-		
-		List<Board> list = dao.getList();
-		model.addAttribute("list", list);
-		return "board/adsList";
-	}
 //  게시글 보기
 	@GetMapping("/detail/{num}")
 	public String getDetail(@PathVariable("num") int num, Model model) {
-
+		
 		model.addAttribute("board", dao.getDetail(num));
-		return "board/boardDetail";
+		return "thymeleaf/board/free_board_detail";
 	}
-//    게시글 업데이트폼
+//============================================================================================================//
+	
+	
+	
+	
+	
+//  게시글 업데이트폼
 	@GetMapping("/update/{num}")
 	public String update(@PathVariable("num") int num, Model model) {
 
@@ -132,6 +115,7 @@ public class BoardController {
 		
 		return "board/boardEdit";
 	}
+	
 //  게시글 수정
 	@GetMapping("/edit/{num}")
 	@ResponseBody
@@ -146,16 +130,21 @@ public class BoardController {
 		map.put("updated", updated);
 		return map;
 	}
+	
+	
 //  게시글 삭제
-	@PostMapping("/delete{num}")
+	@PostMapping("/delete/{num}")
 	@ResponseBody
-	public Map<String, Object> delete(@PathParam("num") int num, Model model) {
+	public Map<String, Object> delete(@PathVariable("num") String num, Model model) {
+		int num1 = Integer.parseInt(num);
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean deleted = dao.delete(num);
-		model.addAttribute("board", dao.delete(num));
+		boolean deleted = dao.delete(num1);
+		model.addAttribute("deleted", deleted);
 		return map;
 	}
+	
+	
 //	게시글 타이틀 검색
 	@GetMapping("/listByTitle")
 	public String getListByTitle(Model model) {
@@ -184,7 +173,40 @@ public class BoardController {
 		model.addAttribute("list", list);
 		return "board/boardList";
 	}
-//	게시글 타입속성(업종 등) 검색
+	
+	
+//	공지게시판(미완성 type속성을 notice로 주면될듯) X
+//	type 없이 get으로 구분하여 mapper로 해당 테이블의 list 받아오기
+	@GetMapping("/notice/list")
+	public String getNoticeList(Model model) {
+		
+		PageHelper.startPage(5,30);
+		PageInfo<Board> pageinfo=new PageInfo<Board>();
+		List<Board> pagelist=pageinfo.getList();
+		
+		model.addAttribute("pageInfo",pageinfo);
+		
+		List<Board> list = dao.getList();
+		model.addAttribute("list", list);
+		return "board/noticeList";
+	}
+	
+//	광고게시판(미완성 type속성을 ads로 주면될듯)
+	@GetMapping("/ads/list")
+	public String getAdsList(Model model) {
+		
+		PageHelper.startPage(5,30);
+		PageInfo<Board> pageinfo=new PageInfo<Board>();
+		List<Board> pagelist=pageinfo.getList();
+		
+		model.addAttribute("pageInfo",pageinfo);
+		
+		List<Board> list = dao.getList();
+		model.addAttribute("list", list);
+		return "board/adsList";
+	}
+	
+/*	게시글 타입속성(업종 등) 은 일단 안하기로 함
 	@GetMapping("/listByType")
 	public String getListByNickNameType(Model model) {
 		PageHelper.startPage(5,30);
@@ -197,4 +219,5 @@ public class BoardController {
 		model.addAttribute("list", list);
 		return "board/boardList";
 	}
+*/
 }

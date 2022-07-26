@@ -5,7 +5,8 @@
 <mapper namespace="com.mac.demo.mappers.BoardMapper">
 
 	<insert id="save" parameterType="com.mac.demo.model.Board">
-		INSERT INTO free_board(num,nickname,title,contents,wdate,pcode) VALUES(BOARD_NUM.NEXTVAL,#{nicknameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac})
+		INSERT INTO free_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,PCODEMAC)
+		VALUES(BOARD_NUM.NEXTVAL,#{nicknameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac})
 	</insert>
 
 	<select id="getList" resultType="com.mac.demo.model.Board">
@@ -21,7 +22,7 @@
 	</select>
 	
 	<select id="getDetail" resultType="com.mac.demo.model.Board">
-		SELECT * FROM free_board WHERE num=#{num}
+		SELECT * FROM free_board WHERE NUMMAC=#{numMac}
 	</select>
 
 	<update id="edit" parameterType="com.mac.demo.model.Board">
@@ -29,7 +30,7 @@
 	</update>
 	
 	<delete id="delete" parameterType="com.mac.demo.model.Board">
-		DELETE FROM free_board WHERE num=#{num}
+		DELETE FROM free_board WHERE NUMMAC=#{numMac}
 	</delete>
 
 </mapper>
