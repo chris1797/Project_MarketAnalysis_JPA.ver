@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>자유게시판 상세보기</title>
@@ -17,14 +17,13 @@
 <script type="text/javascript">
 
 	function remove(){
-		alert();
 		$.ajax({
-			url : '/board/delete/'+"${board.numMac}",
-			method:'post',
+			url : '/board/delete/'+"[[${board.numMac}]]",
+			method:'get',
 			cache:false,
 			dataType:'json',
 			success:function(res){ //res는 object
-					alert(res.deleted ? '삭제성공' : '삭제실패'); //res object 안에있는 num
+					alert(res.deleted ? '삭제실패' : '삭제성공');
 					location.href = '/board/free/list';
 			},
 			error:function(xhr,status,err){
@@ -162,7 +161,7 @@ tr:hover {
 				<th>작성일</th>
 			</tr>
 				<td th:text="${board.numMac}"></td>
-				<td th:text="${board.nicknameMac}"></td>
+				<td th:text="${board.nickNameMac}"></td>
 				<td th:text="${board.titleMac}"></td>
 				<td th:text="${board.contentsMac}"></td>
 				<td th:text="${board.wdateMac}"></td>

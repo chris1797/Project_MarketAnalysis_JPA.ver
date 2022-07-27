@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class Board {
 	
 	private int numMac;
-	private String nicknameMac;
+	private String nickNameMac;
 	private String titleMac;
 	private String contentsMac;
 	private java.sql.Date wdateMac;
@@ -22,11 +22,11 @@ public class Board {
 	public void setNumMac(int numMac) {
 		this.numMac = numMac;
 	}
-	public String getNicknameMac() {
-		return nicknameMac;
+	public String getNickNameMac() {
+		return nickNameMac;
 	}
-	public void setNicknameMac(String nicknameMac) {
-		this.nicknameMac = nicknameMac;
+	public void setNickNameMac(String nicknameMac) {
+		this.nickNameMac = nicknameMac;
 	}
 	public String getTitleMac() {
 		return titleMac;

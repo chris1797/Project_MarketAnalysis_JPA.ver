@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>자유게시판</title>
@@ -142,7 +142,7 @@ tr:hover {
 			<tr th:each="board : ${list}">
 				<td th:text="${board.numMac}"></td>
 				<td><a th:text="${board.titleMac}" th:href="@{'/board/detail/'+ ${board.numMac}}"></a></td>
-				<td th:text="${board.nicknameMac}"></td>
+				<td th:text="${board.nickNameMac}"></td>
 				<td th:text="${board.wdateMac}">
 		</table>
 		<form id="search_form" method="post" action="/mb/board/search">

@@ -47,7 +47,7 @@ public class BoardController {
 	public String input(Model model) {
 		Board board = new Board();
 		board.setPcodeMac(0);
-		board.setNicknameMac("이재훈");
+		board.setNickNameMac("재훈");
 		model.addAttribute("board", board);
 		return "thymeleaf/board/board_inputform";
 	}
@@ -68,7 +68,7 @@ public class BoardController {
 		}
 */
 		board.setPcodeMac(0);
-		board.setNicknameMac("재훈");
+		board.setNickNameMac("재훈");
 		boolean saved = dao.save(board)>0;
 
 		map.put("saved", saved);
@@ -76,15 +76,13 @@ public class BoardController {
 	}
 	
 //	자유게시판
+//	page 구현 필요
 	@GetMapping("/free/list")
 	public String getList(Model model) {
 
 //		PageHelper.startPage(i, dao.getList().size()/3);
 //		PageInfo<Board> pageInfo = new PageInfo<>(dao.getList());
 		List<Board> list = dao.getList();
-		for(int i=0; i < list.size(); i++) {
-			System.out.println(list.get(i).toString());
-		}
 
 //		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("list", list);
@@ -95,14 +93,24 @@ public class BoardController {
 //  게시글 보기
 	@GetMapping("/detail/{num}")
 	public String getDetail(@PathVariable("num") int num, Model model) {
-		
+		model.addAttribute("num", num);
 		model.addAttribute("board", dao.getDetail(num));
 		return "thymeleaf/board/free_board_detail";
 	}
+	
+	
+//  게시글 삭제
+//	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
+	@GetMapping("/delete/{num}")
+	@ResponseBody
+	public Map<String, Object> delete(@PathVariable("num") int num, Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean deleted = 0<dao.delete(num);
+		System.out.println(deleted);
+		model.addAttribute("deleted", deleted);
+		return map;
+	}
 //============================================================================================================//
-	
-	
-	
 	
 	
 //  게시글 업데이트폼
@@ -132,17 +140,6 @@ public class BoardController {
 	}
 	
 	
-//  게시글 삭제
-	@PostMapping("/delete/{num}")
-	@ResponseBody
-	public Map<String, Object> delete(@PathVariable("num") String num, Model model) {
-		int num1 = Integer.parseInt(num);
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		boolean deleted = dao.delete(num1);
-		model.addAttribute("deleted", deleted);
-		return map;
-	}
 	
 	
 //	게시글 타이틀 검색

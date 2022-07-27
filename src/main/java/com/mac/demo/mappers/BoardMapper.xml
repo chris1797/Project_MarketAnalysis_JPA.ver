@@ -6,7 +6,7 @@
 
 	<insert id="save" parameterType="com.mac.demo.model.Board">
 		INSERT INTO free_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,PCODEMAC)
-		VALUES(BOARD_NUM.NEXTVAL,#{nicknameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac})
+		VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac})
 	</insert>
 
 	<select id="getList" resultType="com.mac.demo.model.Board">
