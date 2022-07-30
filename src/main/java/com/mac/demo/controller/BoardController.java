@@ -1,11 +1,14 @@
 package com.mac.demo.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
 
+import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,18 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.thymeleaf.standard.expression.AdditionSubtractionExpression;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.mappers.BoardMapper;
 import com.mac.demo.model.Board;
+import com.mac.demo.model.Comment;
 import com.mac.demo.service.BoardService;
 
 @RequestMapping("/board")
 @Controller
+@SessionAttributes("idMac")
 public class BoardController {
-
+	HttpSession session;
+	
 	@Autowired
 	private BoardMapper dao;
 	
@@ -38,17 +45,19 @@ public class BoardController {
 	@GetMapping("/main")
 	public String main() {
 		
-		return "board/boardMain";
+		return "thymeleaf/board/boardMain";
 	}
 	
 	
 //	게시글작성(게시글 인풋폼을 자유게시판과 공지, 광고게시판과 나눠야되나 생각중 )
 	@GetMapping("/input")
-	public String input(Model model) {
+	public String input(Model model,HttpSession session) {
 		Board board = new Board();
 		board.setPcodeMac(0);
 		board.setNickNameMac("재훈");
+		String id =session.getAttribute("idMac").toString();//세션을 가져옴
 		model.addAttribute("board", board);
+		model.addAttribute("idMac", id);//세션을 넣어준후 form에서는 hidden으로!!!
 		return "thymeleaf/board/board_inputform";
 	}
 	
@@ -57,7 +66,7 @@ public class BoardController {
 //	추후 로그인 체크 구현 완료 후 수정 예정
 	@PostMapping("/save")
 	@ResponseBody
-	public Map<String, Object> save(Board board, @SessionAttribute(name = "uid", required = false) String uid) {
+	public Map<String, Object> save(Board board, @SessionAttribute(name = "idMac", required = false) String idMac) {
 		Map<String, Object> map = new HashMap<String, Object>();
 /*
 		board.setPcode(0);
@@ -67,11 +76,19 @@ public class BoardController {
 			return map;
 		}
 */
-		board.setPcodeMac(0);
-		board.setNickNameMac("재훈");
-		boolean saved = dao.save(board)>0;
+		//board.setPcodeMac(0);
+		//board.setNickNameMac("재훈");
+		//boolean saved = dao.save(board)>0;
 
-		map.put("saved", saved);
+		//map.put("saved", saved);
+		
+		 dao.save(board);
+		 System.out.println(board.getNumMac());
+		map.put("saved",board.getNumMac());
+		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
+		//그후 그 번호를 가지고 detail로 넘어가독
+		//자세한건 form에 ajax 확인
+		
 		return map;
 	}
 	
@@ -95,6 +112,15 @@ public class BoardController {
 	public String getDetail(@PathVariable("num") int num, Model model) {
 		model.addAttribute("num", num);
 		model.addAttribute("board", dao.getDetail(num));
+		
+		Comment comment = new Comment();
+		comment.setIdMac("test");
+		comment.setPcodeMac(num);
+		
+		List<Comment> list = dao.getCommentList(num);
+		
+		model.addAttribute("commentlist", list);
+		model.addAttribute("comment", comment);
 		return "thymeleaf/board/free_board_detail";
 	}
 	
@@ -106,41 +132,46 @@ public class BoardController {
 	public Map<String, Object> delete(@PathVariable("num") int num, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean deleted = 0<dao.delete(num);
-		System.out.println(deleted);
 		model.addAttribute("deleted", deleted);
 		return map;
 	}
-//============================================================================================================//
-	
 	
 //  게시글 업데이트폼
 	@GetMapping("/update/{num}")
 	public String update(@PathVariable("num") int num, Model model) {
-
-		Board board = new Board();
-		board.setNumMac(num);
-		model.addAttribute("board", dao.edit(board));
-		
-		return "board/boardEdit";
+		model.addAttribute("board", dao.getDetail(num));
+		return "thymeleaf/board/board_updateform";
 	}
 	
 //  게시글 수정
-	@GetMapping("/edit/{num}")
+	@PostMapping("/edit")
 	@ResponseBody
-	public Map<String, Object> edit(@PathVariable("num") int num, Board newBoard, Model model) {
-
-		newBoard.setNumMac(num);
-		newBoard.setContentsMac(newBoard.getContentsMac());
-		newBoard.setTitleMac(newBoard.getTitleMac());
-
+	public Map<String, Object> edit(Board newBoard, Model model) {
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean updated = dao.edit(newBoard)>0;
+		System.out.println(dao.edit(newBoard));
+		System.out.println(newBoard.getNumMac());
 		map.put("updated", updated);
 		return map;
 	}
 	
 	
+	@PostMapping("/comment")
+	@ResponseBody
+	public Map<String, Object> comment(Comment comment, Model model, HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println(comment.getPcodeMac());
+		System.out.println(comment.getCommentMac());
+		
+		boolean commented = 0<dao.commentsave(comment);
+		map.put("commented", commented);
+		
+		return map;
+	}
 	
+//============================================================================================================//
 	
 //	게시글 타이틀 검색
 	@GetMapping("/listByTitle")

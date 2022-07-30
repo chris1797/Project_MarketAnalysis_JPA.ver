@@ -1,19 +1,17 @@
 package com.mac.demo.model;
 
+import java.sql.Date;
 
-
-import org.springframework.stereotype.Component;
-
-
-@Component
 public class Board {
-	
-	private int numMac;
-	private String nickNameMac;
-	private String titleMac;
-	private String contentsMac;
-	private java.sql.Date wdateMac;
-	private int pcodeMac;
+
+	private int numMac; //번호
+	private String nickNameMac; //닉네임
+	private String titleMac; //제목
+	private String contentsMac; //내용
+	private java.sql.Date wdateMac; //작성일
+	private int pcodeMac; //부모글pcode
+	private String typeMac; //속성(업종등)
+	private String idMac;
 	
 	
 	public int getNumMac() {
@@ -25,8 +23,8 @@ public class Board {
 	public String getNickNameMac() {
 		return nickNameMac;
 	}
-	public void setNickNameMac(String nicknameMac) {
-		this.nickNameMac = nicknameMac;
+	public void setNickNameMac(String nickNameMac) {
+		this.nickNameMac = nickNameMac;
 	}
 	public String getTitleMac() {
 		return titleMac;
@@ -52,5 +50,18 @@ public class Board {
 	public void setPcodeMac(int pcodeMac) {
 		this.pcodeMac = pcodeMac;
 	}
+	public String getTypeMac() {
+		return typeMac;
+	}
+	public void setTypeMac(String typeMac) {
+		this.typeMac = typeMac;
+	}
+	public String getIdMac() {
+		return idMac;
+	}
+	public void setIdMac(String idMac) {
+		this.idMac = idMac;
+	}
 	
+
 }

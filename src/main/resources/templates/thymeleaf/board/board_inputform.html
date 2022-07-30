@@ -76,10 +76,15 @@ nav>a {
 			data : $('#input_form').serialize(),
 			dataType : 'json',
 			success : function(res) {
-				alert(res.saved ? '저장 성공' : res.msg);
-				if (!res.saved && res.msg) {
-					location.href = "/login/loginForm";
-				}
+				//alert(res.saved ? '저장 성공' : res.msg);
+				//if (!res.saved && res.msg) {
+					//location.href = "/login/loginForm";
+				//}
+				
+				if(res.saved!=0){
+					alert('저장성공');	
+					location.href="/board/detail/"+res.saved;
+				};
 			},
 			error : function(xhr, status, err) {
 				alert('Error:' + err);
@@ -155,6 +160,9 @@ nav>a {
 	<main>
 		<h3>게시판 글 입력 폼</h3>
 		<form id="input_form" method="post" th:object="${board}" th:action="@{/board/save}" onsubmit="return save();">
+			<input type="hidden" th:field="*{pcodeMac}" name="pcodeMac">
+			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
+			<input type="hidden" th:value="${idMac}" name="idMac">
 			<div>
 				<select name="type">
 				<option value="free">자유게시판</option>

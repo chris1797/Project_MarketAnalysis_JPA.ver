@@ -32,6 +32,25 @@
 		});
 		return false;
 	}
+	
+	function comment(){
+		alert('comment');
+		$.ajax({
+			url:'/board/comment',
+			method:'post',
+			cache:false,
+			data:$('#comment_form').serialize(),
+			dataType:'json',
+			success:function(res){ //res는 object
+					alert(res.commented ? '댓글작성성공' : '댓글작성실패');
+					location.href='/board/detail/'+'[[${board.numMac}]]';
+			},
+			error:function(xhr,status,err){
+				alert(err);
+			}
+		});
+		return false;
+	}
 </script>
 <style type="text/css">
 #login { 
@@ -160,20 +179,46 @@ tr:hover {
 				<th>글내용</th>
 				<th>작성일</th>
 			</tr>
+			<tr>
 				<td th:text="${board.numMac}"></td>
 				<td th:text="${board.nickNameMac}"></td>
 				<td th:text="${board.titleMac}"></td>
 				<td th:text="${board.contentsMac}"></td>
 				<td th:text="${board.wdateMac}"></td>
+				</tr>
 			
 		</table>
+	<br>
+		<table>
+			<tr>
+				<th>작성자</th>
+				<th>댓글</th>
+				<th>작성일</th>
+			</tr>
+			<tr th:each="comment : ${commentlist}">
+				<td th:text="${comment.idMac}"></td>
+				<td th:text="${comment.commentMac}"></td>
+				<td th:text="${comment.wdateMac}"></td>
+				</tr>
+		</table>
+		
+	<form id="comment_form" onsubmit="return comment();">
+		<input type="hidden" th:name="pcodeMac" th:value="${comment.pcodeMac}">
+		<input type="hidden" th:name="idMac" th:value="${comment.idMac}">
+		<tr>
+			<label for="commentMac">답글쓰기 : </label>
+				<input type="text" name="commentMac">
+		</tr>
+		<button type="submit">작성</button>
+	</form>
+	
 	</main>
 	<footer>
 		[<a href="/board/free/list">글목록</a>] &nbsp;&nbsp;
-		[<a href="/board/edit/${board.num}">수정</a>] &nbsp;&nbsp;
+		<a th:href="@{'/board/update/' + ${board.numMac}}">수정하기</a> &nbsp;&nbsp;
 		[<a href="javascript:remove();">삭제</a>]
-		[<a href="board?cmd=inputform&pcode=${board.num}">답글쓰기</a>]
 	</footer>
+</body>
 	<footer class="text-muted py-5">
 		<div class="container">
 			<p class="float-end mb-1">
@@ -187,5 +232,4 @@ tr:hover {
 			</p>
 		</div>
 	</footer>
-</body>
 </html>
