@@ -42,8 +42,6 @@ a:hover { /* a태그에 마우스가 올라갈 때 라는 의미*/
 	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 	crossorigin="anonymous"></script>
 <script type="text/javascript">
-var msg = '[[${msg}]]';
-if(msg)alert(msg);
 
 function logout() {
 	if (!confirm('정말로 로그아웃하시겠어요?'))
@@ -86,7 +84,8 @@ function logout() {
 			<a href="/user/addForm"> <strong>회원가입</strong></a>
 			</div>
 			<div th:if="${idMac !=null}">
-			 <a href="javascript:logout();"> <strong>로그아웃</strong></a>
+			<h5 th:text=" ${idMac}+'님 환영합니다'" th:style="'color:white'"></h5>
+			 <a href="javascript:logout();"> <strong>로그아웃|</strong></a>
 			 <a th:href="'/home/myPage/'+${idMac}"> <strong>마이페이지</strong></a>
 			</div>
 			<div>

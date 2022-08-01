@@ -1,23 +1,24 @@
 package com.mac.demo.model;
 
+
 import java.sql.Date;
 
 public class User {
 
 	
 	private int numMac;
-	private String nameMac;
-	private java.sql.Date birthMac;
-	private String idMac;
-	private String pwMac;
-	private int phoneNumMac;
+	private String idMac;  //pk
+	private String pwMac; 
+	private String nickNameMac; 
 	private String emailMac;
-	private String nickNameMac;
 	private String genderMac;
+	private Date birthMac;
+	private String phoneNumMac;
 	private String cityMac;
-	private String townMac;
+	private String townMac; 
 	private String villageMac;
 	private int managerMac;
+	private String nameMac;
 	
 	
 	public int getNumMac() {
@@ -25,18 +26,6 @@ public class User {
 	}
 	public void setNumMac(int numMac) {
 		this.numMac = numMac;
-	}
-	public String getNameMac() {
-		return nameMac;
-	}
-	public void setNameMac(String nameMac) {
-		this.nameMac = nameMac;
-	}
-	public java.sql.Date getBirthMac() {
-		return birthMac;
-	}
-	public void setBirthMac(java.sql.Date birthMac) {
-		this.birthMac = birthMac;
 	}
 	public String getIdMac() {
 		return idMac;
@@ -50,11 +39,11 @@ public class User {
 	public void setPwMac(String pwMac) {
 		this.pwMac = pwMac;
 	}
-	public int getPhoneNumMac() {
-		return phoneNumMac;
+	public String getNickNameMac() {
+		return nickNameMac;
 	}
-	public void setPhoneNumMac(int phoneNumMac) {
-		this.phoneNumMac = phoneNumMac;
+	public void setNickNameMac(String nickNameMac) {
+		this.nickNameMac = nickNameMac;
 	}
 	public String getEmailMac() {
 		return emailMac;
@@ -62,17 +51,23 @@ public class User {
 	public void setEmailMac(String emailMac) {
 		this.emailMac = emailMac;
 	}
-	public String getNickNameMac() {
-		return nickNameMac;
-	}
-	public void setNickNameMac(String nickNameMac) {
-		this.nickNameMac = nickNameMac;
-	}
 	public String getGenderMac() {
 		return genderMac;
 	}
 	public void setGenderMac(String genderMac) {
 		this.genderMac = genderMac;
+	}
+	public Date getBirthMac() {
+		return birthMac;
+	}
+	public void setBirthMac(Date birthMac) {
+		this.birthMac = birthMac;
+	}
+	public String getPhoneNumMac() {
+		return phoneNumMac;
+	}
+	public void setPhoneNumMac(String phoneNumMac) {
+		this.phoneNumMac = phoneNumMac;
 	}
 	public String getCityMac() {
 		return cityMac;
@@ -98,7 +93,12 @@ public class User {
 	public void setManagerMac(int managerMac) {
 		this.managerMac = managerMac;
 	}
+	public String getNameMac() {
+		return nameMac;
+	}
+	public void setNameMac(String nameMac) {
+		this.nameMac = nameMac;
+	}
 	
-	
-	
+
 }

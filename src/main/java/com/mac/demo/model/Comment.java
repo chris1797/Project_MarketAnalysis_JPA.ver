@@ -5,12 +5,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class Comment {
 	
+	private int numMac;
 	private int pcodeMac;
 	private String idMac;
 	private String commentMac;
 	private java.sql.Date wdateMac;
 	
 	
+	
+	
+	public int getNumMac() {
+		return numMac;
+	}
+	public void setNumMac(int numMac) {
+		this.numMac = numMac;
+	}
 	public int getPcodeMac() {
 		return pcodeMac;
 	}

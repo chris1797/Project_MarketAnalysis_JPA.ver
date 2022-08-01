@@ -9,11 +9,17 @@ public class Board {
 	private String titleMac; //제목
 	private String contentsMac; //내용
 	private java.sql.Date wdateMac; //작성일
-	private int pcodeMac; //부모글pcode
 	private String typeMac; //속성(업종등)
 	private String idMac;
+	private int countMac;
 	
 	
+	public int getCountMac() {
+		return countMac;
+	}
+	public void setCountMac(int countMac) {
+		this.countMac = countMac;
+	}
 	public int getNumMac() {
 		return numMac;
 	}
@@ -43,12 +49,6 @@ public class Board {
 	}
 	public void setWdateMac(java.sql.Date wdateMac) {
 		this.wdateMac = wdateMac;
-	}
-	public int getPcodeMac() {
-		return pcodeMac;
-	}
-	public void setPcodeMac(int pcodeMac) {
-		this.pcodeMac = pcodeMac;
 	}
 	public String getTypeMac() {
 		return typeMac;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User List</title>
+</head>
+<body>
+<main>
+<table>
+<tr>
+	<td></td>
+	<td>numMac</td>
+	<td>idMac</td>
+	<td>pwMac</td>
+	<td>nickNameMac</td>
+	<td>emailMac</td>
+	<td>genderMac</td>
+	<td>birthMac</td>
+	<td>phoneNumMAC</td>
+	<td>cityMac</td>
+	<td>townMac</td>
+	<td>villageMac</td>
+	<td>managerMac</td>
+	<td>nameMac</td>
+</tr>
+<tr th:each="user : ${list}">
+	<td><a th:href="@{/user/detail(idMac=${user.idMac})}">정보보기</a></td>
+	<td th:text="${user.numMac}"></td>
+	<td th:text="${user.idMac}"></td>
+	<td th:text="${user.pwMac}"></td>
+	<td th:text="${user.nickNameMac}"></td>
+	<td th:text="${user.emailMac}"></td>
+	<td th:text="${user.genderMac}"></td>
+	<td th:text="${user.birthMac}"></td>
+	<td th:text="${user.phoneNumMac}"></td>
+	<td th:text="${user.cityMac}"></td>
+	<td th:text="${user.townMac}"></td>
+	<td th:text="${user.villageMac}"></td>
+	<td th:text="${user.managerMac}"></td>
+	<td th:text="${user.nameMac}"></td>
+</tr>
+</table>
+<div>
+<button type="button"  onclick="location.href='/user/addForm'">회원가입</button>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>addForm</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+function added()
+{
+	$.ajax({
+		url:'/user/add',
+		method:'post',
+		cache:false,
+		data:$('#added').serialize(),
+		dataType:'json',
+		success:function(res){
+			alert(res.result ? '회원가입 성공':'회원가입 실패');
+			location.href="/home";
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+//th:action="@{/user/add}" th:object="${user}" method="post"
+</script>
+</head>
+<body>
+<main>
+<h3>addForm 입니다.</h3>
+<form id="added" th:object="${user}" onsubmit="return added();" >
+    <!-- div>
+        <label for="numMac">번호</label>
+        <input type="number" th:field="*{numMac}" id="numMac" placeholder="번호">
+    </div-->
+    <div>
+        <label for="idMac">아이디</label>
+        <input type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
+        <a th:href="'/user/idcheck/'+${idMac}"> <strong>아이디 중복 확인</strong></a>
+    </div>
+    <div>
+        <label for="pwMac">비밀번호</label>
+        <input type="text" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
+    </div>
+    <div>
+        <label for="nickNameMac">닉네임</label>
+        <input type="text" th:field="*{nickNameMac}" id="nickNameMac" placeholder="닉네임">
+    </div>
+    <div>
+        <label for="emailMac">이메일</label>
+        <input type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
+    </div>
+    <div>
+        <label for="genderMac">성별</label>
+        <input type="text" th:field="*{genderMac}" id="genderMac" placeholder="성별">
+    </div>
+    <div>
+        <label for="birthMac">생년월일</label>
+        <input type="date" th:field="*{birthMac}" id="birthMac" placeholder="생년월일">
+    </div>
+	<div>
+        <label for="phoneNumMac">핸드폰번호</label>
+        <input type="text" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
+    </div>
+    <div>
+        <label for="cityMac">시</label>
+        <input type="text" th:field="*{cityMac}" id="cityMac" placeholder="시">
+    </div>
+    <div>
+        <label for="townMac">구</label>
+        <input type="text" th:field="*{townMac}" id="townMac" placeholder="구">
+    </div>
+    <div>
+        <label for="villageMac">동</label>
+        <input type="text" th:field="*{villageMac}" id="villageMac" placeholder="동">
+    </div>
+    <!-- div>
+        <label for="managerMac">관리자권한 유무</label>
+        <input type="number" th:field="*{managerMac}" id="managerMac" placeholder="관리자권한 유무">
+    </div-->
+    <div>
+        <label for="nameMac">이름</label>
+        <input type="text" th:field="*{nameMac}" id="nameMac" placeholder="이름">
+    </div>
+    <nav>
+	    <button type="reset">취소</button>
+	    <button type="submit">저장</button>
+    </nav>
+</form>
+</main>
+</body>
+</html>

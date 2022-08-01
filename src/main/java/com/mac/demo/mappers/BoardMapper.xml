@@ -14,9 +14,9 @@
 <insert id="save"
         parameterType="com.mac.demo.model.Board" 
         useGeneratedKeys="true" 
-       keyColumn="NUMMAC" keyProperty="numMac">
+       	keyColumn="NUMMAC" keyProperty="numMac">
 
-   INSERT INTO free_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,PCODEMAC,IDMAC)
+   INSERT INTO free_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC)
 		VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{pcodeMac},#{idMac})
 
 </insert>
@@ -24,15 +24,19 @@
 <insert id="commentsave"
         parameterType="com.mac.demo.model.Comment" 
         useGeneratedKeys="true" 
-       keyColumn="PCODEMAC" keyProperty="pcodeMac">
+       	keyColumn="NUMMAC" keyProperty="numMac">
 
-   INSERT INTO comment_board(PCODEMAC,IDMAC,COMMENTMAC,WDATEMAC)
-		VALUES(#{pcodeMac},#{idMac},#{commentMac},SYSDATE)
+   INSERT INTO comment_board(NUMMAC, PCODEMAC, IDMAC, COMMENTMAC, WDATEMAC)
+		VALUES(COMMENT_NUM.NEXTVAL, #{pcodeMac}, #{idMac}, #{commentMac}, SYSDATE)
 
 </insert>
 
 	<select id="getList" resultType="com.mac.demo.model.Board">
-		SELECT * FROM free_board
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM free_board f
 	</select>
 	
 	<select id="getCommentList" resultType="com.mac.demo.model.Comment">

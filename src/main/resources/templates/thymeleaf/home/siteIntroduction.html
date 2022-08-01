@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -71,10 +69,14 @@ a:hover { /* a태그에 마우스가 올라갈 때 라는 의미*/
 						<circle cx="12" cy="13" r="4" /></svg> <strong>상권현황제공 창업커뮤니티</strong>
 				</a>
 			</div>
-			<div>
-				<a id="login" href="/login/loginForm"> <strong>로그인</strong>
-				</a>/ <a id="add" href="/user/add"> <strong>회원가입</strong>
-				</a>
+		<div th:if="${idMac==null}">
+			<a href="/login/loginForm"> <strong>로그인</strong></a>
+			<a href="/user/addForm"> <strong>회원가입</strong></a>
+			</div>
+			<div th:if="${idMac !=null}">
+			<h5 th:text=" ${idMac}+'님 환영합니다'" th:style="'color:white'"></h5>
+			 <a href="javascript:logout();"> <strong>로그아웃|</strong></a>
+			 <a th:href="'/home/myPage/'+${idMac}"> <strong>마이페이지</strong></a>
 			</div>
 			<div>
 				<button class="navbar-toggler" type="button"
@@ -152,4 +154,3 @@ a:hover { /* a태그에 마우스가 올라갈 때 라는 의미*/
 		</div>
 	</footer>
 </body>
-</html>

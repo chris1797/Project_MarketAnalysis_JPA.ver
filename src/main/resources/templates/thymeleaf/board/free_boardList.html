@@ -85,9 +85,9 @@ tr:hover {
 						<!--                     <p class="text-muted">공지사항</p> -->
 						<ul class="list-unstyled">
 							<li><a href="/board/main" class="text-white">커뮤니티 메인화면</a></li>
-							<li><a href="/board/notice" class="text-white">공지사항</a></li>
-							<li><a href="/board/list" class="text-white">자유게시판</a></li>
-							<li><a href="/board/ads" class="text-white">광고게시판</a></li>
+							<li><a href="/board/notice/list" class="text-white">공지사항</a></li>
+							<li><a href="/board/free/list" class="text-white">자유게시판</a></li>
+							<li><a href="/board/ads/list" class="text-white">광고게시판</a></li>
 						</ul>
 					</div>
 					<div class="col-sm-4 col-md-5 py-4">
@@ -125,9 +125,9 @@ tr:hover {
 			<div class="row py-lg-5">
 				<div class="col-lg-8 col-md-2">
 					<ul class="list-unstyled">
-						<li><a href="/board/notice" class="text-black">공지사항</a></li>
-						<li><a href="/board/list" class="text-black">자유게시판</a></li>
-						<li><a href="/board/ads" class="text-black">광고게시판</a></li>
+						<li><a href="/board/notice/list" class="text-black">공지사항</a></li>
+						<li><a href="/board/free/list" class="text-black">자유게시판</a></li>
+						<li><a href="/board/ads/list" class="text-black">광고게시판</a></li>
 					</ul>
 				</div>
 			</div>
@@ -139,9 +139,11 @@ tr:hover {
 				<th>작성자</th>
 				<th>작성일</th>
 			</tr>
-			<tr th:each="board : ${list}">
+			<tr th:each="board : ${pageInfo.list}">
 				<td th:text="${board.numMac}"></td>
-				<td><a th:text="${board.titleMac}" th:href="@{'/board/detail/'+ ${board.numMac}}"></a></td>
+				<td><a th:text="${board.titleMac}" th:href="@{'/board/detail/'+ ${board.numMac}}"></a>
+				<span th:text="'	['+${board.countMac}+']'">
+				</td>
 				<td th:text="${board.nickNameMac}"></td>
 				<td th:text="${board.wdateMac}">
 		</table>
@@ -157,7 +159,19 @@ tr:hover {
 			<div>
 				<button type="reset">취소</button>
 				<button type="submit">검색</button>
+				<button type="button"><a href="/board/input">글쓰기</a></button>
 			</div>
+			
+			<c:forEach var="i" items="${pageInfo.navigatepageNums}">
+				<c:choose>
+					<c:when test="${i==pageInfo.pageNum}">
+						<span th:text='${i}'></span>
+					</c:when>
+					<c:otherwise>
+						[<a th:text='${i}+1' th:href="'/board/free/list/'+(${i}+1)"></a>]
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
 		</form>
 	</main>
 	<footer class="text-muted py-5">

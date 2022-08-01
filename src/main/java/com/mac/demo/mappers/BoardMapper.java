@@ -1,11 +1,14 @@
 package com.mac.demo.mappers;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.domain.Page;
 
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
+import com.mac.demo.model.User;
 
 
 @Mapper
@@ -20,15 +23,20 @@ public interface BoardMapper {
 	int commentsave(Comment comment);
 	List<Comment> getCommentList(int num); //자유게시판
 
-//게시글 목록
+//	유저
+	User getUserById(String idMac);
+
+//	게시글 목록
 	List<Board> getList(); //자유게시판
 	List<Board> getAdsList(); //광고게시판
 	List<Board> getNoticeList(); //공지게시판
 	
 	
-	//myPage
+//	myPage
 	List<Board> getMypageInFreeBoard(String idMac);
 	List<Board> getMypageInAdsBoard(String idMac);
+	
+	Page<Board> getList(Pageable pageable);
 	
 
 }

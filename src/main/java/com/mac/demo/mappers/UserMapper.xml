@@ -4,24 +4,25 @@
 
 <mapper namespace="com.mac.demo.mappers.UserMapper">
 
-<insert id="add" parameterType="com.mac.demo.model.User">
-		INSERT INTO USER_TB(
-		nummac, idmac, pwmac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, managermac, namemac) VALUES(#{numMac},#{idMac},#{pwMac},#{nickNameMac},#{emailMac},#{genderMac},#{birthMac},#{phoneNumMac},#{cityMac},#{townMac},#{villageMac},#{managerMac},#{nameMac})
+	<insert id="add" parameterType="com.mac.demo.model.User">
+		INSERT INTO USER_TB(nummac, idmac, pwmac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, managermac, namemac) 
+		VALUES(USER_NUM.nextval,#{idMac},#{pwMac},#{nickNameMac},#{emailMac},#{genderMac},#{birthMac},#{phoneNumMac},#{cityMac},#{townMac},#{villageMac},#{managerMac},#{nameMac})
 	</insert>
 
-<select id="getList" resultType="com.mac.demo.model.User">SELECT * FROM user_tb </select>
+	<select id="getList" resultType="com.mac.demo.model.User">
+		SELECT * FROM USER_TB
+	</select>
+	
+	<select id="getOne" resultType="com.mac.demo.model.User">
+		SELECT * FROM USER_TB WHERE idmac= #{idMac}
+	</select>
 
-
-
-<update parameterType="com.mac.demo.model.User" id="edit">UPDATE user_tb SET nameMac=#{nameMac}, birthMac=#{birthMac}, cityMac=#{cityMac}, townMac=#{townMac}, villageMac=#{villageMac},emailMac=#{emailMac}, genderMac=#{genderMac}, upwMac=#{upwMac} WHERE uidMac=#{uidMac} </update>
-
-<delete parameterType="com.mac.demo.model.User" id="delete">DELETE FROM user_tb WHERE idMac=#{idMac} </delete>
-
-
-
-<select parameterType="String" id="getId" resultType="String">SELECT idMac FROM user_tb WHERE idMac=#{idMac} AND pwMac=#{pwMac} </select><!-- 건든부분 -->
-
-<select parameterType="String" id="getNickNameMac" resultType="String">SELECT nickNameMac FROM user_tb WHERE idMac=#{idMac}</select><!-- 건든부분 -->
-<!-- 정보를 닉네임으로가 아닌 아이디로 가져오기 -->
-<select id="getMypage" resultType="com.mac.demo.model.User">SELECT * FROM user_tb WHERE idMac=#{idMac} </select>
+	<update id="updated" parameterType="com.mac.demo.model.User">
+		UPDATE USER_TB SET pwmac=#{pwMac}, emailmac=#{emailMac}, phonenummac=#{phoneNumMac}, citymac=#{cityMac}, townmac=#{townMac}, villagemac=#{villageMac} WHERE idmac=#{idMac}
+	</update>
+	
+	<delete id="deleted" parameterType="String">
+		DELETE FROM USER_TB WHERE idmac=#{idMac}
+	</delete>
+	
 </mapper>

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.websocket.server.PathParam;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,83 +16,91 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mac.demo.mappers.UserMapper;
-import com.mac.demo.model.Board;
 import com.mac.demo.model.User;
+import com.mac.demo.service.UserService;
 
-@RequestMapping("/user")
 @Controller
+@RequestMapping("/user")
 public class UserController {
 	
+	//유저 맵퍼
 	@Autowired
-	private UserMapper dao;
+	private UserService svc;
 
 //	계정추가폼
-	@GetMapping("/add")
-	public String add() {
-		
-		return "user/addForm";
+	@GetMapping("/addForm")
+	public String addForm(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		return "thymeleaf/mac/User/addForm";
 	}
 	
 //	계정추가
-	@PostMapping
+	@PostMapping("/add")
 	@ResponseBody
 	public Map<String,Object> add(User user) {
-		
-		Map<String,Object> map=new HashMap<String,Object>();
-		
-		boolean add=dao.add(user)>0;
-		map.put("add", add);
-		
+		Map<String, Object> map = new HashMap<>();
+		boolean result = svc.add(user);
+		map.put("result", result);
 		return map;
 	}
 	
-//	계정 삭제
-	@PostMapping("/delete{uid}")
-	@ResponseBody
-	public Map<String,Object> delete(@PathVariable("uid") String uid, Model model) {
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		boolean deleted = dao.delete(uid);
-		model.addAttribute("board", dao.delete(uid));
-		return map;
+//	계정리스트
+	@GetMapping("/list")
+	public String list(Model model) {
+		List<User> list = svc.getList();
+		model.addAttribute("list", list);	
+		return "thymeleaf/mac/User/userlist";
 	}
 	
 //	마이페이지
-	@GetMapping("/detail/{uid}")
-	public String mypage(@PathVariable("uid") String uid, Model model) {
-		
-		User user = new User();
-		user.setIdMac(uid);
-		model.addAttribute("user", dao.getMypage(uid));
-		return "user/mypage";
+	@GetMapping("/detail")
+	public String mypage(@RequestParam("idMac")String idMac, Model model) {
+		User user = svc.getOne(idMac);
+		model.addAttribute("user", user);
+		return "thymeleaf/mac/User/myPage";
+	}
+	
+//	계정 삭제
+	@PostMapping("/deleted")
+	@ResponseBody
+	public Map<String,Object> deleted(User user, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		String idMac = user.getIdMac();
+		boolean result = svc.deleted(idMac);
+		map.put("result", result);
+		return map;
 	}
 	
 //  유저 업데이트폼
-	@GetMapping("/update/{uid}")
-	public String update(@PathVariable("uid") String uid, Model model) {
-
-		User user = new User();
-		user.setIdMac(uid);
-		model.addAttribute("board", dao.edit(user));
-		
-		return "/user/mypage2";
+	@GetMapping("/updateForm")
+	public String update(User user, Model model) {
+		System.out.println(user.getIdMac());
+		User user2 = svc.getOne(user.getIdMac());
+		model.addAttribute("user", user2);
+		return "thymeleaf/mac/User/updateForm";
 	}
+	
 //  유저 정보 수정
-	@GetMapping("/edit/{num}")
+	@PostMapping("/updated")
 	@ResponseBody
-	public Map<String, Object> edit(@PathVariable("uid") String uid, User newUser, Model model) {
-
-		newUser.setPwMac(uid);
-		newUser.setPwMac(newUser.getPwMac());
-		newUser.setEmailMac(newUser.getEmailMac());
-		newUser.setCityMac(newUser.getCityMac());
-		newUser.setTownMac(newUser.getTownMac());
-		newUser.setVillageMac(newUser.getVillageMac());
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		boolean updated = dao.edit(newUser)>0;
-		map.put("updated", updated);
+	public Map<String, Object> edit(User user, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		boolean result = svc.updated(user);
+		map.put("result", result);
 		return map;
 	}
+	
+//	ID 중복체크
+	@PostMapping("/idcheck/{idMac}")
+	@ResponseBody
+	public Map<String, Object> idcheck(@PathVariable("idMac")String idMac) {
+		Map<String, Object> map = new HashMap<>();
+		boolean result = svc.idcheck(idMac);
+		map.put("result", result);
+		return map;
+	}
+	
+	
+	
 }
