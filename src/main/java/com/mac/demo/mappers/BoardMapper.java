@@ -26,6 +26,7 @@ public interface BoardMapper {
 //	유저
 	User getUserById(String idMac);
 
+	
 //	게시글 목록
 	List<Board> getList(); //자유게시판
 	List<Board> getAdsList(); //광고게시판
