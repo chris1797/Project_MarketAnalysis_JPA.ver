@@ -29,7 +29,12 @@ public interface BoardMapper {
 	
 //	게시글 목록
 	List<Board> getList(); //자유게시판
-	List<Board> getAdsList(); //광고게시판
+	
+//	닉네임, 글내용+제목 검색
+	List<Board> getFreeListByKeyword(String keyword);
+	List<Board> getFreeListByNickName(String nickNameMac);
+	
+//	List<Board> getAdsList(); //광고게시판
 	List<Board> getNoticeList(); //공지게시판
 	
 	

@@ -147,12 +147,12 @@ tr:hover {
 				<td th:text="${board.nickNameMac}"></td>
 				<td th:text="${board.wdateMac}">
 		</table>
-		<form id="search_form" method="post" action="/mb/board/search">
+		
+		<form id="search_form" method="get" action="/board/free/search?category=+${category}">
 			<div>
 				<label for="category">검색항목</label> <select name="category">
-					<option value="author">작성자</option>
-					<option value="title">글제목</option>
-					<option value="contents">글내용</option>
+					<option value="nickname">작성자</option>
+					<option value="contents">글제목+내용</option>
 				</select> <label for="keyword">검색어</label> <input type="text" name="keyword"
 					value="smith">
 			</div>
@@ -161,17 +161,16 @@ tr:hover {
 				<button type="submit">검색</button>
 				<button type="button"><a href="/board/input">글쓰기</a></button>
 			</div>
-			
-			<c:forEach var="i" items="${pageInfo.navigatepageNums}">
-				<c:choose>
-					<c:when test="${i==pageInfo.pageNum}">
-						<span th:text='${i}'></span>
-					</c:when>
-					<c:otherwise>
-						[<a th:text='${i}+1' th:href="'/board/free/list/'+(${i}+1)"></a>]
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
+
+			<span th:each="i :${pageInfo.navigatepageNums}"> 
+				<span th:if="${i==pageInfo.pageNum}"> 
+					<span th:text="${i}">
+					</span>
+				</span> 
+				<span th:if="${i!=pageInfo.pageNum}"> 
+					[<a th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>]
+				</span>
+			</span>
 		</form>
 	</main>
 	<footer class="text-muted py-5">

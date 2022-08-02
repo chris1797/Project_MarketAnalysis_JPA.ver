@@ -37,9 +37,6 @@ import com.mac.demo.service.BoardService;
 public class BoardController {
 	
 	@Autowired
-	private BoardMapper dao;
-	
-	@Autowired
 	private BoardService svc;
 	
 //	커뮤니티메인화면
@@ -87,26 +84,13 @@ public class BoardController {
 		
 		return map;
 	}
-	
-//	자유게시판
-//	page 구현 필요
-//	@GetMapping("/free/list")
-//	public String getList(Model model) {
-//
-//		PageHelper.startPage(1, dao.getList().size()/3);
-//		PageInfo<Board> pageInfo = new PageInfo<>(dao.getList());
-//		model.addAttribute("pageInfo", pageInfo);
-//
-//		model.addAttribute("list", svc.getList());
-//		return "thymeleaf/board/free_boardList";
-//	}
-//	
-//	자유게시판
-//	page 구현 필요
-	@GetMapping("/free/list/{i}")
-	public String getListByPage(@PathVariable("i") int i, Model model) {
+/*	
+	자유게시판
+	page 구현 필요
+	@GetMapping("/free/list")
+	public String getList(Model model) {
 
-		PageHelper.startPage(i, svc.getList().size()/3);
+		PageHelper.startPage(1, dao.getList().size()/3);
 		PageInfo<Board> pageInfo = new PageInfo<>(dao.getList());
 		model.addAttribute("pageInfo", pageInfo);
 
@@ -116,20 +100,31 @@ public class BoardController {
 	
 //	자유게시판
 //	page 구현 필요
-	@GetMapping("/free/list")
-	public String getListByPage2(Pageable pageable, Model model) {
+	@GetMapping("/free/list/{i}")
+	public String getListByPage(@PathVariable("i") int i, Model model) {
 
-		Page<Board> pageInfo = svc.getList(pageable);
-		List<Board> list = pageInfo.getContent();
-		
-		int[]linkRange = svc.getLinkRange(pageInfo);
-		
-		model.addAttribute("list", list);
+		PageHelper.startPage(i, svc.getList().size()/3);
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.getList());
 		model.addAttribute("pageInfo", pageInfo);
-		model.addAttribute("start", linkRange[0]);
-		model.addAttribute("end", linkRange[1]);
+
+		model.addAttribute("list", svc.getList());
+		return "thymeleaf/mac/board/free_boardList";
+	}
+*/
+	
+//	자유게시판
+//	page 구현 필요
+	@GetMapping("/free/list")
+	public String getListByPage2(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
+								Model model) {
+
+		PageHelper.startPage(page, 3);
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.getList());
+		List<Board> list = pageInfo.getList();
 		
-		return "thymeleaf/board/free_boardList";
+		model.addAttribute("pageInfo", pageInfo);
+		
+		return "thymeleaf/mac/board/free_boardList";
 	}
 	
 	
@@ -150,7 +145,7 @@ public class BoardController {
 		model.addAttribute("commentlist", svc.getCommentList(num));
 		model.addAttribute("comment", comment);
 		
-		return "thymeleaf/board/free_board_detail";
+		return "thymeleaf/mac/board/free_board_detail";
 	}
 	
 	
@@ -169,7 +164,7 @@ public class BoardController {
 	@GetMapping("/update/{num}")
 	public String update(@PathVariable("num") int num, Model model) {
 		model.addAttribute("board", svc.getDetail(num));
-		return "thymeleaf/board/board_updateform";
+		return "thymeleaf/mac/board/board_updateform";
 	}
 	
 //  게시글 수정
@@ -195,34 +190,25 @@ public class BoardController {
 //============================================================================================================//
 	
 //	게시글 타이틀 검색
-	@GetMapping("/listByTitle")
-	public String getListByTitle(Model model) {
-
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
+	@GetMapping("/free/search")
+	public String getListByTitle(@RequestParam(name="page", required = false,defaultValue = "1") int page,
+								@RequestParam(name="category", required = false) String category,
+								@RequestParam(name="keyword", required = false) String keyword,
+								Model model) {
 		
-		model.addAttribute("pageInfo",pageinfo);
+		PageHelper.startPage(page, 3);
 		
-		List<Board> list = dao.getList();
-		model.addAttribute("list", list);
-		return "board/boardList";
+		PageInfo<Board> pageInfo = null;
+		if(category.equals("contents")) {
+			pageInfo = new PageInfo<>(svc.getFreeListByKeyword(keyword));
+		} else {
+			pageInfo = new PageInfo<>(svc.getFreeListByNickName(keyword));
+		}
+		
+		model.addAttribute("pageInfo",pageInfo);
+		
+		return "thymeleaf/mac/board/free_boardList";
 	}
-//	게시글 닉네임 검색
-	@GetMapping("/listByNickName")
-	public String getListByNickName(Model model) {
-
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
-		
-		model.addAttribute("pageInfo",pageinfo);
-		
-		List<Board> list = dao.getList();
-		model.addAttribute("list", list);
-		return "board/boardList";
-	}
-	
 	
 //	공지게시판(미완성 type속성을 notice로 주면될듯) X
 //	type 없이 get으로 구분하여 mapper로 해당 테이블의 list 받아오기
@@ -235,7 +221,7 @@ public class BoardController {
 		
 		model.addAttribute("pageInfo",pageinfo);
 		
-		List<Board> list = dao.getList();
+		List<Board> list = svc.getList();
 		model.addAttribute("list", list);
 		return "board/noticeList";
 	}
@@ -250,23 +236,8 @@ public class BoardController {
 		
 		model.addAttribute("pageInfo",pageinfo);
 		
-		List<Board> list = dao.getList();
+		List<Board> list = svc.getList();
 		model.addAttribute("list", list);
 		return "board/adsList";
 	}
-	
-/*	게시글 타입속성(업종 등) 은 일단 안하기로 함
-	@GetMapping("/listByType")
-	public String getListByNickNameType(Model model) {
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
-		
-		model.addAttribute("pageInfo",pageinfo);
-		
-		List<Board> list = dao.getList();
-		model.addAttribute("list", list);
-		return "board/boardList";
-	}
-*/
 }

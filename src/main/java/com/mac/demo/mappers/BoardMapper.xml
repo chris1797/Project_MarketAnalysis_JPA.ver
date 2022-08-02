@@ -30,6 +30,13 @@
 		VALUES(COMMENT_NUM.NEXTVAL, #{pcodeMac}, #{idMac}, #{commentMac}, SYSDATE)
 
 </insert>
+	<select id="getAdsList" resultType="com.mac.demo.model.Board">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = a.nummac) COUNTMAC
+		FROM ads_board a
+	</select>
 
 	<select id="getList" resultType="com.mac.demo.model.Board">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
@@ -39,13 +46,36 @@
 		FROM free_board f
 	</select>
 	
+<!-- 검색 : 닉네임, 제목+내용 -->
+	<select id="getFreeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM free_board f
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getFreeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM free_board f
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+	</select>
+	
 	<select id="getCommentList" resultType="com.mac.demo.model.Comment">
 		SELECT * FROM comment_board WHERE PCODEMAC=#{pcodeMac}
 	</select>
 	
-	<select id="getAdsList" resultType="com.mac.demo.model.Board">
+	<!-- <select id="getAdsList" resultType="com.mac.demo.model.Board">
 		SELECT * FROM ads_board
-	</select>
+	</select> -->
 	
 	<select id="getNoticeList" resultType="com.mac.demo.model.Board">
 		SELECT * FROM notice_board

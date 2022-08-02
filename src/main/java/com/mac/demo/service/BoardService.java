@@ -92,4 +92,12 @@ public class BoardService {
 	public boolean commentsave(Comment comment) {
 		return 0 < boardDao.commentsave(comment);	
 	}
+	
+	public List<Board> getFreeListByKeyword(String titleMac){
+		return boardDao.getFreeListByKeyword(titleMac);
+	}
+
+	public List<Board> getFreeListByNickName(String nickNameMac) {
+		return boardDao.getFreeListByNickName(nickNameMac);
+	}
 }
