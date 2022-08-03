@@ -2,52 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>자유게시판</title>
+<title>게시판 글 입력폼</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous">
+<style type="text/css">
+main {
+	width: fit-content;
+	margin: 0 auto;
+}
+
+main>h3 {
+	width: fit-content;
+	margin: 1em auto;
+	border-bottom: 3px double black;
+}
+
+form {
+	padding: 1em;
+	border: 1px solid black;
+	border-radius: 7px;
+}
+
+div>label {
+	display: inline-block;
+	width: 2em;
+	padding-right: 1em;
+	text-align: right;
+	vertical-align: top;
+}
+
+div>input {
+	width: 30em;
+	margin-bottom: 0.5em;
+}
+
+div>textarea {
+	width: 30em;
+	height: 10em;
+}
+
+form>div:last-child {
+	margin: 1em auto;
+	margin-bottom: 0;
+	width: fit-content;
+	text-align: center;
+}
+
+nav {
+	width: fit-content;
+	margin: 1em auto;
+}
+
+nav>a {
+	text-decoration: none;
+}
+</style>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-	crossorigin="anonymous">
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
+<script type="text/javascript">
+	var msg = '[[${msg}]]';
+	if(msg != ""){
+		alert(msg);
+		location.href="/board/free/list";
+	}
+
+	function save() {
+		$.ajax({
+			url : '/board/free/save',
+			method : 'post',
+			cache : false,
+			data : $('#input_form').serialize(),
+			dataType : 'json',
+			success : function(res) {
+				//alert(res.saved ? '저장 성공' : res.msg);
+				//if (!res.saved && res.msg) {
+					//location.href = "/login/loginForm";
+				//}
+				
+				if(res.saved!=0){
+					alert('저장성공');	
+					location.href="/board/free/detail/"+res.saved;
+				};
+			},
+			error : function(xhr, status, err) {
+				alert('Error:' + err);
+			}
+		});
+		return false;
+	}
 </script>
-<style type="text/css">
-#login {
-	font-size: 4px;
-}
-
-#add {
-	font-size: 4px;
-}
-
-table {
-	border: 1px solid black;
-	border-spacing: 0;
-	border-collapse: collapse;
-	margin: 0 auto;
-	padding: 1em;
-}
-
-th, td {
-	padding: 0.3em 1em;
-	border-right: 1px dashed black;
-}
-
-th {
-	border-bottom: 3px double black;
-	background-color: #add;
-}
-
-tr:nth-child(odd)>td {
-	background-color: rgba(100, 180, 180, 0.2);
-}
-
-tr:hover {
-	background-color: rgba(100, 180, 180, 0.5);
-}
-</style>
 </head>
 <body>
 	<header>
@@ -113,66 +164,32 @@ tr:hover {
 		</div>
 	</header>
 	<main>
-		<section class="text-left container">
-			<div class="row py-lg-5">
-				<div class="col-lg-8 col-md-8">
-					<h1 class="fw-light">자유게시판</h1>
-				</div>
-			</div>
-		</section>
-
-		<section class="py-2 text-left container">
-			<div class="row py-lg-5">
-				<div class="col-lg-8 col-md-2">
-					<ul class="list-unstyled">
-						<li><a href="/board/notice/list" class="text-black">공지사항</a></li>
-						<li><a href="/board/free/list" class="text-black">자유게시판</a></li>
-						<li><a href="/board/ads/list" class="text-black">광고게시판</a></li>
-					</ul>
-				</div>
-			</div>
-		</section>
-		<table>
-			<tr>
-				<th>번호</th>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>작성일</th>
-			</tr>
-			<tr th:each="board : ${pageInfo.list}">
-				<td th:text="${board.numMac}"></td>
-				<td><a th:text="${board.titleMac}" th:href="@{'/board/free/detail/'+ ${board.numMac}}"></a>
-				<span th:text="'	['+${board.countMac}+']'">
-				</td>
-				<td th:text="${board.nickNameMac}"></td>
-				<td th:text="${board.wdateMac}">
-		</table>
-	<br>
-		<form id="search_form" method="get" action="/board/free/search?category=+${category}">
+		<h3>게시판 글 입력 폼</h3>
+		<form id="input_form" method="post" th:object="${board}" th:action="@{/board/free/save}" onsubmit="return save();">
+			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
+			<input type="hidden" th:value="${idMac}" name="idMac">
 			<div>
-				&nbsp;&nbsp;
-				<label for="category">검색항목</label> 
-				<select name="category">
-					<option value="contents">글제목+내용</option>
-					<option value="nickname">작성자</option>
-				</select> 
-				<label for="keyword">검색어</label> <input type="text" name="keyword">
-				<button type="submit">검색</button>
-				<button type="reset">취소</button>
-				&nbsp;&nbsp;			
-				<button type="button"><a href="/board/free/input">글쓰기</a></button>
+				<select name="type">
+				<option value="free">자유게시판</option>
+				<option value="ads">광고게시판</option>
+				</select>
 			</div>
-			&nbsp;&nbsp;
-			<span th:each="i :${pageInfo.navigatepageNums}"> 
-				<span th:if="${i==pageInfo.pageNum}"> 
-					<span th:text="${i}">
-					</span>
-				</span> 
-				<span th:if="${i!=pageInfo.pageNum}"> 
-					[<a th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>]
-				</span>
-			</span>
+			<div>
+				<label for="titleMac">제목</label>
+				<input type="text" name="titleMac" th:field="*{titleMac}">
+			</div>
+			<div>
+				<label for="contentsMac">내용</label>
+				<input type="text" name="contentsMac" th:field="*{contentsMac}">
+			</div>
+			<div>
+				<button type="reset">취소</button>
+				<button type="submit">저장</button>
+			</div>
 		</form>
+		<nav>
+			[<a href="/board/free/list">목록보기</a>] [<a href="/board/main">커뮤니티 메인화면</a>]
+		</nav>
 	</main>
 	<footer class="text-muted py-5">
 		<div class="container">

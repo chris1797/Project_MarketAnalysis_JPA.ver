@@ -15,7 +15,8 @@ import com.mac.demo.model.User;
 public interface BoardMapper {
 
 //	게시글CRUD
-	int save(Board board); //게시글 저장
+	int saveToFree(Board board);
+	int saveToAds(Board board);
 	int edit(Board board); //게시글 수정
 	int delete(int num); //게시글 삭제
 	Board getDetail(int num); //게시글 상세보기
@@ -30,14 +31,14 @@ public interface BoardMapper {
 
 	
 //	게시글 목록
-	List<Board> getList(); //자유게시판
+	List<Board> getFreeList(); // 자유게시판
+	List<Board> getAdsList(); // 광고게시판
+	List<Board> getNoticeList(); // 공지게시판
 	
 //	닉네임, 글내용+제목 검색
 	List<Board> getFreeListByKeyword(String keyword);
 	List<Board> getFreeListByNickName(String nickNameMac);
 	
-//	List<Board> getAdsList(); //광고게시판
-	List<Board> getNoticeList(); //공지게시판
 	
 	
 //	myPage

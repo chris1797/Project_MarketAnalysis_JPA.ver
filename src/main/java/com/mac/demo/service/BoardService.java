@@ -29,16 +29,16 @@ public class BoardService {
 	private UserMapper userDao;
 	
 	
+	public List<Board> getFreeList(){
+		return boardDao.getFreeList();
+	}
 	
-	public Page<Board> getList(Pageable pageable) {
-        //List<Board> list = boardRepository.findAll();
-        Page<Board> pageInfo = boardDao.getList(pageable);
-
-        return pageInfo;
-    }
+	public List<Board> getNoticeList() {
+		return boardDao.getNoticeList();
+	}
 	
-	public List<Board> getList(){
-		return boardDao.getList();
+	public List<Board> getAdsList() {
+		return boardDao.getAdsList();
 	}
 
 //	------------------id로 유저정보 가져오기-------------------    
@@ -46,14 +46,12 @@ public class BoardService {
 		return userDao.getOne(idMac);
 	}
 	
-	public Page<Board> getListByPage(Pageable pageable) {
-		return null;
+	public boolean saveToFree(Board board){
+		return 0 < boardDao.saveToFree(board);
 	}
-	
-	public boolean save(Board board){
-		return 0 < boardDao.save(board);
+	public boolean saveToAds(Board board){
+		return 0 < boardDao.saveToAds(board);
 	}
-	
 	
 	
 	public Board getDetail(int num) {
@@ -110,4 +108,6 @@ public class BoardService {
 		}
 		return new int[] { start, end };
 	}
+
+
 }

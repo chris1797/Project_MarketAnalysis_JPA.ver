@@ -34,7 +34,6 @@ import com.mac.demo.service.BoardService;
 
 @RequestMapping("/board")
 @Controller
-@SessionAttributes("idMac")
 public class BoardController {
 	
 	@Autowired
@@ -44,11 +43,11 @@ public class BoardController {
 	@GetMapping("/main")
 	public String main() {
 		
-		return "thymeleaf/board/boardMain";
+		return "thymeleaf/mac/board/boardMain";
 	}
 	
-	
-//	게시글작성(게시글 인풋폼을 자유게시판과 공지, 광고게시판과 나눠야되나 생각중 )
+//======================================== 자유게시판 ========================================
+//	게시글작성폼
 	@GetMapping("/free/input")
 	public String input(Model model,HttpSession session) {
 		
@@ -58,40 +57,32 @@ public class BoardController {
 		
 		System.out.println((String)session.getAttribute("idMac"));
 		
-		if(session.getAttribute("idMac") == null){ //세션을 가져옴
-			id = "null";
+		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
+			model.addAttribute("msg", msg);
 			msg = "로그인 후 사용 가능합니다.";
 		} else {
 			id = (String)session.getAttribute("idMac");
 			
 			//닉네임 가져오기
-//			board.setNickNameMac(svc.getOne(id).getNickNameMac());
+			board.setNickNameMac(svc.getOne(id).getNickNameMac());
+			model.addAttribute("board", board);
+			
+			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
+			model.addAttribute("idMac", id);
 		}
 		
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("board", board);
-		model.addAttribute("idMac", id);//세션을 넣어준후 form에서는 hidden으로!!!
-		
-		return "thymeleaf/board/board_inputform";
+		return "thymeleaf/mac/board/free_inputform";
 	}
 	
 
 //	게시글 저장
-//	추후 로그인 체크 구현 완료 후 수정 예정
-	@PostMapping("/save")
+	@PostMapping("/free/save")
 	@ResponseBody
 	public Map<String, Object> save(Board board, @SessionAttribute(name = "idMac", required = false) String idMac) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-//		if (idMac == null) {
-//			map.put("saved", false);
-//			map.put("msg", "로그인 후에 사용할 수 있습니다");
-//			return map;
-//		}
-
 		
-		svc.save(board);
+		svc.saveToFree(board);
 		map.put("saved",board.getNumMac());
 		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
 		//그후 그 번호를 가지고 detail로 넘어가독
@@ -99,42 +90,14 @@ public class BoardController {
 		
 		return map;
 	}
-/*	
-	자유게시판
-	page 구현 필요
-	@GetMapping("/free/list")
-	public String getList(Model model) {
-
-		PageHelper.startPage(1, dao.getList().size()/3);
-		PageInfo<Board> pageInfo = new PageInfo<>(dao.getList());
-		model.addAttribute("pageInfo", pageInfo);
-
-		model.addAttribute("list", svc.getList());
-		return "thymeleaf/board/free_boardList";
-	}
 	
-//	자유게시판
-//	page 구현 필요
-	@GetMapping("/free/list/{i}")
-	public String getListByPage(@PathVariable("i") int i, Model model) {
-
-		PageHelper.startPage(i, svc.getList().size()/3);
-		PageInfo<Board> pageInfo = new PageInfo<>(svc.getList());
-		model.addAttribute("pageInfo", pageInfo);
-
-		model.addAttribute("list", svc.getList());
-		return "thymeleaf/mac/board/free_boardList";
-	}
-*/
-	
-//	자유게시판
-//	page 구현 필요
+//	자유게시판 리스트
 	@GetMapping("/free/list")
-	public String getListByPage2(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
+	public String getListByPage_free(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 								Model model) {
 
 		PageHelper.startPage(page, 3);
-		PageInfo<Board> pageInfo = new PageInfo<>(svc.getList());
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.getFreeList());
 		List<Board> list = pageInfo.getList();
 		
 		model.addAttribute("pageInfo", pageInfo);
@@ -144,17 +107,21 @@ public class BoardController {
 	
 	
 //  게시글 보기
-	@GetMapping("/detail/{num}")
+	@GetMapping("/free/detail/{num}")
 	public String getDetail(@PathVariable("num") int num, 
 							Model model,
 							HttpSession session) {
-		String idMac = (String) session.getAttribute("idMac");
-		
 		
 		//test용
+		String idMac = null;
 		Comment comment = new Comment();
-		comment.setIdMac("chris");
-		comment.setPcodeMac(num);
+		if(session.getAttribute("idMac") != null) {
+			comment.setIdMac((String) session.getAttribute("idMac"));
+			comment.setNickNameMac(svc.getOne(idMac).getNickNameMac());	
+			comment.setPcodeMac(num);
+		} else {
+			model.addAttribute("msg", "로그인 후 작성가능합니다.");
+		}
 		
 		// 글상세
 		model.addAttribute("num", num);
@@ -165,7 +132,7 @@ public class BoardController {
 		model.addAttribute("comment", comment);
 		
 		// 댓글 삭제를 위한 idMac체크
-		model.addAttribute("idMac", "chris");
+		model.addAttribute("idMac", idMac);
 		
 		return "thymeleaf/mac/board/free_board_detail";
 	}
@@ -173,7 +140,7 @@ public class BoardController {
 	
 //  게시글 삭제
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
-	@GetMapping("/delete/{num}")
+	@GetMapping("/free/delete/{num}")
 	@ResponseBody
 	public Map<String, Object> delete(@PathVariable("num") int num) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -183,14 +150,14 @@ public class BoardController {
 	}
 	
 //  게시글 업데이트폼
-	@GetMapping("/update/{num}")
+	@GetMapping("/free/update/{num}")
 	public String update(@PathVariable("num") int num, Model model) {
 		model.addAttribute("board", svc.getDetail(num));
-		return "thymeleaf/mac/board/board_updateform";
+		return "thymeleaf/mac/board/free_updateform";
 	}
 	
 //  게시글 수정
-	@PostMapping("/edit")
+	@PostMapping("/free/edit")
 	@ResponseBody
 	public Map<String, Object> edit(Board newBoard) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -199,27 +166,6 @@ public class BoardController {
 		return map;
 	}
 	
-	
-	@PostMapping("/comment")
-	@ResponseBody
-	public Map<String, Object> comment(Comment comment, Model model, HttpSession session) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		map.put("commented", svc.commentsave(comment));
-		return map;
-	}
-	
-	@GetMapping("/comment/delete/{numMac}")
-	@ResponseBody
-	public Map<String, Object> comment_delte(@PathVariable int numMac, Model model, HttpSession session) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		System.out.println(numMac);
-		map.put("deleted", svc.commentdelete(numMac));
-		return map;
-	}
-	
-//============================================================================================================//
 	
 //	게시글 타이틀 검색
 	@GetMapping("/free/search")
@@ -242,34 +188,103 @@ public class BoardController {
 		return "thymeleaf/mac/board/free_boardList";
 	}
 	
-//	공지게시판(미완성 type속성을 notice로 주면될듯) X
-//	type 없이 get으로 구분하여 mapper로 해당 테이블의 list 받아오기
-	@GetMapping("/notice/list")
-	public String getNoticeList(Model model) {
+	
+	
+//======================================== 광고게시판 ========================================
+//	광고게시판
+	@GetMapping("/ads/list")
+	public String getListByPage_ads(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
+			Model model) {
 		
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
+		PageHelper.startPage(page, 3);
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.getAdsList());
 		
-		model.addAttribute("pageInfo",pageinfo);
+		model.addAttribute("pageInfo", pageInfo);
 		
-		List<Board> list = svc.getList();
-		model.addAttribute("list", list);
-		return "board/noticeList";
+		return "thymeleaf/mac/board/ads_boardList";
 	}
 	
-//	광고게시판(미완성 type속성을 ads로 주면될듯)
-	@GetMapping("/ads/list")
-	public String getAdsList(Model model) {
+//	광고게시글 작성폼
+	@GetMapping("/ads/input")
+	public String input_ads(Model model,HttpSession session) {
 		
-		PageHelper.startPage(5,30);
-		PageInfo<Board> pageinfo=new PageInfo<Board>();
-		List<Board> pagelist=pageinfo.getList();
+		String id = null;
+		String msg = null;
+		Board board = new Board();
 		
-		model.addAttribute("pageInfo",pageinfo);
+		System.out.println((String)session.getAttribute("idMac"));
 		
-		List<Board> list = svc.getList();
-		model.addAttribute("list", list);
-		return "board/adsList";
+		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
+			model.addAttribute("msg", msg);
+			msg = "로그인 후 사용 가능합니다.";
+		} else {
+			id = (String)session.getAttribute("idMac");
+			
+			//닉네임 가져오기
+			board.setNickNameMac(svc.getOne(id).getNickNameMac());
+			model.addAttribute("board", board);
+			
+			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
+			model.addAttribute("idMac", id);
+		}
+		
+		return "thymeleaf/mac/board/ads_inputform";
 	}
+	
+//	광고게시글 저장
+	@PostMapping("/ads/save")
+	@ResponseBody
+	public Map<String, Object> save_ads(Board board, @SessionAttribute(name = "idMac", required = false) String idMac) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		
+		svc.saveToAds(board);
+		map.put("saved",board.getNumMac());
+		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
+		//그후 그 번호를 가지고 detail로 넘어가독
+		//자세한건 form에 ajax 확인
+		
+		return map;
+	}
+
+//======================================== 공지게시판 ========================================
+//	자유게시판 리스트
+	@GetMapping("/notice/list")
+	public String getListByPage_notice(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
+			Model model) {
+		
+		PageHelper.startPage(page, 3);
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.getNoticeList());
+		
+		model.addAttribute("pageInfo", pageInfo);
+		
+		return "thymeleaf/mac/board/notice_boardList";
+	}
+
+//======================================== 댓글 ========================================
+	@PostMapping("/comment")
+	@ResponseBody
+	public Map<String, Object> comment(Comment comment, Model model, HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
+//			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
+			map.put("msg", "로그인 후 사용 가능합니다.");
+		} else {
+			map.put("commented", svc.commentsave(comment));
+		}
+		
+		return map;
+	}
+	
+	@GetMapping("/comment/delete/{numMac}")
+	@ResponseBody
+	public Map<String, Object> comment_delte(@PathVariable int numMac, Model model, HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println("삭제할 댓글 No. : " + numMac);
+		map.put("deleted", svc.commentdelete(numMac));
+		return map;
+	}
+//=====================================================================================
 }

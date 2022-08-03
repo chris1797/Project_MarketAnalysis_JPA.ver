@@ -8,12 +8,19 @@ public class Comment {
 	private int numMac;
 	private int pcodeMac;
 	private String idMac;
+	private String nickNameMac;
 	private String commentMac;
 	private java.sql.Date wdateMac;
 	
 	
 	
 	
+	public String getNickNameMac() {
+		return nickNameMac;
+	}
+	public void setNickNameMac(String nickNameMac) {
+		this.nickNameMac = nickNameMac;
+	}
 	public int getNumMac() {
 		return numMac;
 	}
