@@ -20,8 +20,10 @@ public interface BoardMapper {
 	int delete(int num); //게시글 삭제
 	Board getDetail(int num); //게시글 상세보기
 	
+//	댓글
 	int commentsave(Comment comment);
 	List<Comment> getCommentList(int num); //자유게시판
+	int commentdelete(int numMac);
 
 //	유저
 	User getUserById(String idMac);
@@ -43,6 +45,5 @@ public interface BoardMapper {
 	List<Board> getMypageInAdsBoard(String idMac);
 	
 	Page<Board> getList(Pageable pageable);
-	
 
 }

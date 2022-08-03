@@ -29,34 +29,19 @@ public class BoardService {
 	private UserMapper userDao;
 	
 	
+	
 	public Page<Board> getList(Pageable pageable) {
         //List<Board> list = boardRepository.findAll();
         Page<Board> pageInfo = boardDao.getList(pageable);
 
         return pageInfo;
     }
-
-    public int[] getLinkRange(Page<Board> pageInfo) {
-        int start = 0;
-        int end = 0;
-
-        if (pageInfo.getNumber() - 2 < 0) {
-            start = 0;
-        } else {
-            start = pageInfo.getNumber() - 2;
-        }
-
-        if (pageInfo.getTotalPages() < (start + 4)) {
-            end = pageInfo.getTotalPages();
-            start = (end - 4) < 0 ? 0 : (end - 4);
-        } else {
-            end = start + 4;
-        }
-        return new int[] { start, end };
-    }
-    
-    
 	
+	public List<Board> getList(){
+		return boardDao.getList();
+	}
+
+//	------------------id로 유저정보 가져오기-------------------    
 	public User getOne(String idMac) {
 		return userDao.getOne(idMac);
 	}
@@ -69,13 +54,7 @@ public class BoardService {
 		return 0 < boardDao.save(board);
 	}
 	
-	public List<Board> getList(){
-		return boardDao.getList();
-	}
 	
-	public List<Comment> getCommentList(int num){
-		return boardDao.getCommentList(num);		
-	}
 	
 	public Board getDetail(int num) {
 		return boardDao.getDetail(num);
@@ -88,16 +67,47 @@ public class BoardService {
 	public boolean edit(Board board) {
 		return 0 < boardDao.edit(board);
 	}
+//	-----------------------댓글-----------------------
+	public List<Comment> getCommentList(int num){
+		return boardDao.getCommentList(num);		
+	}
 	
 	public boolean commentsave(Comment comment) {
 		return 0 < boardDao.commentsave(comment);	
 	}
 	
+	public boolean commentdelete(int numMac) {
+		return 0 < boardDao.commentdelete(numMac);
+	}
+
+//	-----------------------검색-----------------------	
 	public List<Board> getFreeListByKeyword(String titleMac){
 		return boardDao.getFreeListByKeyword(titleMac);
 	}
 
 	public List<Board> getFreeListByNickName(String nickNameMac) {
 		return boardDao.getFreeListByNickName(nickNameMac);
+	}
+
+	
+	
+//	------------------------------------------------
+	public int[] getLinkRange(Page<Board> pageInfo) {
+		int start = 0;
+		int end = 0;
+		
+		if (pageInfo.getNumber() - 2 < 0) {
+			start = 0;
+		} else {
+			start = pageInfo.getNumber() - 2;
+		}
+		
+		if (pageInfo.getTotalPages() < (start + 4)) {
+			end = pageInfo.getTotalPages();
+			start = (end - 4) < 0 ? 0 : (end - 4);
+		} else {
+			end = start + 4;
+		}
+		return new int[] { start, end };
 	}
 }

@@ -93,6 +93,10 @@
 		DELETE FROM free_board WHERE NUMMAC=#{numMac}
 	</delete>
 	
+	<delete id="commentdelete" parameterType="com.mac.demo.model.Board">
+		DELETE FROM comment_board WHERE NUMMAC=#{numMac}
+	</delete>
+	
 	<!-- 닉네임에서 id로 가져오기 -->
 	<select id="getMypageInFreeBoard" resultType="com.mac.demo.model.Board" parameterType="String">
 		SELECT * FROM free_board WHERE idMac=#{idMac}

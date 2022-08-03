@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
 
@@ -48,13 +49,27 @@ public class BoardController {
 	
 	
 //	게시글작성(게시글 인풋폼을 자유게시판과 공지, 광고게시판과 나눠야되나 생각중 )
-	@GetMapping("/input")
+	@GetMapping("/free/input")
 	public String input(Model model,HttpSession session) {
-		String id =session.getAttribute("idMac").toString();//세션을 가져옴
 		
+		String id = null;
+		String msg = null;
 		Board board = new Board();
-		board.setNickNameMac(svc.getOne(id).getNickNameMac());
 		
+		System.out.println((String)session.getAttribute("idMac"));
+		
+		if(session.getAttribute("idMac") == null){ //세션을 가져옴
+			id = "null";
+			msg = "로그인 후 사용 가능합니다.";
+		} else {
+			id = (String)session.getAttribute("idMac");
+			
+			//닉네임 가져오기
+//			board.setNickNameMac(svc.getOne(id).getNickNameMac());
+		}
+		
+		
+		model.addAttribute("msg", msg);
 		model.addAttribute("board", board);
 		model.addAttribute("idMac", id);//세션을 넣어준후 form에서는 hidden으로!!!
 		
@@ -130,11 +145,15 @@ public class BoardController {
 	
 //  게시글 보기
 	@GetMapping("/detail/{num}")
-	public String getDetail(@PathVariable("num") int num, Model model) {
+	public String getDetail(@PathVariable("num") int num, 
+							Model model,
+							HttpSession session) {
+		String idMac = (String) session.getAttribute("idMac");
+		
 		
 		//test용
 		Comment comment = new Comment();
-		comment.setIdMac("test");
+		comment.setIdMac("chris");
 		comment.setPcodeMac(num);
 		
 		// 글상세
@@ -144,6 +163,9 @@ public class BoardController {
 		// 댓글
 		model.addAttribute("commentlist", svc.getCommentList(num));
 		model.addAttribute("comment", comment);
+		
+		// 댓글 삭제를 위한 idMac체크
+		model.addAttribute("idMac", "chris");
 		
 		return "thymeleaf/mac/board/free_board_detail";
 	}
@@ -184,6 +206,16 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("commented", svc.commentsave(comment));
+		return map;
+	}
+	
+	@GetMapping("/comment/delete/{numMac}")
+	@ResponseBody
+	public Map<String, Object> comment_delte(@PathVariable int numMac, Model model, HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println(numMac);
+		map.put("deleted", svc.commentdelete(numMac));
 		return map;
 	}
 	

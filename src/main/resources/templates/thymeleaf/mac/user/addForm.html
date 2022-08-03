@@ -5,8 +5,47 @@
 <title>addForm</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
-function added()
-{
+
+var idMac = null;
+var checkcode = null;
+var emailMac = null;
+
+
+function added() {
+	
+	var pw = document.getElementById('pwMac').value;
+    var SC = ["!","@","#","$","%"];
+    var check_SC = 0;
+
+    if(pw.length < 6 || pw.length>16){
+        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+        document.getElementById('pwMac').value='';
+        return false;
+    }
+    for(var i=0;i<SC.length;i++){
+        if(pw.indexOf(SC[i]) != -1){
+            check_SC = 1;
+        }
+    }
+    if(check_SC == 0){
+        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+        document.getElementById('pwMac').value='';
+        return false;
+    }
+	
+    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
+            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+            document.getElementById('check').style.color='blue';
+        }
+        else{
+            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+            document.getElementById('check').style.color='red';
+            alert('비밀번호가 일치하지 않습니다.');
+            return false;
+        }
+    }
+	
 	$.ajax({
 		url:'/user/add',
 		method:'post',
@@ -22,26 +61,139 @@ function added()
 		}
 	});
 	return false;
+	
 }
+
+function idcheck() {
+	$.ajax({
+		url:'/user/idcheck',
+		method:'post',
+		cache:false,
+		data:$('#idcheck').serialize(),
+		dataType:'json',
+		success:function(res){
+			if(res.result) {
+				alert('아이디 사용가능');
+				location.href="/user/addForm/" + res.id;
+			} else {
+				alert('중복된 아이디가 있습니다.');
+			}
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+//메일 전송
+function sendMsg()
+{
+	$.ajax({
+		url:'/user/checkmail',
+		method:'post',
+		cache:false,
+		data:$('#emailcheck').serialize(),
+		dataType:'json',
+		success:function(res){
+			alert(res.result ? '메일 전송 완료':'메일 전송 실패');
+			checkcode = res.code;
+			emailMac = res.emailMac;
+			idMac = '[[${user.idMac}]]';
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+//메일 체크
+function checked()
+{	
+	//alert('[[${user.idMac}]]');
+	var data= $('#checkcode').serialize();
+	$.ajax({
+		url:'/user/checkcode',
+		method:'post',
+		cache:false,
+		data:$('#checked').serialize(),
+		dataType:'json',
+		success:function(res){
+			if(res.code == checkcode) {
+				alert("인증 성공");
+				location.href="/user/addForm/"+idMac+"/"+emailMac;
+			} else {
+				alert("인증 실패");
+			}
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+function keyevent() {
+	if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
+            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+            document.getElementById('check').style.color='blue';
+        }
+        else{
+            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+            document.getElementById('check').style.color='red';
+        }
+    }
+}
+
 //th:action="@{/user/add}" th:object="${user}" method="post"
 </script>
 </head>
 <body>
 <main>
 <h3>addForm 입니다.</h3>
+
+<form id="idcheck" th:object="${user}" onsubmit="return idcheck();" >
+<div th:if="*{idMac==null}">
+	<label for="idMac">아이디</label>
+	<input type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
+    <button type="submit">아이디 체크</button>
+</div>
+</form>
+
+<form id="emailcheck" th:object="${user}" onsubmit="return sendMsg();" >
+<div th:if="*{idMac!=null && emailMac==null}">
+	<label for="emailMac">이메일</label>
+	<input type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
+    <button type="submit">이메일 인증</button>
+</div>
+</form>
+
+<form id="checked" onsubmit="return checked();">
+	<div th:if="*{idMac!=null && emailMac==null}"><label>확인코드<input type="text" name="code"></label></div>
+	<div th:if="*{idMac!=null && emailMac==null}">
+		<button type="reset">취소</button>
+		<button type="submit">인증코드 확인</button>
+	</div>
+</form>
+
+
 <form id="added" th:object="${user}" onsubmit="return added();" >
-    <!-- div>
-        <label for="numMac">번호</label>
-        <input type="number" th:field="*{numMac}" id="numMac" placeholder="번호">
-    </div-->
+<div th:if="*{idMac!=null && emailMac!=null}">    
     <div>
         <label for="idMac">아이디</label>
-        <input type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
-        <a th:href="'/user/idcheck/'+${idMac}"> <strong>아이디 중복 확인</strong></a>
+        <input type="text" th:field="*{idMac}" id="idMac" th:value="*{idMac}" placeholder="아이디" readonly="readonly">
     </div>
+    
     <div>
         <label for="pwMac">비밀번호</label>
-        <input type="text" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
+        <input type="password" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
+    </div>
+    <div>
+        <label for="pwcheck">비밀번호 확인</label>
+        <input type="password" id="pwMac2" onkeyup="keyevent();" placeholder="비밀번호 확인">
+        <span id="check"></span>
     </div>
     <div>
         <label for="nickNameMac">닉네임</label>
@@ -49,11 +201,14 @@ function added()
     </div>
     <div>
         <label for="emailMac">이메일</label>
-        <input type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
+        <input type="email" th:field="*{emailMac}" th:value="*{emailMac}" id="emailMac" placeholder="이메일" readonly="readonly">
     </div>
     <div>
         <label for="genderMac">성별</label>
-        <input type="text" th:field="*{genderMac}" id="genderMac" placeholder="성별">
+    	<select th:field="*{genderMac}">
+    		<option value="남">남</option>
+    		<option value="남">여</option>
+    	</select>
     </div>
     <div>
         <label for="birthMac">생년월일</label>
@@ -61,7 +216,7 @@ function added()
     </div>
 	<div>
         <label for="phoneNumMac">핸드폰번호</label>
-        <input type="text" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
+        <input type="tel" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
     </div>
     <div>
         <label for="cityMac">시</label>
@@ -75,18 +230,18 @@ function added()
         <label for="villageMac">동</label>
         <input type="text" th:field="*{villageMac}" id="villageMac" placeholder="동">
     </div>
-    <!-- div>
-        <label for="managerMac">관리자권한 유무</label>
-        <input type="number" th:field="*{managerMac}" id="managerMac" placeholder="관리자권한 유무">
-    </div-->
     <div>
         <label for="nameMac">이름</label>
         <input type="text" th:field="*{nameMac}" id="nameMac" placeholder="이름">
     </div>
+ 
     <nav>
 	    <button type="reset">취소</button>
 	    <button type="submit">저장</button>
     </nav>
+</div>
+
+
 </form>
 </main>
 </body>

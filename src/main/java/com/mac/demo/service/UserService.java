@@ -41,7 +41,7 @@ public class UserService {
 
 	public boolean idcheck(String idMac) {
 		User user = dao.getOne(idMac);
-		return user != null;
+		return user == null;
 	}
 	
 	
