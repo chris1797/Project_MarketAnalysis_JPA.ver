@@ -41,8 +41,9 @@ public class BoardController {
 	
 //	커뮤니티메인화면
 	@GetMapping("/main")
-	public String main() {
+	public String main(Model model, HttpSession session) {
 		
+		model.addAttribute((String)session.getAttribute("idMac"));
 		return "thymeleaf/mac/board/boardMain";
 	}
 	
@@ -51,17 +52,16 @@ public class BoardController {
 	@GetMapping("/free/input")
 	public String input(Model model,HttpSession session) {
 		
-		String id = null;
-		String msg = null;
 		Board board = new Board();
+		System.out.println("현재 접속한 ID : " + (String)session.getAttribute("idMac"));
 		
-		System.out.println((String)session.getAttribute("idMac"));
-		
-		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
-			model.addAttribute("msg", msg);
-			msg = "로그인 후 사용 가능합니다.";
+		// login check
+		if((String)session.getAttribute("idMac") == null){
+			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
+			model.addAttribute("board", board);
+			
 		} else {
-			id = (String)session.getAttribute("idMac");
+			String id = (String)session.getAttribute("idMac");
 			
 			//닉네임 가져오기
 			board.setNickNameMac(svc.getOne(id).getNickNameMac());
@@ -116,9 +116,11 @@ public class BoardController {
 		String idMac = null;
 		Comment comment = new Comment();
 		if(session.getAttribute("idMac") != null) {
+			idMac = (String)session.getAttribute("idMac");
 			comment.setIdMac((String) session.getAttribute("idMac"));
 			comment.setNickNameMac(svc.getOne(idMac).getNickNameMac());	
 			comment.setPcodeMac(num);
+			model.addAttribute("idMac", idMac);
 		} else {
 			model.addAttribute("msg", "로그인 후 작성가능합니다.");
 		}
@@ -132,7 +134,6 @@ public class BoardController {
 		model.addAttribute("comment", comment);
 		
 		// 댓글 삭제를 위한 idMac체크
-		model.addAttribute("idMac", idMac);
 		
 		return "thymeleaf/mac/board/free_board_detail";
 	}

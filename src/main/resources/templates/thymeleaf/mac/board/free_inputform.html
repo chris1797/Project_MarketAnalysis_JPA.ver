@@ -23,31 +23,31 @@ main>h3 {
 form {
 	padding: 1em;
 	border: 1px solid black;
-	border-radius: 7px;
+	border-radius: 10px;
 }
 
 div>label {
 	display: inline-block;
-	width: 2em;
-	padding-right: 1em;
+	width: fit-content;
+	padding-right: 2em;
 	text-align: right;
 	vertical-align: top;
 }
 
 div>input {
-	width: 30em;
+	width: 50em;
 	margin-bottom: 0.5em;
 }
 
 div>textarea {
-	width: 30em;
+	width: 50em;
 	height: 10em;
 }
 
 form>div:last-child {
 	margin: 1em auto;
 	margin-bottom: 0;
-	width: fit-content;
+	width: 700px;
 	text-align: center;
 }
 
@@ -174,17 +174,22 @@ nav>a {
 				<option value="ads">광고게시판</option>
 				</select>
 			</div>
+				<br>
 			<div>
-				<label for="titleMac">제목</label>
-				<input type="text" name="titleMac" th:field="*{titleMac}">
+				<label for="titleMac" class="form-label">
+					<font size="4">제목</font>
+				</label>
+				<input type="text" class="form-control" name="titleMac" th:field="*{titleMac}">
 			</div>
 			<div>
-				<label for="contentsMac">내용</label>
-				<input type="text" name="contentsMac" th:field="*{contentsMac}">
+				<label for="contentsMac" class="form-label">
+					<font size="4">글내용</font>
+				</label>
+				<textarea name="contentsMac" class="form-control" th:field="*{contentsMac}"></textarea>
 			</div>
 			<div>
+				<button type="submit">글쓰기</button>
 				<button type="reset">취소</button>
-				<button type="submit">저장</button>
 			</div>
 		</form>
 		<nav>

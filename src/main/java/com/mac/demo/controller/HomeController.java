@@ -32,10 +32,10 @@ public class HomeController {
 		if(session.getAttribute("idMac")!=null) {
 			String uid = session.getAttribute("idMac").toString();
 			model.addAttribute("idMac",uid);
-			return "thymeleaf/mac/home/home";
+			return "thymeleaf/mac/home/home copy";
 		}
 		
-		return "thymeleaf/mac/home/home";
+		return "thymeleaf/mac/home/home copy";
 	}
 	
 //	데이터 출처
