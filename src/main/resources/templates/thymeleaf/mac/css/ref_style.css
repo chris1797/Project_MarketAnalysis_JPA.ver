@@ -1413,7 +1413,7 @@ dl.datalist_analysis + .box_checkbox {padding:0 20px;}
 #main .visual .menu li + li {margin-left:20px;}
 #main .visual .menu li dl {width:260px; height:380px; padding:0 20px; -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; background:rgba(247,247,247,0.9); text-align:left; -webkit-transition:all .3s; -moz-transition:all .3s; transition:all .3s; -webkit-box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); -moz-box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box;}
 #main .visual .menu li dl dt {padding:251px 0 10px; background-repeat:no-repeat; background-position-x:center; font-size:30px; font-weight:700;}
-#main .visual .menu li.best dl dt {background-image:url('../img/about.jpg'); background-position-y:40px; background-size:210px auto;}
+#main .visual .menu li.best dl dt {background-image:url('../img/il_best.svg'); background-position-y:40px; background-size:210px auto;}
 #main .visual .menu li.business dl dt {background-image:url('../images/il_business.svg'); background-position-y:43px; background-size:100px auto;}
 #main .visual .menu li.start dl dt {background-image:url('../images/il_start.svg'); background-position-y:34px; background-size:154px auto;}
 #main .visual .menu li dl dd {color:#777; font-size:16px;}
@@ -2159,7 +2159,7 @@ dl.datalist_titlecont > dt.bl {background:#00a0f3;}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li {margin-left:30px;}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li > dl {width:337px; height:508px; padding:0 30px; -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; background:rgba(249,249,249,0.7); -webkit-box-shadow:10px 10px 1px 0 rgba(0,0,0,0.05); -moz-box-shadow:10px 10px 1px 0 rgba(0,0,0,0.05); box-shadow:10px 10px 1px 0 rgba(0,0,0,0.05); -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box;}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li > dl > dt {padding:220px 0 20px; background-repeat:no-repeat; background-position-x:center; color:#00a0f3; font-size:24px; font-weight:500;}
-#useInfo .tabcnt_useinfo0 ul.list_col.service > li.best > dl > dt {background-image:url('../img/about.jpg');}
+#useInfo .tabcnt_useinfo0 ul.list_col.service > li.best > dl > dt {background-image:url('../img/megaphone.svg');}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li.business > dl > dt {background-image:url('../images/il_useinfo_business.svg');}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li.start > dl > dt {background-image:url('../images/il_useinfo_start.svg');}
 #useInfo .tabcnt_useinfo0 ul.list_col.service > li.state > dl > dt {background-image:url('../images/il_useinfo_state.svg');}
