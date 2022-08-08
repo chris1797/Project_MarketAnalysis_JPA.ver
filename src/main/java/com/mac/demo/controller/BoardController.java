@@ -43,8 +43,8 @@ public class BoardController {
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
 		
-		model.addAttribute((String)session.getAttribute("idMac"));
-		return "thymeleaf/mac/board/boardMain";
+//		model.addAttribute((String)session.getAttribute("idMac"));
+		return "thymeleaf/mac/board/boardMain_copy";
 	}
 	
 //======================================== 자유게시판 ========================================
@@ -102,7 +102,7 @@ public class BoardController {
 		
 		model.addAttribute("pageInfo", pageInfo);
 		
-		return "thymeleaf/mac/board/free_boardList";
+		return "thymeleaf/mac/board/free_boardList_copy";
 	}
 	
 	
@@ -186,7 +186,7 @@ public class BoardController {
 		
 		model.addAttribute("pageInfo",pageInfo);
 		
-		return "thymeleaf/mac/board/free_boardList";
+		return "thymeleaf/mac/board/free_boardList_copy";
 	}
 	
 	

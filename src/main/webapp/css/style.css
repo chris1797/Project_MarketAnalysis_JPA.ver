@@ -63,6 +63,7 @@ h1,
 h2,
 .fw-bold {
     font-weight: 800 !important;
+    color: #06A3DA;
 }
 
 h3,
@@ -129,7 +130,7 @@ h6,
     position: relative;
     margin-left: 25px;
     padding: 35px 0;
-    color: #FFFFFF;
+    color: #000000;
     font-size: 18px;
     font-weight: 600;
     outline: none;
@@ -147,7 +148,7 @@ h6,
 }
 
 .navbar-dark .navbar-brand h1 {
-    color: #FFFFFF;
+    color: var(--primary);
 }
 
 .navbar-dark .navbar-toggler {
