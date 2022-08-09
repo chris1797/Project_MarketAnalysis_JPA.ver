@@ -1,248 +1,476 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>addForm</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
+    <meta charset="utf-8">
+    <title>골목상권 분석-로그인 폼</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
 
-var idMac = null;
-var checkcode = null;
-var emailMac = null;
-
-
-function added() {
+	var idMac = null;
+	var checkcode = null;
+	var emailMac = null;
 	
-	var pw = document.getElementById('pwMac').value;
-    var SC = ["!","@","#","$","%"];
-    var check_SC = 0;
+	//=====================================로그인 체크=========================================
+	function added() {
+		
+		var pw = document.getElementById('pwMac').value;
+	    var SC = ["!","@","#","$","%"];
+	    var check_SC = 0;
 
-    if(pw.length < 6 || pw.length>16){
-        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
-        document.getElementById('pwMac').value='';
-        return false;
-    }
-    for(var i=0;i<SC.length;i++){
-        if(pw.indexOf(SC[i]) != -1){
-            check_SC = 1;
-        }
-    }
-    if(check_SC == 0){
-        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
-        document.getElementById('pwMac').value='';
-        return false;
-    }
-	
-    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
-        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
-            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
-            document.getElementById('check').style.color='blue';
-        }
-        else{
-            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
-            document.getElementById('check').style.color='red';
-            alert('비밀번호가 일치하지 않습니다.');
-            return false;
-        }
-    }
-	
-	$.ajax({
-		url:'/user/add',
-		method:'post',
-		cache:false,
-		data:$('#added').serialize(),
-		dataType:'json',
-		success:function(res){
-			alert(res.result ? '회원가입 성공':'회원가입 실패');
-			location.href="/home";
-		},
-		error:function(xhr,status, err){
-			alert('에러:'+err);
+	    //비밀번호 유효성검사
+	    if(pw.length < 6 || pw.length>16){
+	        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+	        document.getElementById('pwMac').value='';
+	        return false;
+	    }
+	    for(var i=0;i<SC.length;i++){
+	        if(pw.indexOf(SC[i]) != -1){
+	            check_SC = 1; 
+	        }
+	    }
+	    if(check_SC == 0){
+	        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+	        document.getElementById('pwMac').value='';
+	        return false;
+	    }
+		
+	    //비밀번화 확인 유효성검사
+	    if(document.getElementById('pwMac2').value==''){
+	    	alert('비밀번호 확인을 하세요.');
+	    	return false;
+	    }
+	    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+	        if(document.getElementById('pwMac').value!=document.getElementById('pwMac2').value){
+	            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+	            document.getElementById('check').style.color='red';
+	            alert('비밀번호가 일치하지 않습니다.');
+	            return false;
+	        }
+	    }
+	    
+	    //휴대폰 유효성검사
+	    var phonenum = document.getElementById('phoneNumMac').value;
+	    var regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+	    if(!regPhone.test(phonenum)){
+	     alert('잘못된 휴대폰 번호입니다.');
+	     return false;    
+	    }
+		
+	    //닉네임 유효성 검사
+	    if(document.getElementById('nickNameMac').value.length > 11){
+	        alert('닉네임은 10글자를 넘을 수 없습니다..');
+	        return false;
+	    }
+	    
+	    if(document.getElementById('nickNameMac').value==""){
+			alert('닉네임은 필수 사항입니다.');
+	        return false;
 		}
-	});
-	return false;
-	
-}
-
-function idcheck() {
-	$.ajax({
-		url:'/user/idcheck',
-		method:'post',
-		cache:false,
-		data:$('#idcheck').serialize(),
-		dataType:'json',
-		success:function(res){
-			if(res.result) {
-				alert('아이디 사용가능');
-				location.href="/user/addForm/" + res.id;
-			} else {
-				alert('중복된 아이디가 있습니다.');
+	    
+	    if(document.getElementById('nickNameMac').value.search(/\s/) != -1) {
+	    	alert('닉네임은 빈 칸을 포함 할 수 없습니다.');
+	    	return false;
+	    }
+	    
+	    $.ajax({
+			url:'/user/nickCheck',
+			method:'post',
+			cache:false,
+			data: {nick:document.getElementById('nickNameMac').value},
+			dataType:'json',
+			success:function(res){
+				if(res.result) {
+					$.ajax({
+						url:'/user/add',
+						method:'post',
+						cache:false,
+						data:$('#added').serialize(),
+						dataType:'json',
+						success:function(res){
+							alert(res.result ? '회원가입 성공':'회원가입 실패');
+							location.href="/home";
+						},
+						error:function(xhr,status, err){
+							alert('에러:'+err);
+						}
+					});
+					return false;
+				}else{
+					alert('이미 있는 닉네임입니다.');
+				}
+			},
+			error:function(xhr,status, err){
 			}
-		},
-		error:function(xhr,status, err){
-			alert('에러:'+err);
-		}
-	});
-	return false;
-}
+		});
+		return false;
+	}
 
-//메일 전송
-function sendMsg()
-{
-	$.ajax({
-		url:'/user/checkmail',
-		method:'post',
-		cache:false,
-		data:$('#emailcheck').serialize(),
-		dataType:'json',
-		success:function(res){
-			alert(res.result ? '메일 전송 완료':'메일 전송 실패');
-			checkcode = res.code;
-			emailMac = res.emailMac;
-			idMac = '[[${user.idMac}]]';
-		},
-		error:function(xhr,status, err){
-			alert('에러:'+err);
+	//========================================인증 구간==========================================
+	function idcheck() {
+		
+		//아이디 유효성검사
+		/*
+	    var testId = document.getElementById('idcheck').value;
+	    var regId = /^[0-9a-zA-Z]{4,16}$/;
+	    if(!regId.test(testId)){
+	     	alert('잘못된 아이디 입니다.');
+	     	return false;    
+	    }
+		
+	    if(document.getElementById('idcheck').value==""){
+			alert('아이디를 입력해 주세요.');
+	        return false;
 		}
-	});
-	return false;
-}
-
-//메일 체크
-function checked()
-{	
-	//alert('[[${user.idMac}]]');
-	var data= $('#checkcode').serialize();
-	$.ajax({
-		url:'/user/checkcode',
-		method:'post',
-		cache:false,
-		data:$('#checked').serialize(),
-		dataType:'json',
-		success:function(res){
-			if(res.code == checkcode) {
-				alert("인증 성공");
-				location.href="/user/addForm/"+idMac+"/"+emailMac;
-			} else {
-				alert("인증 실패");
+	    
+	    if(document.getElementById('idcheck').value.search(/\s/) != -1) {
+	    	alert('아이디에 빈 칸을 포함 할 수 없습니다.');
+	    	return false;
+	    }*/
+	    
+		$.ajax({
+			url:'/user/idcheck',
+			method:'post',
+			cache:false, 
+			data:$('#idcheck').serialize(),
+			dataType:'json',
+			success:function(res){
+				if(res.result) {
+					alert('아이디 사용가능');
+					location.href="/user/addForm/" + res.id;
+				} else {
+					alert('중복된 아이디가 있습니다.');
+				}
+			},
+			error:function(xhr,status, err){
+				alert('에러:'+err);
 			}
-		},
-		error:function(xhr,status, err){
-			alert('에러:'+err);
+		});
+		return false;
+	}
+
+	//메일 전송
+	function sendMsg()
+	{
+		$.ajax({
+			url:'/user/checkmail',
+			method:'post',
+			cache:false,
+			data:$('#emailcheck').serialize(),
+			dataType:'json',
+			success:function(res){
+				alert(res.result ? '메일 전송 완료':'메일 전송 실패');
+				checkcode = res.code;
+				emailMac = res.emailMac;
+				idMac = '[[${user.idMac}]]';
+			},
+			error:function(xhr,status, err){
+				alert('에러:'+err);
+			}
+		});
+		return false;
+	}
+
+	//메일 체크
+	function checked()
+	{	
+		//alert('[[${user.idMac}]]');
+		var data= $('#checkcode').serialize();
+		$.ajax({
+			url:'/user/checkcode',
+			method:'post',
+			cache:false,
+			data:$('#checked').serialize(),
+			dataType:'json',
+			success:function(res){
+				if(res.code == checkcode) {
+					//alert("인증 성공");
+					//location.href="/user/addForm/"+idMac+"/"+emailMac;
+					var form = document.createElement('form'); // 폼객체 생성
+					var objs;
+					objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+					objs.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+					objs.setAttribute('name', 'check'); // 객체이름
+					objs.setAttribute('value', 1); //객체값
+					form.appendChild(objs);
+					form.setAttribute('method', 'post'); //get,post 가능
+					form.setAttribute('action', "/user/addForm/"+idMac+"/"+emailMac); //보내는 url
+					document.body.appendChild(form);
+					form.submit();
+				} else {
+					alert("인증 실패");
+				}
+			},
+			error:function(xhr,status, err){
+				alert('에러:'+err);
+			}
+		});
+		return false;
+	}
+
+	function keyevent() {
+		if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+	        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
+	            document.getElementById('check').innerHTML='비밀번호가 일치합니다.';
+	            document.getElementById('check').style.color='blue';
+	        }
+	        else{
+	            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+	            document.getElementById('check').style.color='red';
+	        }
+	    }
+	}
+
+	function keyevent2() {
+		if(document.getElementById('nickNameMac').value==""){
+			document.getElementById('check2').innerHTML='닉네임은 필수사항 입니다.';
+	        document.getElementById('check2').style.color='red';
+	        return false;
 		}
-	});
-	return false;
-}
+		
+		$.ajax({
+			url:'/user/nickCheck',
+			method:'post',
+			cache:false,
+			data: {nick:document.getElementById('nickNameMac').value},
+			dataType:'json',
+			success:function(res){
+				if(res.result) {
+					document.getElementById('check2').innerHTML='사용 가능한 닉네임';
+			        document.getElementById('check2').style.color='blue';
+				} else {
+					document.getElementById('check2').innerHTML='이미 있는 닉네임입니다.';
+		            document.getElementById('check2').style.color='red';
+				}
+			},
+			error:function(xhr,status, err){
+				alert('에러:'+err);
+			}
+		});
+		return false;
+	}
+	</script>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
 
-function keyevent() {
-	if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
-        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
-            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
-            document.getElementById('check').style.color='blue';
-        }
-        else{
-            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
-            document.getElementById('check').style.color='red';
-        }
-    }
-}
+    <!-- Favicon -->
+    <link href="/user/img/favicon.ico" rel="icon">
 
-//th:action="@{/user/add}" th:object="${user}" method="post"
-</script>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/user/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/user/lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/user/css/style.css" rel="stylesheet">
 </head>
+
 <body>
-<main>
-<h3>addForm 입니다.</h3>
-
-<form id="idcheck" th:object="${user}" onsubmit="return idcheck();" >
-<div th:if="*{idMac==null}">
-	<label for="idMac">아이디</label>
-	<input type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
-    <button type="submit">아이디 체크</button>
-</div>
-</form>
-
-<form id="emailcheck" th:object="${user}" onsubmit="return sendMsg();" >
-<div th:if="*{idMac!=null && emailMac==null}">
-	<label for="emailMac">이메일</label>
-	<input type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
-    <button type="submit">이메일 인증</button>
-</div>
-</form>
-
-<form id="checked" onsubmit="return checked();">
-	<div th:if="*{idMac!=null && emailMac==null}"><label>확인코드<input type="text" name="code"></label></div>
-	<div th:if="*{idMac!=null && emailMac==null}">
-		<button type="reset">취소</button>
-		<button type="submit">인증코드 확인</button>
-	</div>
-</form>
+    <!-- Spinner Start -->
+    <!--div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner"></div>
+    </div-->
+    <!-- Spinner End -->
 
 
-<form id="added" th:object="${user}" onsubmit="return added();" >
-<div th:if="*{idMac!=null && emailMac!=null}">    
-    <div>
-        <label for="idMac">아이디</label>
-        <input type="text" th:field="*{idMac}" id="idMac" th:value="*{idMac}" placeholder="아이디" readonly="readonly">
-    </div>
-    
-    <div>
-        <label for="pwMac">비밀번호</label>
-        <input type="password" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
-    </div>
-    <div>
-        <label for="pwcheck">비밀번호 확인</label>
-        <input type="password" id="pwMac2" onkeyup="keyevent();" placeholder="비밀번호 확인">
-        <span id="check"></span>
-    </div>
-    <div>
-        <label for="nickNameMac">닉네임</label>
-        <input type="text" th:field="*{nickNameMac}" id="nickNameMac" placeholder="닉네임">
-    </div>
-    <div>
-        <label for="emailMac">이메일</label>
-        <input type="email" th:field="*{emailMac}" th:value="*{emailMac}" id="emailMac" placeholder="이메일" readonly="readonly">
-    </div>
-    <div>
-        <label for="genderMac">성별</label>
-    	<select th:field="*{genderMac}">
-    		<option value="남">남</option>
-    		<option value="남">여</option>
-    	</select>
-    </div>
-    <div>
-        <label for="birthMac">생년월일</label>
-        <input type="date" th:field="*{birthMac}" id="birthMac" placeholder="생년월일">
-    </div>
-	<div>
-        <label for="phoneNumMac">핸드폰번호</label>
-        <input type="tel" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
-    </div>
-    <div>
-        <label for="cityMac">시</label>
-        <input type="text" th:field="*{cityMac}" id="cityMac" placeholder="시">
-    </div>
-    <div>
-        <label for="townMac">구</label>
-        <input type="text" th:field="*{townMac}" id="townMac" placeholder="구">
-    </div>
-    <div>
-        <label for="villageMac">동</label>
-        <input type="text" th:field="*{villageMac}" id="villageMac" placeholder="동">
-    </div>
-    <div>
-        <label for="nameMac">이름</label>
-        <input type="text" th:field="*{nameMac}" id="nameMac" placeholder="이름">
-    </div>
- 
-    <nav>
-	    <button type="reset">취소</button>
-	    <button type="submit">저장</button>
-    </nav>
-</div>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="/home" class="navbar-brand p-0">
+            
+                <h1 class="m-0"><i class="bi bi-house-door"></i>&nbsp;&nbsp;창업 커뮤니티 및 상권정보</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <div class="nav-item dropdown">
+                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
+                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">이용안내</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/home/dataSource" class="dropdown-item">데이터 출처</a>
+                            <a href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+                            
+                        </div>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div th:if="${idMac==null}">
+                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
+                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+         </div></div>
+         <div th:if="${idMac !=null}">
+         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
+          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+         </div>
+            </div>
+        </nav>
+
+    <!-- Navbar End -->
 
 
-</form>
-</main>
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-primary p-3" placeholder="Type search keyword">
+                        <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+    <!-- Service Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="input-form col-md-12 mx-auto">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h1 class="mb-0">회원가입</h1>
+            </div>
+            <div class="input-form-backgroud row mx-auto">
+				<form id="idcheck" th:object="${user}" onsubmit="return idcheck();" >
+					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac==null}">
+						<label for="idMac">아이디</label>
+						<input class="form-control" type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
+					    <button class="form-control" type="submit">아이디 중복확인</button>
+					</div>
+					</form>
+					
+					<form id="emailcheck" th:object="${user}" onsubmit="return sendMsg();" >
+					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac==null}">
+						<label for="emailMac">이메일</label>
+						<input class="form-control" type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
+					    <button class="form-control" type="submit">이메일 인증</button>
+					</div>
+				</form>
+				
+				<form id="checked" onsubmit="return checked();">
+					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac==null}">
+						<label>확인코드</label>
+						<input class="form-control" type="text" name="code">
+						<button class="form-control" type="submit">인증코드 확인</button>
+					</div>
+				</form>
+            <div>
+            	<form id="added" th:object="${user}" onsubmit="return added();" >
+				<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac!=null}">    
+				    <div>
+				        <label for="idMac">아이디</label>
+				        <input class="form-control" type="text" th:field="*{idMac}" id="idMac" th:value="*{idMac}" placeholder="아이디" readonly="readonly">
+				    </div>
+				    
+				    <div>
+				        <label for="pwMac">비밀번호</label>
+				        <input class="form-control" type="password" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
+				    	<h5>비밀번호는 6 ~ 16글자, !,@,#,$,% 의 특수문자가 들어가야 합니다.</h5>
+				    </div>
+				    <div>
+				        <label for="pwcheck">비밀번호 확인</label>
+				        <input class="form-control" type="password" id="pwMac2" onkeyup="keyevent();" placeholder="비밀번호 확인">
+				     <span id="check"></span>
+				 	</div>
+				 	<div>
+				     <label for="nickNameMac">닉네임</label>
+				     <input class="form-control" type="text" th:field="*{nickNameMac}" onkeyup="keyevent2();" id="nickNameMac" placeholder="닉네임">
+				    	<span id="check2"></span>
+				 	</div>
+					 <div>
+			      	 	 <label for="emailMac">이메일</label>
+			       		 <input class="form-control" type="email" th:field="*{emailMac}" th:value="*{emailMac}" id="emailMac" placeholder="이메일" readonly="readonly">
+				    </div>
+			   		<div>
+			        <label for="genderMac">성별</label>
+			    	<select class="form-control" th:field="*{genderMac}">
+			    		<option value="남">남</option>
+			    		<option value="여">여</option>
+			    	</select>
+			    	</div>
+				    <div>
+				        <label for="birthMac">생년월일</label>
+				        <input class="form-control" type="date" th:field="*{birthMac}" id="birthMac" placeholder="생년월일">
+				    </div>
+					<div>
+				        <label for="phoneNumMac">핸드폰번호</label>
+				        <input class="form-control" type="tel" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
+				    	<h5>'-'을 제외하고 입력해주세요</h5>
+				    </div>
+				    <div>
+				        <label for="cityMac">시</label>
+				        <input class="form-control" type="text" th:field="*{cityMac}" id="cityMac" placeholder="시">
+				    </div>
+				    <div>
+				        <label for="townMac">구</label>
+				        <input class="form-control" type="text" th:field="*{townMac}" id="townMac" placeholder="구">
+				    </div>
+				    <div>
+				        <label for="villageMac">동</label>
+				        <input class="form-control" type="text" th:field="*{villageMac}" id="villageMac" placeholder="동">
+				    </div>
+				    <div>
+				        <label for="nameMac">이름</label>
+				        <input class="form-control" type="text" th:field="*{nameMac}" id="nameMac" placeholder="이름">
+				    </div>
+				 
+				    <nav>
+					    <button class="btn btn-outline-danger" type="reset">취소</button>
+					    <button class="btn btn-outline-info" type="submit">저장</button>
+				    </nav>
+				</div>
+			</form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/user/lib/wow/wow.min.js"></script>
+    <script src="/user/lib/easing/easing.min.js"></script>
+    <script src="/user/lib/waypoints/waypoints.min.js"></script>
+    <script src="/user/lib/counterup/counterup.min.js"></script>
+    <script src="/user/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/user/js/main.js"></script>
 </body>
+
 </html>

@@ -5,20 +5,24 @@
 <mapper namespace="com.mac.demo.mappers.UserMapper">
 
 	<insert id="add" parameterType="com.mac.demo.model.User">
-		INSERT INTO USER_TB(nummac, idmac, pwmac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, managermac, namemac) 
-		VALUES(USER_NUM.nextval,#{idMac},#{pwMac},#{nickNameMac},#{emailMac},#{genderMac},#{birthMac},#{phoneNumMac},#{cityMac},#{townMac},#{villageMac},#{managerMac},#{nameMac})
+		INSERT INTO USER_TB(nummac, idmac, pwmac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac) 
+		VALUES(USER_NUM.nextval, #{idMac},pkg_crypto.encrypt(#{pwMac}),#{nickNameMac},#{emailMac},#{genderMac},#{birthMac},#{phoneNumMac},#{cityMac},#{townMac},#{villageMac},#{nameMac})
 	</insert>
 
 	<select id="getList" resultType="com.mac.demo.model.User">
-		SELECT * FROM USER_TB
+		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac FROM USER_TB
 	</select>
 	
 	<select id="getOne" resultType="com.mac.demo.model.User">
-		SELECT * FROM USER_TB WHERE idmac= #{idMac}
+		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac FROM USER_TB WHERE idmac= #{idMac}
+	</select>
+
+	<select id="getOneNick" resultType="com.mac.demo.model.User">
+		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac FROM USER_TB WHERE nicknamemac= #{nickNameMac}
 	</select>
 
 	<update id="updated" parameterType="com.mac.demo.model.User">
-		UPDATE USER_TB SET pwmac=#{pwMac}, emailmac=#{emailMac}, phonenummac=#{phoneNumMac}, citymac=#{cityMac}, townmac=#{townMac}, villagemac=#{villageMac} WHERE idmac=#{idMac}
+		UPDATE USER_TB SET pwmac=pkg_crypto.encrypt(#{pwMac}), emailmac=#{emailMac}, phonenummac=#{phoneNumMac}, citymac=#{cityMac}, townmac=#{townMac}, villagemac=#{villageMac} WHERE idmac=#{idMac}
 	</update>
 	
 	<delete id="deleted" parameterType="String">

@@ -1,175 +1,243 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>홈화면</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-	crossorigin="anonymous">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-	crossorigin="anonymous"></script>
-	
-<style>
-#login {
-	font-size: 10px;
-}
 
-#add {
-	font-size: 4px;
-}
 
-#menu {
-	color: black;
-	text-decoration: none;
-	background-color: #f44366;
-	padding: 15px;
-	display: inline-block;
-	width: 200px;
-	text-align: center;
-	margin: 5px;
-}
+    <head>
+    <meta charset="utf-8">
+    <title>창업 커뮤니티 밎 상권분석</title>
+    <link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+   rel="stylesheet"
+   integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+   crossorigin="anonymous">
+   
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <link href="/img/favicon.ico" rel="icon">
 
-a:hover { /* a태그에 마우스가 올라갈 때 라는 의미*/
-	color: white;
-	text-decoration: underline;
-}
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-	crossorigin="anonymous"></script>
-<script type="text/javascript">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-function logout() {
-	if (!confirm('정말로 로그아웃하시겠어요?'))
-		return;
-	$.ajax({
-		url :'/login/logout',
-		method : 'get',
-		cache : false,
-		dataType : 'json',
-		success : function(res) {
-			alert(res.logout==true? '로그아웃 성공' : '로그아웃 실패');
-			location.href="/home";
-		},
-		error : function(xhr, status, err) {
-			alert(err);
-		}
-	});
-}
-</script>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/main/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/main/lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/main/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/main/css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
-	<header>
-
-		<div class="navbar navbar-dark bg-dark shadow-sm">
-			<div class=" text-left container">
-				<a href="/home" class="navbar-brand d-flex align-items-center">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-						fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="2" aria-hidden="true"
-						class="me-2" viewBox="0 0 24 24">
-						<path
-							d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-						
-						<circle cx="12" cy="13" r="4" /></svg> <strong>상권현황제공 창업커뮤니티</strong>
-				</a>
-			</div>
-			<div th:if="${idMac==null}">
-			<a href="/login/loginForm"> <strong>로그인</strong></a>
-			<a href="/user/addForm"> <strong>회원가입</strong></a>
-			</div>
-			<div th:if="${idMac !=null}">
-			<h5 th:text=" ${idMac}+'님 환영합니다'" th:style="'color:white'"></h5>
-			 <a href="javascript:logout();"> <strong>로그아웃|</strong></a>
-			 <a th:href="'/home/myPage/'+${idMac}"> <strong>마이페이지</strong></a>
-			</div>
-			<div>
-				<button class="navbar-toggler" type="button"
-					data-bs-toggle="collapse" data-bs-target="#navbarHeader"
-					aria-controls="navbarHeader" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			</div>
-		</div>
-		<div class="collapse bg-dark" id="navbarHeader">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 col-md-5 py-4">
-						<h4 class="text-white">커뮤니티</h4>
-						<!--                     <p class="text-muted">공지사항</p> -->
-						<ul class="list-unstyled">
-							<li><a href=/board/main class="text-white">커뮤니티 메인화면</a></li>
-							<li><a href="/board/notice" class="text-white">공지사항</a></li>
-							<li><a href="/board/free" class="text-white">자유게시판</a></li>
-							<li><a href="/board/ads" class="text-white">광고게시판</a></li>
-						</ul>
-					</div>
-					<div class="col-sm-4 col-md-5 py-4">
-						<h4 class="text-white">정보</h4>
-						<ul class="list-unstyled">
-							<li><a href="/board/notice" class="text-white">지역별
-									현황(지도)</a></li>
-							<li><a href="/board/notice" class="text-white">상권현황
-									상세데이터</a></li>
-							<li><a href="/board/notice" class="text-white">정부 지원사업
-									정보</a></li>
-						</ul>
-					</div>
-					<div class="col-sm-4 col-md-2 py-4">
-						<h4 class="text-white">이용안내</h4>
-						<ul class="list-unstyled">
-							<li><a href="/home/dataSource" class="text-white">데이터 출처</a></li>
-							<li><a href="/home/siteIntroduction" class="text-white">사이트
-									소개</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-
-	<main>
-
-		<section class="py-5 text-center container">
-			<div class="row py-lg-5">
-				<div class="col-lg-6 col-md-8 mx-auto">
-					<h1 class="fw-light">서울시 상권현황의 상권그래프</h1>
-					<p class="lead text-muted">그래프 및 지도 들어갈곳</p>
-				</div>
-			</div>
-		</section>
-
-		<section class="py-5 text-center container">
-			<div class="row py-lg-5">
-				<div class="col-lg-6 col-md-8 mx-auto">
-					<a id="menu" href="#">지역별상권현황(지도)</a><br> <a id="menu"
-						href="/board/main">커뮤니티</a><br> <a id="menu" href="#">서울시
-						현황데이터 </a><br>
-				</div>
-			</div>
-		</section>
+    <!-- Topbar End -->
 
 
-	</main>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="/home" class="navbar-brand p-0">
+            
+                <h1 class="m-0"><i class="bi bi-house-door"></i>&nbsp;&nbsp;창업 커뮤니티 및 상권정보</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <div class="nav-item dropdown">
+                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
+                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">이용안내</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/home/dataSource" class="dropdown-item">데이터 출처</a>
+                            <a href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+                            
+                        </div>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div th:if="${idMac==null}">
+                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
+                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+         </div></div>
+         <div th:if="${idMac !=null}">
+         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
+          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+         </div>
+            </div>
+        </nav>
 
-	<footer class="text-muted py-5">
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for y ourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
-	</footer>
+        <div class="container-fluid bg-primary py-5 bg-header" style="margin-bottom: 90px;">
+            <div class="row py-5">
+                <div class="col-12 pt-lg-5 mt-lg-5 text-center">
+                    <h1 class="display-4 text-white animated zoomIn">Home</h1>
+                 
+                </div>
+            </div>
+        </div>
+
+    <!-- Navbar End -->
+
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-primary p-3" placeholder="Type search keyword">
+                        <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+     <div class="row g-2 justify-content-center" >
+                <div class="col-lg-3 wow">
+                    <div class="bg-light rounded">
+                        <div class="border-bottom py-4 px-5 mb-4">
+                            <h4 class="text-primary mb-1">매출</h4>
+                            <small class="text-uppercase">서울시 매출 현황</small>
+                        </div>
+                        <div class="p-5 pt-0">
+                            <h1 class="display-5 mb-3">
+                                데이터 분석 자리
+                            </h1>
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 wow">
+                    <div class="bg-white rounded shadow position-relative" style="z-index: 1;">
+                        <div class="border-bottom py-4 px-5 mb-4">
+                            <h4 class="text-primary mb-1">유동인구</h4>
+                            <small class="text-uppercase">서울시의 유동인구</small>
+                        </div>
+                        <div class="p-5 pt-0">
+                            <h1 class="display-5 mb-3">
+                              데이터 분석 자리
+                            </h1>
+                
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 wow" >
+                    <div class="bg-light rounded">
+                        <div class="border-bottom py-4 px-5 mb-4">
+                            <h4 class="text-primary mb-1">점포</h4>
+                            <small class="text-uppercase">서울시 점포현황</small>
+                        </div>
+                        <div class="p-5 pt-0">
+                            <h1 class="display-5 mb-3">
+                              데이터 분석 자리
+                            </h1>
+                          
+                
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+
+    <!-- Service Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                           <i class="bi bi-pencil-square text-white"></i>
+                        </div>
+                        <h4 class="mb-3">창업 커뮤니티</h4>
+                        <p class="m-0">창업 관련 정보를 얻고 자신의 가게를 홍보할수 있습니다 </p>
+                        <a class="btn btn-lg btn-primary rounded" href="/board/main">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                            <i class="fa fa-chart-pie text-white"></i>
+                        </div>
+                        <h4 class="mb-3">그래프로 빅데이터 시각화</h4>
+                        <p class="m-0">매출,인구,점포를 보기쉽게 그래프로 보여줌</p>
+                        <a class="btn btn-lg btn-primary rounded" href="">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                            <i class="bi bi-geo-alt-fill text-white"></i>
+                        </div>
+                        <h4 class="mb-3">지도를 이용한 빅데이터 시각화</h4>
+                        <p class="m-0">지도를 이용하여 자신이 원하는 지역의 데이터를 보여줌</p>
+                        <a class="btn btn-lg btn-primary rounded" href="">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Footer Start -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/main/lib/wow/wow.min.js"></script>
+    <script src="/main/lib/easing/easing.min.js"></script>
+    <script src="/main/lib/waypoints/waypoints.min.js"></script>
+    <script src="/main/lib/counterup/counterup.min.js"></script>
+    <script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/main/js/main.js"></script>
 </body>
+
+
+
 </html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mac.demo.admin.AdminMapper">
+
+
+<select id="findAllUser" resultType="com.mac.demo.model.User">
+		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac FROM USER_TB
+	</select>
+	<select id="findAllFreeBoard" resultType="com.mac.demo.model.Board">
+		SELECT * FROM free_board
+	</select>
+	<select id="findAllAdsBoard" resultType="com.mac.demo.model.Board">
+		SELECT * FROM ads_board
+	</select>
+	
+	<delete id="freeBordDeleted" parameterType="Integer">
+		DELETE FROM free_board WHERE numMac=#{numMac}
+	</delete>
+	
+	<delete id="adsBordDeleted" parameterType="Integer">
+		DELETE FROM ads_board WHERE numMac=#{numMac}
+	</delete>
+	
+	<delete id="userDeleted" parameterType="Integer">
+		DELETE FROM user_tb WHERE numMac=#{numMac}
+	</delete>
+	
+	<insert id="saveNotice" parameterType="com.mac.demo.model.Board">
+	INSERT INTO notice_board
+		VALUES(NOTICE_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac})
+	</insert>
+	
+	
+	<select id="findAllNoticeBoard" resultType="com.mac.demo.model.Board">
+		SELECT * FROM notice_board
+	</select>
+	
+	<delete id="noticeBoardDeleted" parameterType="Integer">
+		DELETE FROM notice_board WHERE numMac=#{numMac}
+	</delete>
+	
+	<select id="findAllCommentBoard" resultType="com.mac.demo.model.Comment">
+	SELECT * FROM comment_board
+	</select>
+	
+	<delete id="commentBoardDeleted" parameterType="Integer">
+		DELETE FROM comment_board WHERE numMac=#{numMac}
+	</delete>
+	
+		<select id="getAdsListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM ads_board f
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getAdsListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM ads_board f
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
+
+</mapper>

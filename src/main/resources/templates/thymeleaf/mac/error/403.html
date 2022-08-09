@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Error, [[${code}]]</title>
+</head>
+<body>
+   <h3>Error, [[${code}]]</h3>
+    <div>
+        <p th:text="${'code: ' + code}"></p>
+        <p th:text="${'msg: ' + msg}"></p>
+        <p th:text="${'query string: ' + querystring}"></p>
+    </div>
+</body>
+</html>

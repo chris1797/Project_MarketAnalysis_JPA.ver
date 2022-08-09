@@ -94,13 +94,13 @@ public class BoardController {
 //	자유게시판 리스트
 	@GetMapping("/free/list")
 	public String getListByPage_free(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
-								Model model) {
+									Model model) {
 
 		PageHelper.startPage(page, 3);
 		PageInfo<Board> pageInfo = new PageInfo<>(svc.getFreeList());
-		List<Board> list = pageInfo.getList();
 		
 		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("page", page);
 		
 		return "thymeleaf/mac/board/free_boardList_copy";
 	}
@@ -135,7 +135,7 @@ public class BoardController {
 		
 		// 댓글 삭제를 위한 idMac체크
 		
-		return "thymeleaf/mac/board/free_board_detail";
+		return "thymeleaf/mac/board/free_board_detail_copy";
 	}
 	
 	
@@ -176,6 +176,7 @@ public class BoardController {
 								Model model) {
 		
 		PageHelper.startPage(page, 3);
+		System.out.println(keyword);
 		
 		PageInfo<Board> pageInfo = null;
 		if(category.equals("contents")) {
@@ -185,6 +186,7 @@ public class BoardController {
 		}
 		
 		model.addAttribute("pageInfo",pageInfo);
+		model.addAttribute("page", page);
 		
 		return "thymeleaf/mac/board/free_boardList_copy";
 	}
