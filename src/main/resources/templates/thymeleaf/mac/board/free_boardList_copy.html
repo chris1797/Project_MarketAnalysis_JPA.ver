@@ -20,18 +20,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <!-- Libraries Stylesheet -->
-<link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-<link href="/lib/animate/animate.min.css" rel="stylesheet">
+<link href="/board/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/board/lib/animate/animate.min.css" rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/board/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- Template Stylesheet -->
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<link rel="stylesheet" type="text/css" href="/css/ref_swiper.min.css">
-<link rel="stylesheet" type="text/css" href="/css/ref_style.css">
-<link rel="stylesheet" type="text/css" href="/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/board/css/style.css">
+<link rel="stylesheet" type="text/css" href="/board/css/ref_swiper.min.css">
+<link rel="stylesheet" type="text/css" href="/board/css/ref_style.css">
+<link rel="stylesheet" type="text/css" href="/board/css/all.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -106,8 +106,8 @@
 			</div>
 		</section>
 		<table>
-			<tr>
-				<div class="col-xl-3 col-md-6">
+			<!-- <tr> -->
+				<!-- <div class="col-xl-3 col-md-6">
 					<div class="card">
 						<div class="card-body">
 							<form>
@@ -128,8 +128,8 @@
 							</form>
 						</div>
 					</div>
-				</div>
-				</div>
+				</div> -->
+			<!-- </div> -->
 				<!-- end row -->
 
 				<div class="row">
@@ -164,22 +164,20 @@
 								</div>
 								<!-- end project-list -->
 
-								<div class="pt-3">
-									<ul class="pagination justify-content-end mb-0">
-											<li class="page-item disabled" th:each="i :${pageInfo.navigatepageNums}">
-												<li th:if="${i==pageInfo.pageNum}">
-													<li class="page-item active" th:text="${i}"></li>
-												</li>
-													<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-												<li th:if="${i!=pageInfo.pageNum}">
-													<li class="page-item"><a class="page-link" th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>
-												</li>
-													<li class="page-item">
-															<a class="page-link" href="'/board/free/list?page='+(${i}+1)">Next</a>
-													</li>
-											</li>
+								<div class="pt-3" align="center">
+									<ul class="pagination justify-content-center mb-0">
+										<a class="page-link" href="'/board/free/list?page='+(${pageInfo.pagenum}+1)" tabindex="-1" aria-disabled="true">Previous</a>
+											<span th:each="i :${pageInfo.navigatepageNums}">
+												<span th:if="${i==pageInfo.pageNum}"> 
+													<span th:text="${i}"></span>
+												</span> 
+												<span th:if="${i!=pageInfo.pageNum}"> 
+													<a th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>
+												</span>
+											</span>
+										<a class="page-link" href="'/board/free/list?page='+(${i}+1)">Next</a>
 									</ul>
-							</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -204,29 +202,34 @@
 				</button>
 			</div>
 			&nbsp;&nbsp;
-			<span th:each="i :${pageInfo.navigatepageNums}">
-				<span th:if="${i==pageInfo.pageNum}"> 
-					<span th:text="${i}">
+			<div class="pt-3">
+				<li class="page-item">
+					<a class="page-link" th:href="'/board/free/list?page='+(${i})" tabindex="-1" aria-disabled="true">Previous</a>
+				<span th:each="i :${pageInfo.navigatepageNums}">
+					<span th:if="${i==pageInfo.pageNum}"> 
+						<span th:text="${i}"></span>
+					</span> 
+					<span th:if="${i!=pageInfo.pageNum}"> 
+						<a th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>
+					</span>
 				</span>
-			</span> 
-				<span th:if="${i!=pageInfo.pageNum}"> 
-					<a th:text='${i}' th:href="'/board/free/list?page='+(${i})"></a>
-				</span>
-			</span>
+					<a class="page-link" th:href="'/board/free/list?page='+(${i})" tabindex="+1" aria-disabled="true">Next</a>
+				</li>
+			</div>
 		</form>
 
 		<!-- JavaScript Libraries -->
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="/lib/wow/wow.min.js"></script>
-		<script src="/lib/easing/easing.min.js"></script>
-		<script src="/lib/waypoints/waypoints.min.js"></script>
-		<script src="/lib/counterup/counterup.min.js"></script>
-		<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+		<script src="/board/lib/wow/wow.min.js"></script>
+		<script src="/board/lib/easing/easing.min.js"></script>
+		<script src="/board/lib/waypoints/waypoints.min.js"></script>
+		<script src="/board/lib/counterup/counterup.min.js"></script>
+		<script src="/board/lib/owlcarousel/owl.carousel.min.js"></script>
 
 		<!-- Template Javascript -->
-		<script src="/js/main.js"></script>
+		<script src="/board/js/main.js"></script>
 	</main>
 </body>
 <footer class="text-muted py-5">
