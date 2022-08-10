@@ -168,36 +168,34 @@
 				</div>
 			</div>
 		</section>
-		<table style="width: 800px;">
-			<div class="col-lg-12">
-					<div class="card">
-						<div class="table-responsive project-list">
-							<table class="table project-table table-centered table-nowrap">
-								<tr>
-									<th scope="col">번호</th>
-									<th scope="col">작성자</th>
-									<th scope="col">제목</th>
-									<th scope="col">글내용</th>
-									<th scope="col">작성일</th>
-								</tr>
-								<tr>
-									<td th:text="${board.numMac}"></td>
-									<td th:text="${board.nickNameMac}"></td>
-									<td th:text="${board.titleMac}"></td>
-									<td th:text="${board.contentsMac}"></td>
-									<td th:text="${board.wdateMac}"></td>
+		<section>
+			<div class="inner">
+				<table >
+						<div class="card">
+							<div class="table-responsive project-list">
+								<table class="table project-table table-centered table-nowrap">
+									<tr>
+										<th scope="col">번호</th>
+										<th scope="col">작성자</th>
+										<th scope="col">제목</th>
+										<th scope="col">글내용</th>
+										<th scope="col">작성일</th>
 									</tr>
-								
-							</table>
-		</div>
-		</div>
-		</div>
-		</table>
+									<tr>
+										<td th:text="${board.numMac}"></td>
+										<td th:text="${board.nickNameMac}"></td>
+										<td th:text="${board.titleMac}"></td>
+										<td th:text="${board.contentsMac}"></td>
+										<td th:text="${board.wdateMac}"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+				</table>
+			</div>
+		</section>
 		&nbsp;&nbsp;
-		<a href="/board/free/list">글목록</a> &nbsp;&nbsp;
-		<td th:if="${idMac}==${board.idMac}">
-			<a th:href="@{'/board/free/update/' + ${board.numMac}}">수정하기</a> &nbsp;&nbsp;
-		<a href="javascript:remove();">삭제</a></td>
+		
 		
 		<br><br><br>
 		<table style="width: 800px;">
@@ -243,6 +241,11 @@
 				</form>
 			</tr>
 		</table>
+		<a href="/board/free/list">글목록</a> &nbsp;&nbsp;
+		<td th:if="${idMac}==${board.idMac}">
+			<a th:href="@{'/board/free/update/' + ${board.numMac}}">수정하기</a> &nbsp;&nbsp;
+		<a href="javascript:remove();">삭제</a></td>
+
 		<br>
 
 
