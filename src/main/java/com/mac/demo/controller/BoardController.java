@@ -122,7 +122,7 @@ public class BoardController {
 			comment.setPcodeMac(num);
 			model.addAttribute("idMac", idMac);
 		} else {
-			model.addAttribute("msg", "로그인 후 작성가능합니다.");
+			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
 		
 		// 글상세
@@ -271,9 +271,9 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
-//			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
 			map.put("msg", "로그인 후 사용 가능합니다.");
 		} else {
+			System.out.println(comment.getCommentMac());
 			map.put("commented", svc.commentsave(comment));
 		}
 		

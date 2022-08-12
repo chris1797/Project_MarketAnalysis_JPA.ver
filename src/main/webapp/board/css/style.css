@@ -8,9 +8,46 @@
 
 .inner {
     width: 1100px;
+    height: 500px;
     margin: 0 auto;
-    border-radius: 5%;
+    padding: auto;
 }
+
+.board {
+    position: relative;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    margin: 0 auto;
+    width: 1100px;
+    height: 450px;
+    padding: 15px;
+}
+
+.board-header {
+    margin-bottom: 15px;
+    /* background-color: yellow; */
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee
+}
+
+.board-body {
+    border:#DDDDDD;
+    margin: 0 auto;
+    height: 100% auto;
+}
+
+.board-comment-header{
+    padding-left: 5px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid rgb(94, 94, 94)
+
+}
+
+.board-comment-li {
+	position:absolute;
+	bottom:2px;
+}
+
 
 /*** Spinner ***/
 .spinner {

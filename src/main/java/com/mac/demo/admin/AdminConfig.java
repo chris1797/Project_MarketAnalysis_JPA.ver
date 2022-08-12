@@ -56,6 +56,10 @@ public class AdminConfig
             
             .and()
             .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .ignoringAntMatchers("/home/**")
+            .ignoringAntMatchers("/user/**")
+            .ignoringAntMatchers("/board/**")
+            .ignoringAntMatchers("/login/**")
             //.csrf().ignoringAntMatchers("/logout") //요청시 'POST' not supported 에러 방지(사기 방지 시스템)
             // .ignoringAntMatchers("/admin/loginForm")
             //.ignoringAntMatchers("/doLogin")
