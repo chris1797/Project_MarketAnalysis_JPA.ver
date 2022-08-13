@@ -41,130 +41,129 @@
 <body>
 	<!-- Navbar & Carousel (상단바) Start -->
 	<main>
-		<header>
-			<div class="container-fluid position-relative p-0">
-				<nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
-					<a href="/board/main" class="navbar-brand p-0">
-						<h1 class="m-0">
-							<i class="fa fa-user-tie me-2"></i>Market
-						</h1>
-					</a>
-					<button class="navbar-toggler" type="button"
-						data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-						<span class="fa fa-bars"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarCollapse">
-						<div class="navbar-nav ms-auto py-0">
-							<a href="index.html" class="nav-item nav-link active">Home</a> <a
-								href="about.html" class="nav-item nav-link">About</a> <a
-								href="service.html" class="nav-item nav-link">Services</a>
-							<div class="nav-item dropdown">
-								<a href="#" class="nav-link dropdown-toggle"
-									data-bs-toggle="dropdown">Blog</a>
-								<div class="dropdown-menu m-0">
-									<a href="blog.html" class="dropdown-item">Blog Grid</a> <a
-										href="detail.html" class="dropdown-item">Blog Detail</a>
-								</div>
-							</div>
-							<div class="nav-item dropdown">
-								<a href="#" class="nav-link dropdown-toggle"
-									data-bs-toggle="dropdown">Pages</a>
-								<div class="dropdown-menu m-0">
-									<a href="price.html" class="dropdown-item">Pricing Plan</a> <a
-										href="feature.html" class="dropdown-item">Our features</a> <a
-										href="team.html" class="dropdown-item">Team Members</a> <a
-										href="testimonial.html" class="dropdown-item">Testimonial</a>
-									<a href="quote.html" class="dropdown-item">Free Quote</a>
-								</div>
-							</div>
-							<a href="contact.html" class="nav-item nav-link">Contact</a>
-						</div>
-						<a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-						<a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
-					</div>
-				</nav>
-			</div>
-		</header>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="/home" class="navbar-brand p-0">
+            
+                <h1 class="m-0"><i class="bi bi-house-door"></i>&nbsp;&nbsp;창업 커뮤니티 및 상권정보</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <div class="nav-item dropdown">
+                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
+                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">이용안내</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/home/dataSource" class="dropdown-item">데이터 출처</a>
+                            <a href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+                            
+                        </div>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div th:if="${idMac==null}">
+	                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
+	                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+         		</div>
+         	</div>
+	         <div th:if="${idMac !=null}">
+		         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+		          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
+		          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+	         </div>
+		</nav>
+	</div>
+    <!-- Navbar End -->
+    
 		<br> <br> <br>
 		<section class="text-left container">
 			<div class="row py-lg-5">
-				<div class="col-lg-8 col-md-8">
-					<h1 class="fw-light">자유게시판</h1>
-				</div>
 			</div>
 		</section>
-
-		<section class="py-2 text-left container">
-			<div class="row py-lg-5">
-				<div class="col-lg-8 col-md-2">
-					<ul class="list-unstyled">
-						<li><a href="/board/notice/list" class="text-black">공지사항</a></li>
-						<li><a href="/board/free/list" class="text-black">자유게시판</a></li>
-						<li><a href="/board/ads/list" class="text-black">광고게시판</a></li>
-					</ul>
-				</div>
+		<div class="inner">
+			<div class="col-lg-8 col-md-8">
+				<h1 class="fw-light">자유게시판</h1>
 			</div>
-		</section>
-		<table>
-			<div class="col-lg-12">
-				<div class="card">
-					<div class="table-responsive project-list">
-						<table class="table project-table table-centered table-nowrap">
-							<thead>
-								<tr>
-									<th scope="col">No.</th>
-									<th scope="col">제목</th>
-									<th scope="col">작성자</th>
-									<th scope="col">작성일</th>
-									<th scope="col">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="board : ${pageInfo.list}">
-									<td th:text="${board.numMac}"></td>
-									<td><a th:text="${board.titleMac}"
-										th:href="@{'/board/free/detail/'+ ${board.numMac}}"></a> 
-										<span th:text="'	['+${board.countMac}+']'"></span>
-									</td>
-									<td th:text="${board.nickNameMac}"></td>
-									<td th:text="${board.wdateMac}">
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<div class="pt-3" align="center">
-						<ul class="pagination justify-content-center mb-0">
-							<span th:if="${page!=1}"> <a class="page-link"
-								th:href="@{'/board/free/list?page='+${page-1}}">Previous</a>
-							</span>
-							<span th:unless="${page!=1}">
-								<li class="page-item disabled"><a class="page-link"
-									th:href="@{'/board/free/list?page='+${page-1}}">Previous</a></li>
-							</span>
-							<span th:each="i :${pageInfo.navigatepageNums}"> <span
-								th:if="${i==pageInfo.pageNum}">
-									<li class="page-item active"><span class="page-link"
-										th:text="${i}"></span></li>
-							</span> <span th:if="${i!=pageInfo.pageNum}"> <a
-									class="page-link" th:text='${i}'
-									th:href="'/board/free/list?page='+(${i})"></a>
-							</span>
-							</span>
-							<span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
-								class="page-link"
-								th:href="@{'/board/free/list?page='+${page+1}}">Next</a>
-							</span>
-							<span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
-								<li class="page-item disabled"><a class="page-link"
-									th:href="@{'/board/free/list?page='+${page+1}}">Next</a></li>
-							</span>
-						</ul>
+			<table>
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="table-responsive project-list">
+							<table class="table project-table table-centered table-nowrap">
+								<thead>
+									<tr>
+										<th scope="col">No.</th>
+										<th scope="col">제목</th>
+										<th scope="col">작성자</th>
+										<th scope="col">작성일</th>
+										<th scope="col">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="board : ${pageInfo.list}">
+										<td th:text="${board.numMac}"></td>
+										<td><a th:text="${board.titleMac}"
+											th:href="@{'/board/free/detail/'+ ${board.numMac}}"></a> 
+											<span th:text="'	['+${board.countMac}+']'"></span>
+										</td>
+										<td th:text="${board.nickNameMac}"></td>
+										<td th:text="${board.wdateMac}">
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+	
+						<div class="pt-3" align="center">
+							<ul class="pagination justify-content-center mb-0">
+								<span th:if="${page!=1}"> <a class="page-link"
+									th:href="@{'/board/free/list?page='+${page-1}}">Previous</a>
+								</span>
+								<span th:unless="${page!=1}">
+									<li class="page-item disabled"><a class="page-link"
+										th:href="@{'/board/free/list?page='+${page-1}}">Previous</a></li>
+								</span>
+								<span th:each="i :${pageInfo.navigatepageNums}"> <span
+									th:if="${i==pageInfo.pageNum}">
+										<li class="page-item active"><span class="page-link"
+											th:text="${i}"></span></li>
+								</span> <span th:if="${i!=pageInfo.pageNum}"> <a
+										class="page-link" th:text='${i}'
+										th:href="'/board/free/list?page='+(${i})"></a>
+								</span>
+								</span>
+								<span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
+									class="page-link"
+									th:href="@{'/board/free/list?page='+${page+1}}">Next</a>
+								</span>
+								<span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
+									<li class="page-item disabled"><a class="page-link"
+										th:href="@{'/board/free/list?page='+${page+1}}">Next</a></li>
+								</span>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-		</table>
+			</table>
+		</div>
 		<br>
 		<form id="search_form" method="get" action="/board/free/search?category=+${category}">
 			<div>
@@ -176,10 +175,10 @@
 				</select> 
 				<label for="keyword">검색어</label> 
 					<input type="text" name="keyword">
-				<button type="submit">검색</button>
-				<button type="reset">취소</button>
+				<button type="submit" class="btn btn-primary py-2 px-4 ms-3">검색</button>
+				<button type="reset" class="btn btn-primary py-2 px-4 ms-3">취소</button>
 				&nbsp;&nbsp;
-					<a href="/board/free/input">글쓰기</a>
+					<a href="/board/free/input" class="btn btn-primary py-2 px-4 ms-3">글쓰기</a>
 			</div>
 			&nbsp;&nbsp;
 		</form>

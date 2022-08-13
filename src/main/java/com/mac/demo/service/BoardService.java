@@ -44,8 +44,9 @@ public class BoardService {
 //	------------------id로 유저정보 가져오기-------------------    
 	public User getOne(String idMac) {
 		return userDao.getOne(idMac);
+		
 	}
-	
+//	------------------ SAVE -------------------    
 	public boolean saveToFree(Board board){
 		return 0 < boardDao.saveToFree(board);
 	}
@@ -53,17 +54,36 @@ public class BoardService {
 		return 0 < boardDao.saveToAds(board);
 	}
 	
-	
-	public Board getDetail(int num) {
-		return boardDao.getDetail(num);
+//	------------------상세보기-------------------    
+	public Board getFreeDetail(int num) {
+		return boardDao.getFreeDetail(num);
 	}
 	
-	public boolean delete(int num) {
-		return 0 < boardDao.delete(num);
+	public Board getAdsDetail(int num) {
+		return boardDao.getAdsDetail(num);
+	}
+	public Board getNoticeDetail(int num) {
+		return boardDao.getNoticeDetail(num);
+	}
+//	------------------DELETE-------------------    
+	public boolean Freedelete(int num) {
+		return 0 < boardDao.Freedelete(num);
+	}
+	public boolean Adsdelete(int num) {
+		return 0 < boardDao.Adsdelete(num);
+	}
+	public boolean Noticedelete(int num) {
+		return 0 < boardDao.Noticedelete(num);
 	}
 	
-	public boolean edit(Board board) {
-		return 0 < boardDao.edit(board);
+	public boolean Freeedit(Board board) {
+		return 0 < boardDao.Freeedit(board);
+	}
+	public boolean Adsedit(Board board) {
+		return 0 < boardDao.Adsedit(board);
+	}
+	public boolean Noticeedit(Board board) {
+		return 0 < boardDao.Noticeedit(board);
 	}
 //	-----------------------댓글-----------------------
 	public List<Comment> getCommentList(int num){
@@ -78,7 +98,7 @@ public class BoardService {
 		return 0 < boardDao.commentdelete(numMac);
 	}
 
-//	-----------------------검색-----------------------	
+//	-----------------------SEARCH-----------------------	
 	public List<Board> getFreeListByKeyword(String titleMac){
 		return boardDao.getFreeListByKeyword(titleMac);
 	}
@@ -86,10 +106,18 @@ public class BoardService {
 	public List<Board> getFreeListByNickName(String nickNameMac) {
 		return boardDao.getFreeListByNickName(nickNameMac);
 	}
+	
+	public List<Board> getAdsListByKeyword(String titleMac){
+		return boardDao.getAdsListByKeyword(titleMac);
+	}
+
+	public List<Board> getAdsListByNickName(String nickNameMac) {
+		return boardDao.getAdsListByNickName(nickNameMac);
+	}
 
 	
 	
-//	------------------------------------------------
+//	------------------------PAGE------------------------
 	public int[] getLinkRange(Page<Board> pageInfo) {
 		int start = 0;
 		int end = 0;

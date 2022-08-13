@@ -86,6 +86,30 @@
 		DESC
 	</select>
 	
+		<select id="getAdsListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM ads_board f
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getAdsListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
+			(SELECT COUNT(*)
+			FROM comment_board c
+			WHERE c.pcodemac = f.nummac) COUNTMAC
+		FROM ads_board f
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
 	<select id="getCommentList" resultType="com.mac.demo.model.Comment">
 		SELECT * 
 		FROM comment_board 
@@ -104,16 +128,40 @@
 	
 	</insert>
 	
-	<select id="getDetail" resultType="com.mac.demo.model.Board">
+	<!-- 상세보기 -->
+	
+	<select id="getFreeDetail" resultType="com.mac.demo.model.Board">
 		SELECT * FROM free_board WHERE NUMMAC=#{numMac}
 	</select>
+	
+	<select id="getAdsDetail" resultType="com.mac.demo.model.Board">
+		SELECT * FROM ads_board WHERE NUMMAC=#{numMac}
+	</select>
+	
+	<select id="getNoticeDetail" resultType="com.mac.demo.model.Board">
+		SELECT * FROM notice_board WHERE NUMMAC=#{numMac}
+	</select>
+	
+	<!--  -->
 
-	<update id="edit" parameterType="com.mac.demo.model.Board">
+	<update id="Freeedit" parameterType="com.mac.demo.model.Board">
 		UPDATE free_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
 	</update>
+	<update id="Adsedit" parameterType="com.mac.demo.model.Board">
+		UPDATE ads_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
+	</update>
+	<update id="Noticeedit" parameterType="com.mac.demo.model.Board">
+		UPDATE notice_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
+	</update>
 	
-	<delete id="delete" parameterType="com.mac.demo.model.Board">
+	<delete id="Freedelete" parameterType="com.mac.demo.model.Board">
 		DELETE FROM free_board WHERE NUMMAC=#{numMac}
+	</delete>
+	<delete id="Adsdelete" parameterType="com.mac.demo.model.Board">
+		DELETE FROM ads_board WHERE NUMMAC=#{numMac}
+	</delete>
+	<delete id="Noticedelete" parameterType="com.mac.demo.model.Board">
+		DELETE FROM notice_board WHERE NUMMAC=#{numMac}
 	</delete>
 	
 	<delete id="commentdelete" parameterType="com.mac.demo.model.Board">
