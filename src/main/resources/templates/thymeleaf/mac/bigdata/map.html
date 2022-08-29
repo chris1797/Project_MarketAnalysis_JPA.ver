@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+<meta charset="utf-8">
+<title>창업 커뮤니티 밎 상권분석</title>
+<style>
+.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+.map_wrap {position:relative;width:100%;height:500px;}
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+#placesList .item .marker_1 {background-position: 0 -10px;}
+#placesList .item .marker_2 {background-position: 0 -56px;}
+#placesList .item .marker_3 {background-position: 0 -102px}
+#placesList .item .marker_4 {background-position: 0 -148px;}
+#placesList .item .marker_5 {background-position: 0 -194px;}
+#placesList .item .marker_6 {background-position: 0 -240px;}
+#placesList .item .marker_7 {background-position: 0 -286px;}
+#placesList .item .marker_8 {background-position: 0 -332px;}
+#placesList .item .marker_9 {background-position: 0 -378px;}
+#placesList .item .marker_10 {background-position: 0 -423px;}
+#placesList .item .marker_11 {background-position: 0 -470px;}
+#placesList .item .marker_12 {background-position: 0 -516px;}
+#placesList .item .marker_13 {background-position: 0 -562px;}
+#placesList .item .marker_14 {background-position: 0 -608px;}
+#placesList .item .marker_15 {background-position: 0 -654px;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
+</style>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Free HTML Templates" name="keywords">
+<meta content="Free HTML Templates" name="description">
+<link href="/img/favicon.ico" rel="icon">
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+	rel="stylesheet">
+
+<!-- Icon Font Stylesheet -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+	rel="stylesheet">
+
+<!-- Libraries Stylesheet -->
+<link href="/main/lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet">
+<link href="/main/lib/animate/animate.min.css" rel="stylesheet">
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="/main/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="/main/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<!-- Topbar End -->
+
+
+	<!-- Navbar Start -->
+	<div class="container-fluid position-relative p-0">
+		<nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+			<a href="/home" class="navbar-brand p-0">
+
+				<h1 class="m-0">
+					<i class="bi bi-house-door"></i>&nbsp;&nbsp;창업 커뮤니티 및 상권정보
+				</h1>
+			</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+				<span class="fa fa-bars"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<div class="navbar-nav ms-auto py-0">
+					<div class="nav-item dropdown">
+						<a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+						<div class="dropdown-menu m-0">
+							<a href="/board/free/list" class="dropdown-item">자유게시판</a> <a
+								href="/board/ads/list" class="dropdown-item">광고게시판</a> <a
+								href="/board/notice/list" class="dropdown-item">공지사항</a>
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
+						<div class="dropdown-menu m-0">
+							<a href="price.html" class="dropdown-item">그래프 시각화</a> <a
+								href="feature.html" class="dropdown-item">지도 시각화</a>
+
+						</div>
+					</div>
+
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle">이용안내</a>
+						<div class="dropdown-menu m-0">
+							<a href="/home/dataSource" class="dropdown-item">데이터 출처</a> <a
+								href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+
+						</div>
+					</div>
+				</div>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<div th:if="${idMac==null}">
+					<a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
+					<a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+				</div>
+			</div>
+			<div th:if="${idMac !=null}">
+				<h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+				<a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
+				<a th:href="'/home/myPage/'+${idMac}"
+					class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+			</div>
+	</div>
+	</nav>
+
+	<div class="container-fluid bg-primary py-5 bg-header"
+		style="margin-bottom: 90px;">
+		<div class="row py-5">
+			<div class="col-12 pt-lg-5 mt-lg-5 text-center">
+				<h1 class="display-4 text-white animated zoomIn">Map</h1>
+
+			</div>
+		</div>
+	</div>
+	<!-- Navbar End -->
+	
+<!-- Service Start -->
+<div>
+	<button onclick="dataTable('sales')">예상 매출 데이터</button>
+	<button onclick="dataTable('population')">유동인구 데이터</button>
+	<button onclick="dataTable('store')">점포 데이터</button>
+</div>
+<div>
+	<div>
+		<h5>구</h5>
+		<select id="si" onChange="javascript:sievent()"></select>
+		
+		<h5>동</h5>
+		<select id="dong" onChange="javascript:dongevent()"></select>
+		
+		<h5>골목길</h5>
+		<select id="gil" onChange="javascript:gilevent()"></select>
+	</div>
+	<br>	
+	<div>
+		<button type="button" onclick="panTo()">검색</button>
+	</div>
+	<div class="map_wrap">
+	    <div id="map" style="width:50%;height:100%;position:relative;overflow:hidden;"></div>
+	</div>
+</div>
+<!-- Service End -->
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	01cb028783685326bfbb992c1e4945ca&libraries=services"></script>
+<script>
+var dataKind;
+var markers = [];
+var x_pit=0;
+var y_pit=0;
+var xpt;
+var ypt;
+
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = {
+        center: new kakao.maps.LatLng(37.5209, 126.9831), // 지도의 중심좌표 / 좌표 찾는법 : 구글지도에서 찾으려는 위치 선택후 주변검색누르면 좌표확인가능
+        level: 8 // 지도의 확대 레벨
+    };  
+
+// 지도를 생성합니다
+var map = new kakao.maps.Map(mapContainer, mapOption);
+
+//지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+var zoomControl = new kakao.maps.ZoomControl();
+map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+////////
+function start1(){
+	var geocoder = new kakao.maps.services.Geocoder(), // 좌표계 변환 객체를 생성합니다
+		     wtmX = x_pit, // 변환할 WTM X 좌표 입니다
+		     wtmY = y_pit; // 변환할 WTM Y 좌표 입니다
+	
+	var callback = function(result, status) {
+		if (status === kakao.maps.services.Status.OK) {
+			console.log(result[0].x);	    
+			console.log(result[0].y);
+			xpt = result[0].x;
+			ypt = result[0].y;
+		}
+	};
+	
+	//WTM 좌표를 WGS84 좌표계의 좌표로 변환한다
+	geocoder.transCoord(wtmX, wtmY, callback, {
+	    input_coord: kakao.maps.services.Coords.WTM,
+	    output_coord: kakao.maps.services.Coords.WGS84
+	});
+}
+
+function panTo() {
+	//마커 제거//
+	for (var i=0; i<markers.length; i++){
+		markers[i].setMap(null);
+	}
+	
+    var moveLatLon = new kakao.maps.LatLng(ypt, xpt);
+    var marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(ypt, xpt), // 마커를 표시할 위치입니다
+        map: map // 마커를 표시할 지도객체입니다
+    })
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+}
+
+function dataTable(kind) {
+	dataKind = kind
+	$.ajax({
+		url:'/big/kind',
+		method:'post',
+		cache:false,
+		data: {kind:kind},
+		dataType:'json',
+		success:function(res){
+			//html 에서 option 적용하게 만듬.
+			document.getElementById("si").innerHTML = res.silist;
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+function sievent() {
+	var thisi = document.getElementById("si").value;
+	$.ajax({
+		url:'/big/dong',
+		method:'post',
+		cache:false,
+		data: {si:thisi, kind:dataKind},
+		dataType:'json',
+		success:function(res){
+			document.getElementById("dong").innerHTML = res.donglist;
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+function dongevent() {
+	var thisdong = document.getElementById("dong").value;
+	$.ajax({
+		url:'/big/gil',
+		method:'post',
+		cache:false,
+		data: {dong:thisdong, kind:dataKind},
+		dataType:'json',
+		success:function(res){
+			document.getElementById("gil").innerHTML = res.gillist;
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+function gilevent() {
+	var thisgil = document.getElementById("gil").value;
+	$.ajax({
+		url:'/big/xy',
+		method:'post',
+		cache:false,
+		data: {gil:thisgil},
+		dataType:'json',
+		success:function(res){
+			x_pit = res.x;
+			y_pit = res.y;
+			start1();
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+</script>
+
+
+	<!-- Footer Start -->
+	<footer class="text-muted py-5">
+		<div class="container">
+			<p class="float-end mb-1">
+				<a href="#">Back to top</a>
+			</p>
+			<p class="mb-1">Album example is &copy; Bootstrap, but please
+				download and customize it for yourself!</p>
+			<p class="mb-0">
+				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
+					href="../getting-started/introduction/">getting started guide</a>.
+			</p>
+		</div>
+	</footer>
+
+	<!-- Back to Top -->
+	<a href="#"
+		class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i
+		class="bi bi-arrow-up"></i></a>
+
+
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/main/lib/wow/wow.min.js"></script>
+	<script src="/main/lib/easing/easing.min.js"></script>
+	<script src="/main/lib/waypoints/waypoints.min.js"></script>
+	<script src="/main/lib/counterup/counterup.min.js"></script>
+	<script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
+
+	<!-- Template Javascript -->
+	<script src="/main/js/main.js"></script>
+</body>
+
+
+
+</html>

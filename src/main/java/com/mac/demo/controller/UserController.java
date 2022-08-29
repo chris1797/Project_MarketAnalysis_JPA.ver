@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.mac.demo.model.Board;
 import com.mac.demo.model.User;
 import com.mac.demo.service.UserService;
 
@@ -36,7 +39,7 @@ public class UserController {
 	}
 	
 //	아이디 체크후 추가폼
-	@GetMapping("/addForm/{idMac}")
+	@PostMapping("/addForm/{idMac}")
 	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
 		User user = new User();
 		user.setIdMac(idMac);
@@ -78,12 +81,31 @@ public class UserController {
 	}
 	
 //	마이페이지
-	@GetMapping("/detail")
-	public String mypage(@RequestParam("idMac")String idMac, Model model) {
+	@GetMapping("/detail/{idMac}")
+	public String mypage(@PathVariable("idMac")String idMac, Model model, HttpSession session,@RequestParam(name="page", required = false,defaultValue = "1") int page) {
 		User user = svc.getOne(idMac);
+	
+		
+		if(idMac.equals((String)session.getAttribute("idMac"))==false) {
+			return "redirect:/home";
+		};
+	
+		
+		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
+			return "thymeleaf/mac/home/home";
+		};
+		
+		
 		model.addAttribute("user", user);
+		
+		PageHelper.startPage(page, 5);
+		PageInfo<Board> pageInfo = new PageInfo<>(svc.findWrite(idMac));
+		System.out.println(svc.findWrite(idMac).toString());
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("page", page);
+		
 		return "thymeleaf/mac/User/myPage";
-//		return "thymeleaf/bootstrap/index";
+
 	}
 	
 //	계정 삭제
@@ -94,12 +116,20 @@ public class UserController {
 		String idMac = user.getIdMac();
 		boolean result = svc.deleted(idMac);
 		map.put("result", result);
+		
+		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
+			result = false;
+			map.put("result", result);
+			return map;
+		}
+		
 		return map;
 	}
 	
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
 	public String update(User user, Model model) {
+//		System.out.println("여기누");
 		User user2 = svc.getOne(user.getIdMac());
 		model.addAttribute("user", user2);
 		return "thymeleaf/mac/User/updateForm";

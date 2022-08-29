@@ -14,7 +14,7 @@
 	</insert>
 	
 	<insert id="insertAttach" parameterType="com.mac.demo.model.AttachVO">
-				INSERT INTO attach_tb(num, pnum, fname, fpath) 
+				INSERT INTO ATTACH(num, pnum, fname, fpath) 
 				VALUES(attach_num.NEXTVAL, #{pnum}, #{fname}, #{fpath})
 	</insert>
 	

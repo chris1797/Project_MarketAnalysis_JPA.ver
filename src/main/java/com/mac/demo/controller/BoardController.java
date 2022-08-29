@@ -111,6 +111,7 @@ public class BoardController {
 //  게시글 보기
 	@GetMapping("/free/detail/{num}")
 	public String getDetail(@PathVariable("num") int num, 
+							@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 							Model model,
 							HttpSession session) {
 		
@@ -131,14 +132,22 @@ public class BoardController {
 		model.addAttribute("num", num);
 		model.addAttribute("board", svc.getFreeDetail(num));
 		
+		
+		PageHelper.startPage(page, 7);
+		PageInfo<Comment> pageInfo = new PageInfo<>(svc.getCommentList(num));
+		
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("page", page);
 		// 댓글
-		model.addAttribute("commentlist", svc.getCommentList(num));
 		model.addAttribute("comment", comment);
 		
 		// 댓글 삭제를 위한 idMac체크
 		
 		return "thymeleaf/mac/board/free_board_detail_copy";
 	}
+	
+	
+	
 	
 	
 //  게시글 삭제
@@ -148,7 +157,9 @@ public class BoardController {
 	public Map<String, Object> delete(@PathVariable("num") int num) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
+		
 		map.put("deleted", svc.Freedelete(num));
+		map.put("commetdeleted", svc.freeCommentAllDelete(num));
 		return map;
 	}
 	
@@ -202,7 +213,7 @@ public class BoardController {
 									Model model,
 									HttpSession session) {
 		
-		PageHelper.startPage(page, 10);
+		PageHelper.startPage(page, 5);
 		PageInfo<Board> pageInfo = new PageInfo<>(svc.getAdsList());
 		
 		model.addAttribute("pageInfo", pageInfo);
@@ -263,6 +274,7 @@ public class BoardController {
 //  게시글 보기
 	@GetMapping("/ads/detail/{num}")
 	public String getDetail_ads(@PathVariable("num") int num, 
+								@RequestParam(name="page", required = false,defaultValue = "1") int page,
 							Model model,
 							HttpSession session) {
 		
@@ -284,7 +296,11 @@ public class BoardController {
 		model.addAttribute("board", svc.getAdsDetail(num));
 		
 		// 댓글
-		model.addAttribute("commentlist", svc.getCommentList(num));
+		PageHelper.startPage(page, 7);
+		PageInfo<Comment> pageInfo = new PageInfo<>(svc.getCommentList(num));
+		
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("page", page);
 		model.addAttribute("comment", comment);
 		
 		// 댓글 삭제를 위한 idMac체크
@@ -292,14 +308,19 @@ public class BoardController {
 		return "thymeleaf/mac/board/ads_board_detail_copy";
 	}
 	
+
+	
+	
+	
 //  게시글 삭제
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
 	@GetMapping("/ads/delete/{num}")
 	@ResponseBody
 	public Map<String, Object> delete_ads(@PathVariable("num") int num) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+		svc.adsCommentAllDelete(num);
 		map.put("deleted", svc.Adsdelete(num));
+		map.put("commetdeleted", svc.adsCommentAllDelete(num));
 		return map;
 	}
 	
@@ -356,7 +377,8 @@ public class BoardController {
 	@GetMapping("/notice/detail/{num}")
 	public String getDetail_notice(@PathVariable("num") int num, 
 							Model model,
-							HttpSession session) {
+							HttpSession session,
+							@RequestParam(name="page", required = false,defaultValue = "1") int page) {
 		
 		//test용
 		String idMac = null;
@@ -376,12 +398,38 @@ public class BoardController {
 		model.addAttribute("board", svc.getNoticeDetail(num));
 		
 		// 댓글
-		model.addAttribute("commentlist", svc.getCommentList(num));
+		PageHelper.startPage(page, 10);
+		PageInfo<Comment> pageInfo = new PageInfo<>(svc.getCommentList(num));
+		model.addAttribute("commentlist",svc.getCommentList(num));
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("page", page);
 		model.addAttribute("comment", comment);
 		
 		// 댓글 삭제를 위한 idMac체크
 		
 		return "thymeleaf/mac/board/notice_board_detail_copy";
+	}
+	
+	@GetMapping("/notice/search")
+	public String getListByTitle_Notice(@RequestParam(name="page", required = false,defaultValue = "1") int page,
+								@RequestParam(name="category", required = false) String category,
+								@RequestParam(name="keyword", required = false) String keyword,
+								Model model) {
+		
+		PageHelper.startPage(page, 10);
+		System.out.println(keyword);
+		
+		PageInfo<Board> pageInfo = null;
+		if(category.equals("contents")) {
+			pageInfo = new PageInfo<>(svc.getNoticeListByKeyword(keyword));
+		} else {
+			pageInfo = new PageInfo<>(svc.getNoticeListByNickName(keyword));
+		}
+		
+		model.addAttribute("pageInfo",pageInfo);
+		model.addAttribute("page", page);
+		
+		return "thymeleaf/mac/board/notice_boardList_copy";
 	}
 
 //======================================== 댓글 ========================================

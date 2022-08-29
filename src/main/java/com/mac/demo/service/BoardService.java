@@ -12,7 +12,7 @@ import org.springframework.data.convert.SimplePropertyValueConversions;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.mac.demo.jpa.board.BoardRepository;
+
 import com.mac.demo.mappers.BoardMapper;
 import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.model.Board;
@@ -67,13 +67,13 @@ public class BoardService {
 	}
 //	------------------DELETE-------------------    
 	public boolean Freedelete(int num) {
-		return 0 < boardDao.Freedelete(num);
+		return 0 > boardDao.Freedelete(num);
 	}
 	public boolean Adsdelete(int num) {
-		return 0 < boardDao.Adsdelete(num);
+		return 0 > boardDao.Adsdelete(num);
 	}
 	public boolean Noticedelete(int num) {
-		return 0 < boardDao.Noticedelete(num);
+		return 0 > boardDao.Noticedelete(num);
 	}
 	
 	public boolean Freeedit(Board board) {
@@ -84,6 +84,16 @@ public class BoardService {
 	}
 	public boolean Noticeedit(Board board) {
 		return 0 < boardDao.Noticeedit(board);
+		
+	}
+
+	public boolean freeCommentAllDelete(int num) {
+		return 0<boardDao.freeCommentAllDelete(num);
+		
+	}
+	public boolean adsCommentAllDelete(int num) {
+		return 0<boardDao.adsCommentAllDelete(num);
+		
 	}
 //	-----------------------댓글-----------------------
 	public List<Comment> getCommentList(int num){
@@ -114,6 +124,17 @@ public class BoardService {
 	public List<Board> getAdsListByNickName(String nickNameMac) {
 		return boardDao.getAdsListByNickName(nickNameMac);
 	}
+	
+	public List<Board> getNoticeListByKeyword(String titleMac) {
+		
+		return boardDao.getNoticeListByKeyword(titleMac);
+	}
+
+	public List<Board> getNoticeListByNickName(String nickNameMac) {
+		return boardDao.getNoticeListByNickName(nickNameMac);
+	}
+	
+	
 
 	
 	
@@ -136,6 +157,9 @@ public class BoardService {
 		}
 		return new int[] { start, end };
 	}
+
+
+	
 
 
 }

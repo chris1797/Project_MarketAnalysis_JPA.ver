@@ -32,10 +32,7 @@
 	</select>
 	
 	<select id="getNoticeList" resultType="com.mac.demo.model.Board">
-		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
-			(SELECT COUNT(*)
-			FROM comment_board c
-			WHERE c.pcodemac = n.nummac) COUNTMAC
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
 		FROM notice_board n
 		ORDER BY NUMMAC
 		DESC
@@ -110,6 +107,24 @@
 		DESC
 	</select>
 	
+		<select id="getNoticeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM notice_board 
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getNoticeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM notice_board 
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
 	<select id="getCommentList" resultType="com.mac.demo.model.Comment">
 		SELECT * 
 		FROM comment_board 
@@ -142,7 +157,7 @@
 		SELECT * FROM notice_board WHERE NUMMAC=#{numMac}
 	</select>
 	
-	<!--  -->
+	<!-- update/delete -->
 
 	<update id="Freeedit" parameterType="com.mac.demo.model.Board">
 		UPDATE free_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
@@ -167,6 +182,15 @@
 	<delete id="commentdelete" parameterType="com.mac.demo.model.Board">
 		DELETE FROM comment_board WHERE NUMMAC=#{numMac}
 	</delete>
+	
+	<delete id="freeCommentAllDelete" parameterType="com.mac.demo.model.Comment">
+		DELETE FROM comment_board WHERE PCODEMAC=#{numMac}
+	</delete>
+	<delete id="adsCommentAllDelete" parameterType="com.mac.demo.model.Comment">
+		DELETE FROM comment_board WHERE PCODEMAC=#{numMac}
+	</delete>
+	
+	
 	
 	<!-- 닉네임에서 id로 가져오기 -->
 	<select id="getMypageInFreeBoard" resultType="com.mac.demo.model.Board" parameterType="String">

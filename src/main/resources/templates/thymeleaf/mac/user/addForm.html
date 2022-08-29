@@ -19,6 +19,10 @@
 	    var check_SC = 0;
 
 	    //비밀번호 유효성검사
+	    if(document.getElementById('pwMac').value.search(/\s/) != -1) {
+	    	alert('비밀번호에 빈 칸을 포함 할 수 없습니다.');
+	    	return false;
+	    }
 	    if(pw.length < 6 || pw.length>16){
 	        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
 	        document.getElementById('pwMac').value='';
@@ -89,10 +93,10 @@
 						dataType:'json',
 						success:function(res){
 							alert(res.result ? '회원가입 성공':'회원가입 실패');
-							location.href="/home";
+							location.href="/login/loginForm";
 						},
 						error:function(xhr,status, err){
-							alert('에러:'+err);
+							alert('다시 확인하세요.');
 						}
 					});
 					return false;
@@ -109,24 +113,24 @@
 	//========================================인증 구간==========================================
 	function idcheck() {
 		
+		
 		//아이디 유효성검사
-		/*
-	    var testId = document.getElementById('idcheck').value;
-	    var regId = /^[0-9a-zA-Z]{4,16}$/;
-	    if(!regId.test(testId)){
-	     	alert('잘못된 아이디 입니다.');
-	     	return false;    
+	    if(document.getElementById('idMac').value.search(/\s/) != -1) {
+	    	alert('빈 칸을 포함 할 수 없습니다.');
+	    	return false;
 	    }
 		
-	    if(document.getElementById('idcheck').value==""){
-			alert('아이디를 입력해 주세요.');
+	    if(document.getElementById('idMac').value==""){
+			alert('아이디를 입력해주세요.');
 	        return false;
 		}
 	    
-	    if(document.getElementById('idcheck').value.search(/\s/) != -1) {
-	    	alert('아이디에 빈 칸을 포함 할 수 없습니다.');
-	    	return false;
-	    }*/
+	    var userId = document.getElementById('idMac').value;
+	    var regId = /^([0-9a-zA-Z]{8,15})$/;
+	    if(!regId.test(userId)){
+	     alert('아이디는 숫자,영어 8~15글자여야 합니다.');
+	     return false;    
+	    }
 	    
 		$.ajax({
 			url:'/user/idcheck',
@@ -137,7 +141,18 @@
 			success:function(res){
 				if(res.result) {
 					alert('아이디 사용가능');
-					location.href="/user/addForm/" + res.id;
+					//location.href="/user/addForm/" + res.id;
+					var form = document.createElement('form'); // 폼객체 생성
+					var objs;
+					objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+					objs.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+					objs.setAttribute('name', 'check'); // 객체이름
+					objs.setAttribute('value', 1); //객체값
+					form.appendChild(objs);
+					form.setAttribute('method', 'post'); //get,post 가능
+					form.setAttribute('action', "/user/addForm/"+res.id); //보내는 url
+					document.body.appendChild(form);
+					form.submit();
 				} else {
 					alert('중복된 아이디가 있습니다.');
 				}
@@ -255,7 +270,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="/user/img/favicon.ico" rel="icon">
+    <link href="/main/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -267,14 +282,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="/user/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="/user/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/main/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/main/lib/animate/animate.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="/user/css/style.css" rel="stylesheet">
+    <link href="/main/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -286,7 +301,7 @@
 
 
     <!-- Navbar Start -->
-    <div class="container-fluid position-relative p-0">
+   <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <a href="/home" class="navbar-brand p-0">
             
@@ -308,8 +323,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
-                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
                     </div>
@@ -331,10 +346,10 @@
          <div th:if="${idMac !=null}">
          <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
           <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
          </div>
+         </nav>
             </div>
-        </nav>
 
     <!-- Navbar End -->
 
@@ -368,6 +383,7 @@
 					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac==null}">
 						<label for="idMac">아이디</label>
 						<input class="form-control" type="text" th:field="*{idMac}" id="idMac" placeholder="아이디">
+					    &nbsp;
 					    <button class="form-control" type="submit">아이디 중복확인</button>
 					</div>
 					</form>
@@ -376,7 +392,8 @@
 					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac==null}">
 						<label for="emailMac">이메일</label>
 						<input class="form-control" type="email" th:field="*{emailMac}" id="emailMac" placeholder="이메일">
-					    <button class="form-control" type="submit">이메일 인증</button>
+					    &nbsp;
+					    <button class="form-control" type="submit">이메일 인증 코드 발송</button>
 					</div>
 				</form>
 				
@@ -384,6 +401,7 @@
 					<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac==null}">
 						<label>확인코드</label>
 						<input class="form-control" type="text" name="code">
+						&nbsp;
 						<button class="form-control" type="submit">인증코드 확인</button>
 					</div>
 				</form>
@@ -392,27 +410,30 @@
 				<div class="col-md-4 mb-3 mx-auto" th:if="*{idMac!=null && emailMac!=null}">    
 				    <div>
 				        <label for="idMac">아이디</label>
-				        <input class="form-control" type="text" th:field="*{idMac}" id="idMac" th:value="*{idMac}" placeholder="아이디" readonly="readonly">
+				        <input class="form-control" type="text" th:field="*{idMac}" th:value="*{idMac}" readonly="readonly">
 				    </div>
 				    
 				    <div>
 				        <label for="pwMac">비밀번호</label>
-				        <input class="form-control" type="password" th:field="*{pwMac}" id="pwMac" placeholder="비밀번호">
-				    	<h5>비밀번호는 6 ~ 16글자, !,@,#,$,% 의 특수문자가 들어가야 합니다.</h5>
+				        <span style="font-size:3px"> [비밀번호는 6 ~ 16글자]</span>
+				    	<div>
+				    	</div>
+				    	<span style="font-size:3px">[!,@,#,$,% 의 특수문자가 들어가야 합니다.]</span>
+				        <input class="form-control" type="password" th:field="*{pwMac}" id="pwMac">
 				    </div>
 				    <div>
 				        <label for="pwcheck">비밀번호 확인</label>
-				        <input class="form-control" type="password" id="pwMac2" onkeyup="keyevent();" placeholder="비밀번호 확인">
+				        <input class="form-control" type="password" id="pwMac2" onkeyup="keyevent();">
 				     <span id="check"></span>
 				 	</div>
 				 	<div>
 				     <label for="nickNameMac">닉네임</label>
-				     <input class="form-control" type="text" th:field="*{nickNameMac}" onkeyup="keyevent2();" id="nickNameMac" placeholder="닉네임">
+				     <input class="form-control" type="text" th:field="*{nickNameMac}" onkeyup="keyevent2();" id="nickNameMac">
 				    	<span id="check2"></span>
 				 	</div>
 					 <div>
 			      	 	 <label for="emailMac">이메일</label>
-			       		 <input class="form-control" type="email" th:field="*{emailMac}" th:value="*{emailMac}" id="emailMac" placeholder="이메일" readonly="readonly">
+			       		 <input class="form-control" type="email" th:field="*{emailMac}" th:value="*{emailMac}" id="emailMac" readonly="readonly">
 				    </div>
 			   		<div>
 			        <label for="genderMac">성별</label>
@@ -423,28 +444,29 @@
 			    	</div>
 				    <div>
 				        <label for="birthMac">생년월일</label>
-				        <input class="form-control" type="date" th:field="*{birthMac}" id="birthMac" placeholder="생년월일">
+				        <input class="form-control" type="date" th:field="*{birthMac}" id="birthMac">
 				    </div>
 					<div>
 				        <label for="phoneNumMac">핸드폰번호</label>
-				        <input class="form-control" type="tel" th:field="*{phoneNumMac}" id="phoneNumMac" placeholder="핸드폰번호">
-				    	<h5>'-'을 제외하고 입력해주세요</h5>
+				        <div></div>
+				        <span style="font-size:5px"> '-'을 제외하고 입력해주세요</span>
+				        <input class="form-control" type="tel" th:field="*{phoneNumMac}" id="phoneNumMac">
 				    </div>
 				    <div>
 				        <label for="cityMac">시</label>
-				        <input class="form-control" type="text" th:field="*{cityMac}" id="cityMac" placeholder="시">
+				        <input class="form-control" type="text" th:field="*{cityMac}" id="cityMac">
 				    </div>
 				    <div>
 				        <label for="townMac">구</label>
-				        <input class="form-control" type="text" th:field="*{townMac}" id="townMac" placeholder="구">
+				        <input class="form-control" type="text" th:field="*{townMac}" id="townMac">
 				    </div>
 				    <div>
 				        <label for="villageMac">동</label>
-				        <input class="form-control" type="text" th:field="*{villageMac}" id="villageMac" placeholder="동">
+				        <input class="form-control" type="text" th:field="*{villageMac}" id="villageMac">
 				    </div>
 				    <div>
 				        <label for="nameMac">이름</label>
-				        <input class="form-control" type="text" th:field="*{nameMac}" id="nameMac" placeholder="이름">
+				        <input class="form-control" type="text" th:field="*{nameMac}" id="nameMac">
 				    </div>
 				 
 				    <nav>
@@ -463,14 +485,14 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/user/lib/wow/wow.min.js"></script>
-    <script src="/user/lib/easing/easing.min.js"></script>
-    <script src="/user/lib/waypoints/waypoints.min.js"></script>
-    <script src="/user/lib/counterup/counterup.min.js"></script>
-    <script src="/user/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/main/lib/wow/wow.min.js"></script>
+    <script src="/main/lib/easing/easing.min.js"></script>
+    <script src="/main/lib/waypoints/waypoints.min.js"></script>
+    <script src="/main/lib/counterup/counterup.min.js"></script>
+    <script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="/user/js/main.js"></script>
+    <script src="/main/js/main.js"></script>
 </body>
 
 </html>

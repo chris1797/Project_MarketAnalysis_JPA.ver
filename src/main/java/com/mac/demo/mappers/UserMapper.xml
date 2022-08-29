@@ -29,4 +29,32 @@
 		DELETE FROM USER_TB WHERE idmac=#{idMac}
 	</delete>
 	
+	<select id="findWrite" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT nummac,titlemac,wdatemac, idmac,nicknamemac,
+		       (select table_name 
+		          from all_tables 
+                 where table_name='ADS_BOARD'
+                ) as TABLEMAC
+
+          FROM ADS_BOARD
+         WHERE idmac=#{idMac}
+
+
+       UNION
+
+	  SELECT nummac,titlemac,wdatemac, idmac,nicknamemac,
+             (select table_name 
+				from all_tables 
+			   where table_name='FREE_BOARD'
+			) as TABLEMAC
+
+	   FROM FREE_BOARD 
+	  WHERE idmac=#{idMac}
+	</select>
+
+	
+	
+	
+	
+	
 </mapper>

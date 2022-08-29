@@ -97,14 +97,12 @@
         </div>
             <!-- Navbar End -->
 
-   <div class="content">
-      <div class="col-sm-15 col-xxl-50">
-     <div class="bg-light rounded h-200 p-5">
+  
                          
 	
             <!-- Form Start -->
           
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4" >
                 <div class="row g-4">
                     
                     <div class="col-sm-12 col-xl-6">
@@ -114,23 +112,32 @@
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                            <input type="hidden" value="운영자" name="nickNameMac">
 			               <input type="hidden" value="admin" name="idMac">
-                            <div class="form-floating mb-3">
-                                <input type="text" name="titleMac" class="form-control">
-
-                                <label for="floatingPassword">제목</label>
-                            </div>
-                         
-                            <div class="form-floating">
-                                <textarea class="form-control"  name="contentsMac" style="height: 150px;"></textarea>
-                                <label for="floatingTextarea">글</label>
-                            </div>
                             <div>
-                            <button type="submit">저장</button> &nbsp;
+						<label for="titleMac" class="form-label">
+							<font size="4">제목</font>
+						</label>
+						<input type="text" class="form-control" name="titleMac"  style="border-radius:10px; width: 850px;">
+						</div>
+                         
                             
-                             <button type="reset">취소</button>
+                            &nbsp;
+							<div>
+							<label for="contentsMac" class="form-label">
+								<font size="4">글내용</font>
+							</label>
+								<textarea name="contentsMac"  rows="15" class="form-control"  style="border-radius:10px; width: 850px;"></textarea>
+							</div>
+							<br>
+							
+                            <div>
+                            <button type="submit" class="btn btn-primary">저장</button> &nbsp;
+                            
+                             <button type="reset" class="btn btn-primary">취소</button>
                             </div>
                             
                             </form>
+                            
+
                         </div>
                     </div>
                 </div>
@@ -141,8 +148,7 @@
     
    
                    
-  </div>
-  </div>   
+     
            
             <!-- Table End -->
 

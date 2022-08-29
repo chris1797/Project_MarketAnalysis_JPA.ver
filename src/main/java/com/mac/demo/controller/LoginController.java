@@ -43,8 +43,8 @@ public class LoginController {
 //		checkdeId에 데이터가 있을시 세션에 id저장
 		if(idMac.equals(checkedId)) {
 		session.setAttribute("idMac", idMac);
+		System.out.println(session.getAttribute("idMac").toString());
 		model.addAttribute("idMac",session.getAttribute("idMac").toString());
-		model.addAttribute("msg", session.getAttribute("idMac").toString()+"님 환영합니다");
 		
 		return "redirect:/home";
 		}else if(checkedId==null) {
@@ -62,7 +62,9 @@ public class LoginController {
 	{	
 		System.out.println(session.getAttribute("idMac"));
 		
-		session.invalidate();
+//		session.invalidate();
+		session.removeAttribute("idMac");
+		
 		Map<String,Object> map = new HashMap<>();
 		map.put("logout", true);
 		return map;
@@ -103,7 +105,7 @@ public class LoginController {
 		}else{
 			model.addAttribute("msg","이름이나 이메일이 잘못 입력되었습니다");
 			
-			return "thymeleaf/mac/home/home";
+			return "thymeleaf/mac/login/findId";
 		}
 	}
 	

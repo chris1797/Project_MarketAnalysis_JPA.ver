@@ -8,7 +8,7 @@
 <meta content="Free HTML Templates" name="description">
 
 <!-- Favicon -->
-<link href="img/favicon.ico" rel="icon">
+<link href="/main/img/favicon.ico" rel="icon">
 
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,16 +20,16 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <!-- Libraries Stylesheet -->
-<link href="/board/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-<link href="/board/lib/animate/animate.min.css" rel="stylesheet">
+<link href="/main/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/main/lib/animate/animate.min.css" rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="/board/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/main/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
 <!-- Template Stylesheet -->
-<link rel="stylesheet" type="text/css" href="/board/css/style.css">
-<link rel="stylesheet" type="text/css" href="/board/css/ref_swiper.min.css">
-<link rel="stylesheet" type="text/css" href="/board/css/ref_style.css">
+<link rel="stylesheet" type="text/css" href="/main/css/style.css">
+<link rel="stylesheet" type="text/css" href="/main/css/ref_swiper.min.css">
+<link rel="stylesheet" type="text/css" href="/main/css/ref_style.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -40,43 +40,55 @@
 	<!-- Navbar & Carousel (상단바) Start -->
 	<main>
 	<header>
-	<div class="container-fluid position-relative p-0">
-		<nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
-				<a href="/board/main" class="navbar-brand p-0">
-						<h1 class="m-0"><i class="fa fa-user-tie me-2"></i>Market </h1>
-				</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-						<span class="fa fa-bars"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-						<div class="navbar-nav ms-auto py-0">
-								<a href="index.html" class="nav-item nav-link active">Home</a>
-								<a href="about.html" class="nav-item nav-link">About</a>
-								<a href="service.html" class="nav-item nav-link">Services</a>
-								<div class="nav-item dropdown">
-										<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
-										<div class="dropdown-menu m-0">
-												<a href="blog.html" class="dropdown-item">Blog Grid</a>
-												<a href="detail.html" class="dropdown-item">Blog Detail</a>
-										</div>
-								</div>
-								<div class="nav-item dropdown">
-										<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-										<div class="dropdown-menu m-0">
-												<a href="price.html" class="dropdown-item">Pricing Plan</a>
-												<a href="feature.html" class="dropdown-item">Our features</a>
-												<a href="team.html" class="dropdown-item">Team Members</a>
-												<a href="testimonial.html" class="dropdown-item">Testimonial</a>
-												<a href="quote.html" class="dropdown-item">Free Quote</a>
-										</div>
-								</div>
-								<a href="contact.html" class="nav-item nav-link">Contact</a>
-						</div>
-						<a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-						<a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
-				</div>
-			</nav>
-		</div>
+	 <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="/home" class="navbar-brand p-0">
+            
+                <h1 class="m-0"><i class="bi bi-house-door"></i>&nbsp;&nbsp;창업 커뮤니티 및 상권정보</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <div class="nav-item dropdown">
+                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
+                        <div class="dropdown-menu m-0">
+                           <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">이용안내</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/home/dataSource" class="dropdown-item">데이터 출처</a>
+                            <a href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+                            
+                        </div>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div th:if="${idMac==null}">
+                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
+                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+         </div></div>
+         <div th:if="${idMac !=null}">
+         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
+          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+         </div>
+            </div>
+        </nav>
 	</header>
 		<br>
 		<br>
@@ -99,7 +111,7 @@
 							<a href="/board/notice/list">
 								<dl>
 									<div>
-										<img src="/board/img/il_best.svg">
+										<img src="/main/img/il_best.svg">
 									</div>
 									<div>
 										<br>
@@ -115,7 +127,7 @@
 						<div class="box business">
 							<a href="/board/free/list">
 								<dl>
-									<img src="/board/img/il_start.svg" height="160px">
+									<img src="/main/img/il_start.svg" height="160px">
 									<div>
 										<br>
 										<dt style="font-size: x-large;">자유게시판</dt>
@@ -130,7 +142,7 @@
 						<div class="box start">
 							<a href="/board/ads/list">
 								<dl>
-									<img src="/board/img/il_business.svg" height="160px">
+									<img src="/main/img/il_business.svg" height="160px">
 									<div>
 										<br>
 										<dt style="font-size: x-large;">광고게시판</dt>
@@ -147,14 +159,14 @@
 	    <!-- JavaScript Libraries -->
 			<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-			<script src="/board/lib/wow/wow.min.js"></script>
-			<script src="/board/lib/easing/easing.min.js"></script>
-			<script src="/board/lib/waypoints/waypoints.min.js"></script>
-			<script src="/board/lib/counterup/counterup.min.js"></script>
-			<script src="/board/lib/owlcarousel/owl.carousel.min.js"></script>
+			<script src="/main/lib/wow/wow.min.js"></script>
+			<script src="/main/lib/easing/easing.min.js"></script>
+			<script src="/main/lib/waypoints/waypoints.min.js"></script>
+			<script src="/main/lib/counterup/counterup.min.js"></script>
+			<script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
 	
 			<!-- Template Javascript -->
-			<script src="/board/js/main.js"></script>
+			<script src="/main/js/main.js"></script>
 		</main>
 		</body>
 		<footer class="text-muted py-5">

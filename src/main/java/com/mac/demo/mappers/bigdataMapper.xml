@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mac.demo.mappers.BigdataMapper">
+
+	<select id="getsi" parameterType="String" resultType="String">
+		select TRDAR_TW_NM from ${kind} GROUP BY TRDAR_TW_NM
+	</select>
+
+	<select id="getdong" parameterType="String" resultType="String">
+		SELECT TRDAR_VG_NM from ${kind} where TRDAR_TW_NM = #{si} group by TRDAR_VG_NM 
+	</select>
+
+	<select id="getgil" parameterType="String" resultType="String">
+		 SELECT TRDAR_CD_NM from ${kind} where TRDAR_VG_NM = #{dong} group by TRDAR_CD_NM
+	</select>
+
+	<select id="getxy" parameterType="String" resultType="com.mac.demo.model.XY">
+		 SELECT X, Y from location where TRDAR_CD_NM = #{gil}
+	</select>
+
+</mapper>

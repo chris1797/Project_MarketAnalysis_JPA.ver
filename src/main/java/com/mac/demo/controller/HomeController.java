@@ -50,16 +50,7 @@ public class HomeController {
 		return "thymeleaf/mac/home/siteIntroduction";
 	}
 	
-	@GetMapping("/myPage/{idMac}")
-	public String myPage(@PathVariable("idMac") String idMac, Model model) {
 
-		model.addAttribute("user",svc.getMyPageInUser(idMac));
-		List<Board> freeBoard = svc.getMyPageInFreeBoard(idMac);
-		model.addAttribute("freeBoard", freeBoard);
-		List<Board> adsBoard = svc.getMyPageInAdsBoard(idMac);
-		model.addAttribute("adsBoard", adsBoard);
-		return "thymeleaf/mac/User/myPage";
-	}
 	
 	
 }

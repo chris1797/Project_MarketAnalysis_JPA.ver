@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.mac.demo.model.Board;
 import com.mac.demo.model.User;
 
 
@@ -25,6 +26,11 @@ public interface UserMapper {
 	
 	//nickname 중복체크
 	User getOneNick(String nickNameMac);
+	//마이 페이지에서 글
+	List<Board> findWrite(String idMac);
+	
+
+	
 	
 	
 	

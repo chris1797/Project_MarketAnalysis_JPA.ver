@@ -100,15 +100,15 @@
 
 
            
-    <div class="content">
-      <div class="col-sm-15 col-xxl-50">
-     <div class="bg-light rounded h-200 p-5">
-                         
-		<table class="table table-bordered text-center">
-		<h3>모든 계정</h3>
-		<tr>
-
-	   <th scope="col">numMac</th>
+ <div class="container-fluid pt-4 px-4 ">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Basic Table</h6>
+                            <table class="table text-center" id="table">
+                                <thead>
+                                    <tr>
+       <th scope="col">numMac</th>
 	   <th scope="col">idMac</th>
 	   <th scope="col">pwMac</th>
 	   <th scope="col">nickNameMac</th>
@@ -121,10 +121,9 @@
 	   <th scope="col">villageMac</th>
 	   <th scope="col">nameMac</th>
 	   <th scope="col">delete</th>
-	                                               
-                                  
-</tr>
-<tbody>
+                                    </tr>
+                                </thead>
+<tbody class="text-center">
     <tr th:each="user : ${pageInfo.list}">                                
     <td th:text="${user.numMac}" id="numMac"></td>
 	<td th:text="${user.idMac}"></td>
@@ -138,26 +137,40 @@
 	<td th:text="${user.townMac}"></td>
 	<td th:text="${user.villageMac}"></td>
 	<td th:text="${user.nameMac}"></td>
-	<td><button th:onclick="javascript:userDelete([[${user.numMac}]]);">삭제</button></td>
+	<td><button th:onclick="javascript:userDelete([[${user.numMac}]]);" class="btn btn-primary">삭제</button></td>
     </tr>
 
 </table>
 </div>
 </div>
 
-<div class="text-center">
-<span th:each="i :${pageInfo.navigatepageNums}" >
-
-<span th:if="${i==pageInfo.pageNum}">
- <span th:text="${i}"></span>
-</span>
-
-<span th:if="${i!=pageInfo.pageNum}">
-[<a th:text='${i}' th:href="'/admin/allUser?page='+(${i})"></a>]
-</span>
-</span>
-                 
-     </div>                   
+  <div class="container-xxl" id=form> 
+<form id="search_form" method="post" action="/admin/userSearch" class="form">
+ <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			<div>
+				&nbsp;&nbsp;
+				<label for="category">검색항목</label> 
+				<select name="category">
+					<option value="contents">id</option>
+				</select> 
+				<label for="keyword">검색어</label> <input type="text" name="keyword">
+				<button type="submit" class="btn btn-primary py-1 px-3 ms-1"><i class="bi bi-search"></i></button>
+						
+			</div>
+			&nbsp;&nbsp;
+			<div class="text-center" id="page">
+			<span th:each="i :${pageInfo.navigatepageNums}"> 
+				<span th:if="${i==pageInfo.pageNum}"> 
+					<span th:text="${i}">
+					</span>
+				</span> 
+				<span th:if="${i!=pageInfo.pageNum}"> 
+					[<a th:text='${i}' th:href="'/admin/allUser?page='+(${i})"></a>]
+				</span>
+			</span>
+			</div>
+		</form> 
+		 </div>                   
      </div>
      </div>
            

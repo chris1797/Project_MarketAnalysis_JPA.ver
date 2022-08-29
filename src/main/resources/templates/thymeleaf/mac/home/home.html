@@ -65,8 +65,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
-                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
                     </div>
@@ -88,7 +88,7 @@
          <div th:if="${idMac !=null}">
          <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
           <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
          </div>
             </div>
         </nav>
@@ -121,57 +121,45 @@
             </div>
         </div>
     </div>
-    <!-- Full Screen Search End -->
-     <div class="row g-2 justify-content-center" >
-                <div class="col-lg-3 wow">
-                    <div class="bg-light rounded">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">매출</h4>
-                            <small class="text-uppercase">서울시 매출 현황</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                                데이터 분석 자리
-                            </h1>
-                           
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 wow">
-                    <div class="bg-white rounded shadow position-relative" style="z-index: 1;">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">유동인구</h4>
-                            <small class="text-uppercase">서울시의 유동인구</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                              데이터 분석 자리
-                            </h1>
-                
+    <!-- Full Screen Search End-->
+    
+            
+           <div class="container-fluid pt-4 px-4" id="alldata">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">서울시 모든 매출</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="sales"></canvas>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 wow" >
-                    <div class="bg-light rounded">
-                        <div class="border-bottom py-4 px-5 mb-4">
-                            <h4 class="text-primary mb-1">점포</h4>
-                            <small class="text-uppercase">서울시 점포현황</small>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <h1 class="display-5 mb-3">
-                              데이터 분석 자리
-                            </h1>
-                          
-                
-                           
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">서울시 모든 유동인구</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="pop"></canvas>
                         </div>
                     </div>
+                     <div class="col-sm-12 col-xl-6" id="storecart">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">서울시 모든 점포</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="store"></canvas>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
     
 
     <!-- Service Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="homeservice">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
@@ -219,7 +207,19 @@
 
 
     <!-- Footer Start -->
-
+	<footer class="text-muted py-5" id="homefooter">
+			<div class="container">
+				<p class="float-end mb-1">
+					<a href="#">Back to top</a>
+				</p>
+				<p class="mb-1">Album example is &copy; Bootstrap, but please
+					download and customize it for yourself!</p>
+				<p class="mb-0">
+					New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
+						href="../getting-started/introduction/">getting started guide</a>.
+				</p>
+			</div>
+		</footer>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -233,9 +233,11 @@
     <script src="/main/lib/waypoints/waypoints.min.js"></script>
     <script src="/main/lib/counterup/counterup.min.js"></script>
     <script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/main/lib/chart/chart.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="/main/js/main.js"></script>
+    <script src="/main/js/homeMain.js"></script>
 </body>
 
 

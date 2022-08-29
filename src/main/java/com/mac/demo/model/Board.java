@@ -10,8 +10,10 @@ public class Board {
 	private String contentsMac; //내용
 	private java.sql.Date wdateMac; //작성일
 	private String typeMac; //속성(업종등)
-	private String idMac;
+	private String idMac; //유저아이디
 	private int countMac;
+	private String tableMac;
+
 	
 	
 	public int getCountMac() {
@@ -62,6 +64,14 @@ public class Board {
 	public void setIdMac(String idMac) {
 		this.idMac = idMac;
 	}
+	public String getTableMac() {
+		return tableMac;
+	}
+	public void setTableMac(String tableMac) {
+		this.tableMac = tableMac;
+	}
+
+	
 	
 
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>골목상권 분석-로그인 폼</title>
+    <title>마이페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 	function deleted() {
@@ -20,7 +20,7 @@
 			dataType:'json',
 			success:function(res){
 				alert(res.result ? '삭제 성공':'삭제 실패');
-				location.href="/user/list";
+				location.href="/home";
 			},
 			error:function(xhr,status, err){
 				alert('에러:'+err);
@@ -29,39 +29,13 @@
 		return false;
 	}
 	
-	function updateForm() {
-		
-	    //WinId = window.open('','newwin','width=100,height=100');
-	    //if (!WinId.opener) WinId.opener = self;
-	    //Text = '<form ';
-	    //Text += 'onSubmit="opener.location=this.password.value + \'.html\'; self.close()">';
-	    //Text += '<input type="password" name="password">';
-	    //Text += '<\/form>';
-	    //WinId.document.open();
-	    //WinId.document.write(Text);
-	    //WinId.document.close();
-		
-		
-	    alert('패스워드를 입력하세요');
-		var password =  prompt("PASSWD 입력","");	
-		
-		if("[[${user.pwMac}]]" == password) {
-			alert('인증 성공');
-			location.href="/user/updateForm";
-		} else {
-			alert('인증 실패');
-			return false;
-		}
-		
-	}
-	
 	</script>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="/img/favicon.ico" rel="icon">
+    <link href="/main/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,14 +47,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="/user/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="/user/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/main/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/main/lib/animate/animate.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="/user/css/style.css" rel="stylesheet">
+    <link href="/main/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -114,8 +88,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
-                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
+                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
                     </div>
@@ -133,11 +107,11 @@
                 <div th:if="${idMac==null}">
                 <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
                 <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
-         </div></div>
+         </div>
          <div th:if="${idMac !=null}">
          <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
           <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-          <a th:href="'/home/myPage/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
          </div>
             </div>
         </nav>
@@ -162,8 +136,10 @@
     <!-- Full Screen Search End -->
 
     <!-- Service Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="input-form">
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="all">
+        <div class="row">
+        <div class="col">
+        <div class="input-form" id="form">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h1 class="mb-0">My Page</h1>
             </div>
@@ -174,13 +150,13 @@
 					<div class="row">
 					
 					<div class="col-sm-6">
-					<img src="/user/img/defultProfile.png" style="width: 300px; height: 350px;">
+					<img src="/main/img/defultProfile.png" style="width: 260px; height: 350px;">
 					</div>
 					
 					<div>&nbsp;</div>
 					
-					<div class="col-sm-12">
-							        <div class="card mb-4">
+					<div class="col-sm-12" id="info">
+							        <div class="card mb-4" id="usertable">
 							          <div class="card-body">
 							            <div class="row">
 							              <div class="col-sm-3">
@@ -224,45 +200,127 @@
 							              </div>
 							              <div class="col-sm-9">
 							                <p class="text-muted mb-0" th:text="${user.cityMac}+'-'+${user.townMac}+'-'+${user.villageMac}"></p>
-							              </div>
+							              </div> 
 							            </div>
+							             <hr>
+
 							          </div>
-							       </div>
-					</div>
-				</div>
-            </div>
-            </div>
-				<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.3s">
-					<form id="update" th:object="${user}" onsubmit="return updateForm();">
+				 <div id=button>
+				    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.3s">
+					<form id="update" th:object="${user}" action="/user/updateForm">
 						<input type="hidden" name="idMac" th:value="*{idMac}">
 						<button class="btn btn-outline-success" type="submit">수정</button>
-					</form>
-					<hr>
+					</form> 
+					
 					<form id="del" th:object="${user}" onsubmit="return deleted();">
 						<input type="hidden" name="idMac" th:value="*{idMac}">
 						<button class="btn btn-outline-danger" type="submit">회원 탈퇴</button>
 					</form>
+			</div>
+			</div>
+							       
+					</div>
+				</div>
+            </div>
+            </div>
+				
+        </div>
+        </div>
+        <div class="col" >
+        <div class="input-form" id="myPageWrite">
+        	<div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h1 class="mb-0">My Write</h1>
+                
+            </div>
+            <div class="inner">
+          	<div class="col-sm-12" id="writetable">
+							        <div class="card mb-4" id="table">
+							          <div class="card-body">
+							          
+							      <table class="table project-table table-centered">
+								<thead>
+									<tr>
+										<th scope="col">No.</th>
+										<th scope="col">제목</th>
+										<th scope="col">작성자</th>
+										<th scope="col">작성일</th>
+										<th scope="col">게시판 이름</th>
+										
+									
+									</tr>
+								</thead>
+									  <tbody>
+									<tr th:each="myWrite : ${pageInfo.list}">
+										<td th:text="${myWrite.numMac}"></td>
+										<td th:if="${myWrite.tableMac}=='ADS_BOARD'"><a th:text="${myWrite.titleMac}"
+											th:href="@{'/board/ads/detail/'+ ${myWrite.numMac}}"></a> 
+										</td>
+										
+										<td th:if="${myWrite.tableMac}=='FREE_BOARD'"><a th:text="${myWrite.titleMac}"
+											th:href="@{'/board/free/detail/'+ ${myWrite.numMac}}"></a> 
+										</td>
+										<td th:text="${myWrite.nickNameMac}"></td>
+										<td th:text="${myWrite.wdateMac}"></td>
+										<td th:if="${myWrite.tableMac}=='ADS_BOARD'">광고 게시판</td>
+										<td th:if="${myWrite.tableMac}=='FREE_BOARD'">자유 게시판</td>
+									</tr>
+								</tbody>
+								
+					        <div class="pt-3" align="center" id="writepage">
+							<ul class="pagination justify-content-center mb-0">
+								<span th:if="${page!=1}"> <a class="page-link"
+									th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a>
+								</span>
+								<span th:unless="${page!=1}">
+									<li class="page-item disabled"><a class="page-link"
+										th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a></li>
+								</span>
+								<span th:each="i :${pageInfo.navigatepageNums}"> <span
+									th:if="${i==pageInfo.pageNum}">
+										<li class="page-item active"><span class="page-link"
+											th:text="${i}"></span></li>
+								</span> <span th:if="${i!=pageInfo.pageNum}"> <a
+										class="page-link" th:text='${i}'
+										th:href="'/user/detail/'+${idMac}+'?page='+(${i})"></a>
+								</span>
+								</span>
+								<span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
+									class="page-link"
+									th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a>
+								</span>
+								<span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
+									<li class="page-item disabled"><a class="page-link"
+										th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a></li>
+								</span>
+							</ul>
+						</div>
+							</table>
+							            
+	
+							       
+					</div>
+				</div>
+                </div>
+        </div>
+        </div>
         </div>
     </div>
+    </div>
+    </div>
     <!-- Service End -->
-
-
-
-
-
 
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/user/lib/wow/wow.min.js"></script>
-    <script src="/user/lib/easing/easing.min.js"></script>
-    <script src="/user/lib/waypoints/waypoints.min.js"></script>
-    <script src="/user/lib/counterup/counterup.min.js"></script>
-    <script src="/user/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/main/lib/wow/wow.min.js"></script>
+    <script src="/main/lib/easing/easing.min.js"></script>
+    <script src="/main/lib/waypoints/waypoints.min.js"></script>
+    <script src="/main/lib/counterup/counterup.min.js"></script>
+    <script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="/user/js/main.js"></script>
+    <script src="/main/js/main.js"></script>
 </body>
 
 </html>
