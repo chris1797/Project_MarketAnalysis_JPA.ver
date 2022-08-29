@@ -2,15 +2,7 @@
     "use strict";
 
     // Spinner
-    var spinner = function () {
-        setTimeout(function () {
-            if ($('#spinner').length > 0) {
-                $('#spinner').removeClass('show');
-            }
-        }, 1);
-    };
-    spinner();
-    
+   
     
     // Initiate the wowjs
     new WOW().init();
@@ -122,8 +114,7 @@
         }
     });
     
-    document.querySelector('#logout').onclick=
-    function logout() {
+    $('#logout').click(function(){
 	if (!confirm('정말로 로그아웃하시겠어요?'))
 		return;
 	$.ajax({
@@ -139,7 +130,7 @@
 			alert(err);
 		}
 	});
-}
+});
     
 })(jQuery);
 
