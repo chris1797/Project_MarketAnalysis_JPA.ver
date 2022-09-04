@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-	<mapper namespace="com.mac.demo.mappers.FileuploadMapper">
+	<mapper namespace="com.mac.demo.mappers.AttachMapper">
 	
-	<insert id="insertUpload" parameterType="com.mac.demo.model.Fileupload">
-	<!-- <selectKey> 안에 있는 SELECT 문장이 먼저(BEFORE) 실행되어 upload_num.NEXTVAL 값이 추출되어 keyProperty="num" 으로 지시되는 UploadVO.num 에 할당된다.-->
+	<!-- <insert id="insertUpload" parameterType="com.mac.demo.model.Fileupload">
+	<selectKey> 안에 있는 SELECT 문장이 먼저(BEFORE) 실행되어 upload_num.NEXTVAL 값이 추출되어 keyProperty="num" 으로 지시되는 UploadVO.num 에 할당된다.
 	      <selectKey keyProperty="num" resultType="integer" order="BEFORE">
-	      <!--  시퀀스 값을 가져오는 것 -->
+	       시퀀스 값을 가져오는 것
 	          	SELECT upload_num.NEXTVAL FROM DUAL
 	      </selectKey>
 				INSERT INTO upload_tb(num, writer, udate, comments) 
 				VALUES(#{num}, #{writer}, sysdate, #{comments})
-	</insert>
+	</insert> -->
 	
-	<insert id="insertAttach" parameterType="com.mac.demo.model.AttachVO">
+	<insert id="insertAttach" parameterType="com.mac.demo.model.Attach">
 				INSERT INTO ATTACH(num, pnum, fname, fpath) 
 				VALUES(attach_num.NEXTVAL, #{pnum}, #{fname}, #{fpath})
 	</insert>
@@ -28,9 +28,9 @@
 	</select>
 	
 	<select id="getFname" parameterType="Integer" resultType="String">
-				SELECT fname
-				  FROM attach_tb
-				 WHERE num=#{num}
+				SELECT filenamemac
+				  FROM attach
+				 WHERE numMac=#{numMac}
 	</select>
 	
 	<select id="getDetailByNum" parameterType="Integer" resultType="map">

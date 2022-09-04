@@ -11,9 +11,28 @@ public class Attach
 	private int numMac;  // index
 	private int pcodeMac; // 부모코드(게시판 numMac)
 	private String idMac; // 유저 ID
-	private String nickNameMac; // 유저 닉네
-	private String fpath; // 파일 저장된 경로
-	private List<Attach> attList = new ArrayList<>(); // 첨부파일명 리스트
+	private String nickNameMac; // 유저 닉네임
+	private String fileNameMac; // 파일 이름
+	private String filepathMac; // 파일 저장된 경로
+	private java.sql.Date wdateMac; // 파일 저장 날짜
+	private List<Attach> attListMac = new ArrayList<>(); // 첨부파일명 리스트
+	
+	
+	public String getFileNameMac() {
+		return fileNameMac;
+	}
+
+	public void setFileNameMac(String fileNameMac) {
+		this.fileNameMac = fileNameMac;
+	}
+
+	public String getFilepathMac() {
+		return filepathMac;
+	}
+
+	public void setFilepathMac(String filepathMac) {
+		this.filepathMac = filepathMac;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -58,20 +77,20 @@ public class Attach
 		this.nickNameMac = nickNameMac;
 	}
 
-	public String getFpath() {
-		return fpath;
+	public List<Attach> getAttListMac() {
+		return attListMac;
 	}
 
-	public void setFpath(String fpath) {
-		this.fpath = fpath;
+	public void setAttListMac(List<Attach> attList) {
+		this.attListMac = attList;
 	}
 
-	public List<Attach> getAttList() {
-		return attList;
+	public java.sql.Date getWdateMac() {
+		return wdateMac;
 	}
 
-	public void setAttList(List<Attach> attList) {
-		this.attList = attList;
+	public void setWdateMac(java.sql.Date wdateMac) {
+		this.wdateMac = wdateMac;
 	}
 	
 	

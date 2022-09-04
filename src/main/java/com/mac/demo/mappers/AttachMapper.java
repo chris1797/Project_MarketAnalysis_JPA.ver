@@ -6,14 +6,14 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mac.demo.model.Attach;
-import com.mac.demo.model.Fileupload;
+//import com.mac.demo.model.Fileupload;
 
 @Mapper
 public interface AttachMapper {
 
-	int insertUpload(Fileupload vo);
+//	int insertUpload(Fileupload vo);
 	
-	int insertAttach(AttachVO att);
+	int insertAttach(Attach att);
 
 	List<Map<String, Object>> getList();
 	

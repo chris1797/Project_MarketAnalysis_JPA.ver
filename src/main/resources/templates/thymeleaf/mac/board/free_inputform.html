@@ -116,7 +116,7 @@
 				<h1 class="fw-light">자유게시판</h1>
 			</div>
 		<h3>게시판 글 입력 폼</h3>
-		<form id="input_form"  th:object="${board}" onsubmit="return freesave();">
+		<form id="input_form"  th:object="${board}" onsubmit="return freesave();" enctype="multipart/form-data">
 			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
 			<input type="hidden" th:value="${idMac}" name="idMac">
 				<br>
@@ -133,6 +133,8 @@
 				</label>
 				<textarea name="contentsMac" cols="110" rows="11" class="form-control" th:field="*{contentsMac}" style="border-radius:10px;"></textarea>
 			</div>
+			<br>
+				파일 첨부 <input type="file" name="files" multiple="multiple">
 			<br>
 			<div>
 				<button type="submit" class="btn btn-primary py-2 px-4 ms-3">글쓰기</button>
