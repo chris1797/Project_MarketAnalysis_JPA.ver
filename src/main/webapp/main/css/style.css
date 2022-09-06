@@ -76,18 +76,6 @@
     }
 }
 
-#spinner {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .5s ease-out, visibility 0s linear .5s;
-    z-index: 99999;
-}
-
-#spinner.show {
-    transition: opacity .5s ease-out, visibility 0s linear 0s;
-    visibility: visible;
-    opacity: 1;
-}
 
 
 /*** Heading ***/
@@ -597,7 +585,7 @@ div#search {
 
 a#write {
          position: relative;
-         left: 1400px;
+         left: 1300px;
          bottom: 85px;}
          
 button#cmt_del{
@@ -641,7 +629,7 @@ div.map{
 	width:50%;
 	float:left;
 	box-sizing:border-box;
-	background: #0ff;
+	
 	height: 800px;
 	position: relative;
     top: 26px;
@@ -652,7 +640,6 @@ div.data{
 	width:50%;
 	float:right;
 	box-sizing:border-box;
-	background: #ff0;
 	height: 800px;
 	
 }
@@ -665,12 +652,14 @@ div#mapdata {
 }
 
 
-div#storecart {
+div#storechart {
     position: relative;
+    left:1120px;
     bottom: 360px;
-    left: 1110px;
     
 }
+
+
 
 div#alldata {
     margin-bottom: -23%;
@@ -686,3 +675,27 @@ footer#boardfooter {
     top: 500px;
 }
 
+div#seletedata {
+    position: relative;
+    left: 100px;
+}
+
+div#selectloca {
+    position: relative;
+    left: 150px;
+
+}
+
+div.paraent {
+  display: flex;
+  position: relative;
+  left:30px;
+  top:50px;
+}
+
+button#datasearch{
+	
+	 position: relative;
+       left:-30px;
+       top:30px;
+}

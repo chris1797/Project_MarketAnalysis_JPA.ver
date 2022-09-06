@@ -37,7 +37,7 @@ public class BoardService {
 	private UserMapper userDao;
 	
 	@Autowired
-	private AttachMapper attchDao;
+	private AttachMapper attachDao;
 	
 //	------------------List-------------------
 	public List<Board> getFreeList(){
@@ -145,29 +145,16 @@ public class BoardService {
 	}
 	
 //	------------------------File------------------------
-	public boolean insert(Attach att) {
-		int pnum = 0;
-		if(att.getIdMac() != null) {
-			attchDao.insertAttach(att);    //upload_tb에 저장
-//			pnum = att.getNumMac();  // 자동 증가된 업로드 번호를 받음
-//			System.out.println("vo.getNum = " + pnum);
-		}
-		
-		List<Attach> attList = att.getAttListMac();
-		
-		if(pnum>0) {
-			for(int i=0; i<attList.size(); i++) {
-				attList.get(i).setPcodeMac(pnum);;
-			}
-		}
-		int res = attchDao.insertMultiAttach(attList);
-		/*
-		int insertedCnt = 0;
-		for(int i=0; i<attList.size(); i++) {
-			insertedCnt += dao.insertAttach(attList.get(i));
-		}
-		*/
+	public boolean insert(List<Attach> attList) {
+		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
+		int res = attachDao.insertMultiAttach(attList);
+		System.out.println(res + "개 업로드성공");
+
 		return res==attList.size();
+	}
+	
+	public List<Attach> getFileList(int pcodeMac){
+		return attachDao.getFileList(pcodeMac);
 	}
 	
 //	public List<Attach> getList() {
@@ -209,12 +196,12 @@ public class BoardService {
 //	}
 
 	public String getFname(int num) {
-		String fname = attchDao.getFname(num);
+		String fname = attachDao.getFname(num);
 		return fname;
 	}
 
 	public Attach getDetailByNum(int _num) {
-		List<Map<String,Object>> list = attchDao.getDetailByNum(_num);
+		List<Map<String,Object>> list = attachDao.getDetailByNum(_num);
 		
 //		Fileupload vo = new Fileupload();
 		for(int i=0; i<list.size(); i++) {
@@ -245,20 +232,20 @@ public class BoardService {
 	}
 
 	public boolean remove(int num) {
-		int removed = attchDao.remove(num);
+		int removed = attachDao.remove(num);
 		return removed > 0;
 	}
 
 	@Transactional(rollbackFor = {Exception.class})
 	public boolean delete3(HttpServletRequest request, int num) throws Exception {
-		boolean attDeleted = attchDao.deleteAttInfo(num)>0;
+		boolean attDeleted = attachDao.deleteAttInfo(num)>0;
 		if(!attDeleted) throw new Exception("attach_tb rows delete fail");
 		
-		boolean uploadDeleted = attchDao.deleteUpload(num)>0;
+		boolean uploadDeleted = attachDao.deleteUpload(num)>0;
 		if(!uploadDeleted) throw new Exception("upload_tb rows delete fail");
 		
 		//게시물 번호를 이용해서 첨부파일명 모두 가져오기
-		List<String> fnameList = attchDao.getAttachByPnum(num);
+		List<String> fnameList = attachDao.getAttachByPnum(num);
 		String dir = request.getServletContext().getRealPath("WEB-INF/files/");
 		int delCnt = 0;
 		
@@ -283,7 +270,7 @@ public class BoardService {
 	}
 	
 	public boolean insertMultiAttach(Attach vo) {
-		int pnum = vo.getNumMac();  // 자동 증가된 업로드 번호를 받음
+		int pcodeMac = vo.getNumMac();  // 자동 증가된 업로드 번호를 받음
 		
 		List<Attach> attList = vo.getAttListMac();
 
@@ -291,9 +278,9 @@ public class BoardService {
 		for(int i=0;i<attList.size();i++)
 		{
 			Map<String,Object> fmap = new HashMap<>();
-			fmap.put("pnum", Integer.valueOf(pnum));
-			fmap.put("fname", attList.get(i).getFileNameMac());
-			fmap.put("fpath", vo.getFilepathMac());
+			fmap.put("pcodeMac", Integer.valueOf(pcodeMac));
+			fmap.put("fileNameMac", attList.get(i).getFileNameMac());
+			fmap.put("filepathMac", vo.getFilepathMac());
 //			totalSuccess += attchDao.insertAttach(fmap);   // 첨부파일 정보 저장
 		}
 		return totalSuccess==attList.size();

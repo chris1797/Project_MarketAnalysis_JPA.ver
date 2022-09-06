@@ -110,11 +110,17 @@
 //----------자유 게시판쪽의 js---------
 
 	function freesave() {
+		var form = $('#input_form')[0]
+		var data = new FormData(form);
+
 		$.ajax({
 			url : '/board/free/save',
+			enctype: 'multipart/form-data',
+			processData: false,
+			contentType: false,
 			method : 'post',
 			cache : false,
-			data : $('#input_form').serialize(),
+			data : data,
 			dataType : 'json',
 			success : function(res) {
 				

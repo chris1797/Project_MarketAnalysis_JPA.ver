@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.mac.demo.model.Attach;
 //import com.mac.demo.model.Fileupload;
+import com.mac.demo.model.Comment;
 
 @Mapper
 public interface AttachMapper {
@@ -18,6 +19,8 @@ public interface AttachMapper {
 	List<Map<String, Object>> getList();
 	
 	String getFname(int num);
+	
+	List<Attach> getFileList(int pcodeMac);
 
 	List<Map<String, Object>> getDetailByNum(int num);
 
@@ -30,5 +33,7 @@ public interface AttachMapper {
 	int deleteAttInfo(int num);
 
 	int deleteUpload(int num);
+	
+	int getIndex();
 
 }

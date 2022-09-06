@@ -15,7 +15,7 @@ public class Attach
 	private String fileNameMac; // 파일 이름
 	private String filepathMac; // 파일 저장된 경로
 	private java.sql.Date wdateMac; // 파일 저장 날짜
-	private List<Attach> attListMac = new ArrayList<>(); // 첨부파일명 리스트
+	private List<Attach> attListMac; // 첨부파일명 리스트
 	
 	
 	public String getFileNameMac() {

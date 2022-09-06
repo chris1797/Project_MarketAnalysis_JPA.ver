@@ -120,6 +120,17 @@ var numMac='[[${board.numMac}]]';
 					<div class="board-body">
 						<span th:text="${board.contentsMac}"></span>
 					</div>
+					<div class="board-footer">
+						<span th:if="${fileindex!=0}">
+								<tr th:each="file : ${filelist}">
+									<p th:text="${file.fileNameMac}"></p>
+									<!-- 
+									값은 받고 있느나 웹에서는 filename만 노출
+									<td th:text="${file.filepathMac}"></td> 
+									-->
+								</tr>
+						</span>
+					</div>
 				</div>
 				<br>
 				<table>

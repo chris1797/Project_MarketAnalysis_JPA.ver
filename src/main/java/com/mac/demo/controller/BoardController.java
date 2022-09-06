@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,8 +100,7 @@ public class BoardController {
 		
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
-		att.setPcodeMac(board.getNumMac());
-		att.setFilepathMac(savePath);
+		String fname_changed = null;
 		
 		// 파일 VO List
 		List<Attach> attList = new ArrayList<>();
@@ -110,35 +110,34 @@ public class BoardController {
 			for (int i = 0; i < mfiles.length; i++) {
 				// mfiles 파일명 수정
 				String[] token = mfiles[i].getOriginalFilename().split("\\.");
-				String fname_changed = token[0] + System.nanoTime() + "." + token[1];
+				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
 				
 				// Attach 객체 만들어서 가공
 				Attach _att = new Attach();
-				_att.setPcodeMac(board.getNumMac());
 				_att.setIdMac(board.getIdMac());
-				_att.setNickNameMac(board.getNickNameMac());
+				_att.setNickNameMac(svc.getOne(board.getIdMac()).getNickNameMac());
 				_att.setFileNameMac(fname_changed);
 				_att.setFilepathMac(savePath);
-				_att.setWdateMac(board.getWdateMac());
 				
 				attList.add(_att);
 
 				mfiles[i].transferTo( // 메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
 						new File(savePath + "/" + fname_changed));
 			}
+			att.setNickNameMac(svc.getOne(board.getIdMac()).getNickNameMac());
+			att.setFileNameMac(fname_changed);
+			att.setFilepathMac(savePath);
 			att.setAttListMac(attList);
-			boolean inserted = svc.insert(att);
-			String msg = String.format("파일(%d)개 저장성공(작성자:%s)", mfiles.length, att.getIdMac());
-//			return "{\"inserted\":" + inserted +"}";
+			
+			svc.insert(attList);
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return "{\"inserted\":" + false +"}";
 		}
 		
 		// 경로를 변수로 받아서 그에 따른 테이블 insert 분기
-		if (board_kind == "free") {
+		if (board_kind.contentEquals("free")) {
 			svc.saveToFree(board);
-		} else if (board_kind == "ads") {
+		} else if (board_kind.contentEquals("ads")) {
 			svc.saveToAds(board);
 		}
 		map.put("saved",board.getNumMac());
@@ -226,6 +225,11 @@ public class BoardController {
 		model.addAttribute("page", page);
 		// 댓글
 		model.addAttribute("comment", comment);
+		
+		List<Attach> filelist = svc.getFileList(num);
+		model.addAttribute("filelist", filelist);
+		model.addAttribute("fileindex", filelist.size());
+		
 		
 		// 댓글 삭제를 위한 idMac체크
 		
