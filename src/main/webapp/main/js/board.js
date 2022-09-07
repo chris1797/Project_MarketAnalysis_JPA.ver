@@ -137,12 +137,17 @@
 	}(jQuery);
 	
 		function freeedit() {
+			var form = $('#edit_form')[0]
+			var data = new FormData(form);
 			var numMac=document.getElementById("numMac").value;
 		$.ajax({
 			url:'/board/free/edit',
+			enctype: 'multipart/form-data',
+			processData: false,
+			contentType: false,
 			method:'post',
 			cache:false,
-			data:$('#edit_form').serialize(),
+			data:data,
 			dataType:'json',
 			success:function(res){ //res는 object
 					alert(res.updated ? '수정 성공' : '수정실패'); //res object 안에있는 num
@@ -218,3 +223,22 @@
 		}
 		return false;
 	}(jQuery);
+
+
+function filedelete(filenum){
+	$.ajax({
+		url : '/board/file/delete/'+filenum,
+		method:'get',
+		cache:false,
+		dataType:'json',
+		success:function(res){ //res는 object
+		
+				// alert(res.filedeleted ? '파일삭제성공' : '파일삭제실패');
+				location.href = '/board/free/detail/'+numMac;
+		},
+		error:function(xhr,status,err){
+			alert(err);
+		}
+	});
+	return false;
+}(jQuery);

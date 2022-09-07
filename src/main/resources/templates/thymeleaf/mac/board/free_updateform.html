@@ -123,6 +123,23 @@
 					<div class="board-body">
 						<span><textarea  cols="110" rows="11" th:name="contentsMac" th:text='${board.contentsMac}'></textarea></span>
 					</div>
+				<div>
+					파일첨부 : <input type="file" name="files" id="files" multiple="multiple">
+					<br>
+					<br>
+						<span th:if="${fileindex!=0}">
+							<tr th:each="file : ${filelist}">
+								<p th:text="${file.fileNameMac}"></p>
+								<td th:if="${idMac}==${file.idMac}">
+									<button th:onclick="javascript:filedelete([[${file.numMac}]]);" id="cmt_del">X</button>
+								</td>
+								<!-- 
+		                           값은 받고 있느나 웹에서는 filename만 노출
+		                           <td th:text="${file.filepathMac}"></td> 
+		                        -->
+								</tr>
+						</span>
+				</div>
 				<input type="submit" value="저장" class="btn btn-primary py-2 px-4 ms-3">
 				</form>
 			</div>
@@ -146,17 +163,5 @@
 </body>
 
 	<footer class="text-muted py-5">
-	<br><br><br>
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for yourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
 	</footer>
 </html>

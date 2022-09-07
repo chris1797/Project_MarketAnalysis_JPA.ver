@@ -153,11 +153,20 @@ public class BoardService {
 		return res==attList.size();
 	}
 	
+	public boolean update(List<Attach> attList) {
+		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
+		int res = attachDao.updateMultiAttach(attList);
+		System.out.println(res + "개 업로드성공(update)");
+
+		return res==attList.size();
+	}
+	
 	public List<Attach> getFileList(int pcodeMac){
 		return attachDao.getFileList(pcodeMac);
 	}
 	
-//	public List<Attach> getList() {
+
+	//	public List<Attach> getList() {
 //		List<Map<String,Object>> list = attchDao.getList();
 //		List<Attach> volist = new ArrayList<>();
 //		
@@ -231,8 +240,8 @@ public class BoardService {
 		return null;
 	}
 
-	public boolean remove(int num) {
-		int removed = attachDao.remove(num);
+	public boolean filedelete(int num) {
+		int removed = attachDao.filedelete(num);
 		return removed > 0;
 	}
 

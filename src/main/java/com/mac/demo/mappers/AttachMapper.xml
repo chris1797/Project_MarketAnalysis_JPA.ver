@@ -34,6 +34,7 @@
 		WHERE PCODEMAC=#{pcodeMac}
 	</select>
 	
+	
 	<select id="getList" resultType="map">
 				SELECT u.num AS num, writer, udate, comments, a.num AS fnum, pnum, fname
 				  FROM upload_tb u
@@ -55,10 +56,11 @@
 				 WHERE u.num=#{num}
 	</select>
 	
-	<delete id="remove" parameterType="Integer">
-				DELETE FROM attach_tb WHERE num=#{num}
+	<delete id="filedelete" parameterType="Integer">
+				DELETE FROM ATTACH WHERE NUMMAC=#{num}
 	</delete>
 	
+	<!-- 신규 글쓰기폼에서 FILE INSERT -->
 	<update id="insertMultiAttach" parameterType="java.util.List">
 		<selectKey keyProperty="num" resultType="integer" order="BEFORE">
 	    	<!--  현재 인덱스 값을 가져오는 것 -->
@@ -76,6 +78,18 @@
     	(
     	<foreach collection="list" item="item" index="index" separator="union all">
 			SELECT #{num}, #{item.idMac}, #{item.nickNameMac}, SYSDATE, #{item.fileNameMac}, #{item.filepathMac} FROM DUAL
+    	</foreach>
+    	) t
+	</update>
+	
+	<!-- 수정폼에서 FILE UPDATE -->
+	<update id="updateMultiAttach" parameterType="java.util.List">
+	    
+    	INSERT INTO ATTACH (NUMMAC, PCODEMAC, IDMAC, NICKNAMEMAC, WDATEMAC, FILENAMEMAC, FILEPATHMAC)
+    	SELECT ATTACH_NUM.NEXTVAL, t.* FROM
+    	(
+    	<foreach collection="list" item="item" index="index" separator="union all">
+			SELECT #{item.pcodeMac}, #{item.idMac}, #{item.nickNameMac}, SYSDATE, #{item.fileNameMac}, #{item.filepathMac} FROM DUAL
     	</foreach>
     	) t
 	</update>

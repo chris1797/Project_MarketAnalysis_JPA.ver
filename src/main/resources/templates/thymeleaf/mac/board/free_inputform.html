@@ -116,8 +116,8 @@
 				<h1 class="fw-light">자유게시판</h1>
 			</div>
 		<h3>게시판 글 입력 폼</h3>
-		<form id="input_form"  th:object="${board}" enctype="multipart/form-data" onsubmit="return freesave();">
-			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		<form id="input_form"  th:object="${board}" onsubmit="return freesave();">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
 			<input type="hidden" th:value="${idMac}" name="idMac">
 				<br>
@@ -134,7 +134,7 @@
 				</label>
 				<textarea name="contentsMac" cols="110" rows="11" class="form-control" th:field="*{contentsMac}" style="border-radius:10px;"></textarea>
 			</div>
-				File <input type="file" name="files" id="files" multiple="multiple"><br>
+			파일첨부 : <input type="file" name="files" id="files" multiple="multiple"><br>
 			<br>
 			<div>
 				<button type="submit" class="btn btn-primary py-2 px-4 ms-3">글쓰기</button>
@@ -161,17 +161,6 @@
 	
 
 	<footer class="text-muted py-5">
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for yourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
 	</footer>
 </body>
 </html>

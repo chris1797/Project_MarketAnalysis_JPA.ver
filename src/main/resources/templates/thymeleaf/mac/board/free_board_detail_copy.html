@@ -69,7 +69,7 @@ var numMac='[[${board.numMac}]]';
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                           <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                           <a href="/big/location" class="dropdown-item">데이터 시각화</a>
                             <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
@@ -116,40 +116,27 @@ var numMac='[[${board.numMac}]]';
 						<h3 th:text="${board.titleMac}"></h3>
 						<span th:text="${board.nickNameMac}"></span> |
 						<span th:text="${board.wdateMac}"></span>
-					</div>
-					<div class="board-body">
-						<span th:text="${board.contentsMac}"></span>
-					</div>
-					<div class="board-footer">
+				</div>
+				<div class="board-body">
+					<span th:text="${board.contentsMac}"></span>
+					<div style="border-top: solid; margin-top: 22%">
 						<span th:if="${fileindex!=0}">
-								<tr th:each="file : ${filelist}">
-									<p th:text="${file.fileNameMac}"></p>
-									<!-- 
-									값은 받고 있느나 웹에서는 filename만 노출
-									<td th:text="${file.filepathMac}"></td> 
-									-->
+							<tr th:each="file : ${filelist}">
+								<li th:text="${file.fileNameMac}"></li>
+								<th:if="${idMac}==${file.idMac}">
+									<p><button th:onclick="javascript:filedelete([[${file.numMac}]]);" id="cmt_del">X</button></p>
+								<!-- 
+		                           값은 받고 있느나 웹에서는 filename만 노출
+		                           <td th:text="${file.filepathMac}"></td> 
+		                        -->
 								</tr>
 						</span>
 					</div>
 				</div>
-				<br>
+					<br>
 				<table>
 					<tr>
-						<form id="comment_form" onsubmit="return freecomment();">
-							<input type="hidden" th:name="nickNameMac" th:value="${comment.nickNameMac}">
-							<input type="hidden" th:name="pcodeMac" th:value="${comment.pcodeMac}">
-							<input type="hidden" th:name="idMac" th:value="${comment.idMac}">
-							<tr>
-								<label for="commentMac">댓글작성</label> &nbsp;&nbsp;
-									<input type="text" th:name="commentMac">
-								<button type="submit" class="btn btn-primary py-2 px-4 ms-3">작성</button>
-								<a href="/board/free/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
-								<td th:if="${idMac}==${board.idMac}" id="board_del">
-									<a th:href="@{'/board/free/update/' + ${board.numMac}}" class="btn btn-primary py-2 px-4 ms-3">수정하기</a> &nbsp;&nbsp;
-									<a href="javascript:freeremove();" class="btn btn-primary py-2 px-4 ms-3">삭제</a>
-								</td>
-							</tr>
-						</form>
+					
 					</tr>
 					<tr>
 						<div class="board-comment-li">
@@ -162,17 +149,31 @@ var numMac='[[${board.numMac}]]';
 										<td th:text="${comment.wdateMac}"></td>
 										<td th:text="${board.wdateMac}">
 									    <td th:if="${idMac}==${comment.idMac}">
-												<button th:onclick="javascript:freecommentdelete([[${comment.numMac}]]);"  id="cmt_del">X</button>
+										<button th:onclick="javascript:freecommentdelete([[${comment.numMac}]]);">X</button>
 												<!-- <a th:href="'/board/comment/delete/'+${comment.numMac}">X</a> -->
-											</td>
+										</td>
 									</tr>
 									
 									
 								
 							</table>
-					</div>
-					</tr>
-						   <div class="pt-3" align="center" id="comPage">
+								<form id="comment_form" onsubmit="return freecomment();">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+							<input type="hidden" th:name="nickNameMac" th:value="${comment.nickNameMac}">
+							<input type="hidden" th:name="pcodeMac" th:value="${comment.pcodeMac}">
+							<input type="hidden" th:name="idMac" th:value="${comment.idMac}">
+							<tr>
+								<label for="commentMac">댓글작성</label> &nbsp;&nbsp;
+									<input type="text" th:name="commentMac">
+								<button type="submit" class="btn btn-primary py-2 px-4 ms-3">작성</button>
+								<a href="/board/free/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
+								
+							</tr>
+							<tr>
+							
+							</tr>
+						</form>
+							   <div class="pt-3" align="center" >
 							<ul class="pagination justify-content-center mb-0">
 								<span th:if="${page!=1}"> <a class="page-link"
 									th:href="@{'/board/free/detail/'+ ${board.numMac}+'?page='+${page-1}}">Previous</a>
@@ -200,6 +201,14 @@ var numMac='[[${board.numMac}]]';
 								</span>
 							</ul>
 						</div>
+						
+						<div th:if="${idMac}==${board.idMac}" id="board_del">
+									<a th:href="@{'/board/free/update/' + ${board.numMac}}" class="btn btn-primary py-2 px-4 ms-3">수정하기</a> &nbsp;&nbsp;
+									<a href="javascript:freeremove();" class="btn btn-primary py-2 px-4 ms-3">삭제</a>
+								</div>
+					</div>
+					</tr>
+						
 				</table>
 			</div>
 		</section>
