@@ -123,6 +123,9 @@ var numMac='[[${board.numMac}]]';
 						<span th:if="${fileindex!=0}">
 							<tr th:each="file : ${filelist}">
 								<li th:text="${file.fileNameMac}"></li>
+								<th:if="${idMac} != null">
+								<p><button th:onclick="|location.href='@{/board/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p>
+									<!-- <p><button th:onclick="javascript:filedownload([[${file.numMac}]]);" id="cmt_del">↓</button></p> -->
 								<th:if="${idMac}==${file.idMac}">
 									<p><button th:onclick="javascript:filedelete([[${file.numMac}]]);" id="cmt_del">X</button></p>
 								<!-- 

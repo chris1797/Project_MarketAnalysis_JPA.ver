@@ -242,3 +242,26 @@ function filedelete(filenum){
 	});
 	return false;
 }(jQuery);
+
+
+function filedownload(filenum){
+			
+	if(msg != ""){
+		alert(msg);
+		location.href='/board/free/detail/'+numMac;
+	} else {
+		$.ajax({
+			url:'/board/download/'+filenum,
+			method:'get',
+			cache:false,
+			dataType:'json',
+			success:function(res){ //res는 object
+					location.href='/board/free/detail/'+numMac;
+			},
+			error:function(xhr,status,err){
+				alert(err);
+			}
+		});
+	}
+	return false;
+}(jQuery);

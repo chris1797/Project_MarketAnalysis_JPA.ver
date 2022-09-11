@@ -2,6 +2,7 @@ package com.mac.demo.controller;
 
 import java.awt.print.Pageable;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +44,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService svc;
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 	
 //	커뮤니티메인화면
 	@GetMapping("/main")
@@ -402,5 +411,32 @@ public class BoardController {
 		System.out.println("삭제할 파일 No. : " + numMac);
 		map.put("filedeleted", svc.filedelete(numMac));
 		return map;
+	}
+	
+	@GetMapping("/download")
+	@ResponseBody
+	public ResponseEntity<Resource> download(HttpServletRequest request, 
+											 @RequestParam(name="filenum", required = false) int numMac) {
+		String filename = svc.getFname(numMac);
+		Resource resource = resourceLoader.getResource("WEB-INF/files/" + filename);
+		System.out.println("파일명:" + resource.getFilename());
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+			System.out.println(contentType); // return : image/jpeg
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				// HttpHeaders.CONTENT_DISPOSITION는 http header를 조작하는 것, 화면에 띄우지 않고 첨부화면으로
+				// 넘어가게끔한다
+				// filename=\"" + resource.getFilename() + "\"" 는 http프로토콜의 문자열을 고대로 쓴 것
+				.body(resource);
 	}
 }
