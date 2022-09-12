@@ -39,9 +39,9 @@
 </script>
 <script type="text/javascript">
 var msg = '[[${msg}]]';
+var idMac = '[[${idMac}]]';
 var numMac='[[${board.numMac}]]';
 
-	
 </script>
 </head>
 <body>
@@ -123,15 +123,9 @@ var numMac='[[${board.numMac}]]';
 						<span th:if="${fileindex!=0}">
 							<tr th:each="file : ${filelist}">
 								<li th:text="${file.fileNameMac}"></li>
-								<th:if="${idMac} != null">
-								<p><button th:onclick="|location.href='@{/board/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p>
+								<button th:onclick="javascript:filedownload([[${file.numMac}]]);">↓</button>
+									<!-- th:onclick="|location.href='@{/board/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p> -->
 									<!-- <p><button th:onclick="javascript:filedownload([[${file.numMac}]]);" id="cmt_del">↓</button></p> -->
-								<th:if="${idMac}==${file.idMac}">
-									<p><button th:onclick="javascript:filedelete([[${file.numMac}]]);" id="cmt_del">X</button></p>
-								<!-- 
-		                           값은 받고 있느나 웹에서는 filename만 노출
-		                           <td th:text="${file.filepathMac}"></td> 
-		                        -->
 								</tr>
 						</span>
 					</div>
@@ -217,7 +211,6 @@ var numMac='[[${board.numMac}]]';
 		</section>
 		&nbsp;&nbsp;
 		
-
 		<br>
 
 
@@ -235,18 +228,5 @@ var numMac='[[${board.numMac}]]';
     <script src="/main/js/main.js"></script>
     <script src="/main/js/board.js"></script>
 </body>
-	<footer class="text-muted py-5" id="boardfooter">
-	<br><br><br>
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for yourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
-	</footer>
+
 </html>

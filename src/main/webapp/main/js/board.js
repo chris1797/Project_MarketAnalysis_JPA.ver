@@ -245,23 +245,22 @@ function filedelete(filenum){
 
 
 function filedownload(filenum){
-			
-	if(msg != ""){
-		alert(msg);
-		location.href='/board/free/detail/'+numMac;
-	} else {
-		$.ajax({
-			url:'/board/download/'+filenum,
-			method:'get',
-			cache:false,
-			dataType:'json',
-			success:function(res){ //res는 object
-					location.href='/board/free/detail/'+numMac;
-			},
-			error:function(xhr,status,err){
-				alert(err);
+	$.ajax({
+		method:'get',
+		async: false,
+		cache:false,
+		contentType : 'application/json; charset=tf-8',
+		success:function(res){
+			if(idMac == ''){
+				alert("로그인 후 다운로드 가능합니다.");
+				location.href='/board/free/detail/'+numMac;
+			} else {
+				location.href='/board/download/'+filenum;
 			}
-		});
-	}
-	return false;
+		},
+		error:function(xhr,status,err){
+			alert(err);
+		}
+	});
+	return;
 }(jQuery);

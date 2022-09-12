@@ -130,9 +130,8 @@
 						<span th:if="${fileindex!=0}">
 							<tr th:each="file : ${filelist}">
 								<p th:text="${file.fileNameMac}"></p>
-								<td th:if="${idMac}==${file.idMac}">
-									<button th:onclick="javascript:filedelete([[${file.numMac}]]);" id="cmt_del">X</button>
-								</td>
+								<button th:if="${board.idMac}==${file.idMac}"
+									 th:onclick="javascript:filedelete([[${file.numMac}]]);">X</button>
 								<!-- 
 		                           값은 받고 있느나 웹에서는 filename만 노출
 		                           <td th:text="${file.filepathMac}"></td> 
