@@ -15,11 +15,11 @@
 		SELECT * FROM ads_board
 	</select>
 	
-	<delete id="freeBordDeleted" parameterType="Integer">
+	<delete id="freeBoardDeleted" parameterType="Integer">
 		DELETE FROM free_board WHERE numMac=#{numMac}
 	</delete>
 	
-	<delete id="adsBordDeleted" parameterType="Integer">
+	<delete id="adsBoardDeleted" parameterType="Integer">
 		DELETE FROM ads_board WHERE numMac=#{numMac}
 	</delete>
 	
@@ -50,10 +50,7 @@
 	</delete>
 	
 		<select id="getAdsListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
-		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
-			(SELECT COUNT(*)
-			FROM comment_board c
-			WHERE c.pcodemac = f.nummac) COUNTMAC
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
 		FROM ads_board f
 		WHERE TITLEMAC 
 		LIKE '%'||#{keyword}||'%'
@@ -62,15 +59,54 @@
 	</select>
 	
 	<select id="getAdsListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
-		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
-			(SELECT COUNT(*)
-			FROM comment_board c
-			WHERE c.pcodemac = f.nummac) COUNTMAC
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
 		FROM ads_board f
 		WHERE NICKNAMEMAC 
 		LIKE '%'||#{nickNameMac}||'%'
 		ORDER BY NUMMAC
 		DESC
+	</select>
+	
+	
+		<select id="getNoticeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM notice_board f
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getNoticeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM notice_board f
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
+	<select id="getCommentListByKeyword" resultType="com.mac.demo.model.Comment" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, COMMENTMAC,PCODEMAC, WDATEMAC
+		FROM comment_board f
+	    WHERE COMMENTMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getCommentListByNickName" resultType="com.mac.demo.model.Comment" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, COMMENTMAC,PCODEMAC, WDATEMAC
+		FROM comment_board f
+		WHERE IDMAC 
+		LIKE '%'||#{idMac}||'%'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
+	<select id="getUserListByKeyword" resultType="com.mac.demo.model.User" parameterType="String">
+		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac
+		FROM user_tb
+	    WHERE IDMAC
+		LIKE '%'||#{keyword}||'%'
 	</select>
 	
 

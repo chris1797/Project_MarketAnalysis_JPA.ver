@@ -1,4 +1,14 @@
 //----------광고 게시판쪽의 js---------
+var token = $("#_csrf").attr("content");
+var header = $("#_csrf_header").attr("content");
+
+$(function() {
+	$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(header, token);
+	});
+});
+
+
 
 	function save() {
 		$.ajax({
@@ -150,7 +160,7 @@
 			data:data,
 			dataType:'json',
 			success:function(res){ //res는 object
-					alert(res.updated ? '수정 성공' : '수정실패'); //res object 안에있는 num
+					// alert(res.updated ? '수정 성공' : '수정실패'); //res object 안에있는 num
 					location.href="/board/free/detail/"+numMac;
 			},
 			error:function(xhr,status,err){
@@ -232,9 +242,7 @@ function filedelete(filenum){
 		cache:false,
 		dataType:'json',
 		success:function(res){ //res는 object
-		
-				// alert(res.filedeleted ? '파일삭제성공' : '파일삭제실패');
-				location.href = '/board/free/detail/'+numMac;
+				alert(res.filedeleted ? '파일삭제성공' : '파일삭제실패');
 		},
 		error:function(xhr,status,err){
 			alert(err);
@@ -253,9 +261,9 @@ function filedownload(filenum){
 		success:function(res){
 			if(idMac == ''){
 				alert("로그인 후 다운로드 가능합니다.");
-				location.href='/board/free/detail/'+numMac;
+				return;
 			} else {
-				location.href='/board/download/'+filenum;
+				location.href='/board/file/download/'+filenum;
 			}
 		},
 		error:function(xhr,status,err){

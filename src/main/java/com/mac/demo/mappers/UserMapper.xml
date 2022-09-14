@@ -22,7 +22,7 @@
 	</select>
 
 	<update id="updated" parameterType="com.mac.demo.model.User">
-		UPDATE USER_TB SET pwmac=pkg_crypto.encrypt(#{pwMac}), emailmac=#{emailMac}, phonenummac=#{phoneNumMac}, citymac=#{cityMac}, townmac=#{townMac}, villagemac=#{villageMac} WHERE idmac=#{idMac}
+		UPDATE USER_TB SET pwmac=pkg_crypto.encrypt(#{pwMac}), emailmac=#{emailMac}, phonenummac=#{phoneNumMac}, citymac=#{cityMac}, townmac=#{townMac}, villagemac=#{villageMac}, birthmac=#{birthMac} WHERE idmac=#{idMac}
 	</update>
 	
 	<delete id="deleted" parameterType="String">

@@ -121,7 +121,10 @@ public class UserController {
 			result = false;
 			map.put("result", result);
 			return map;
-		}
+		};
+		if(result==true) {
+			session.removeAttribute("idMac");
+		};
 		
 		return map;
 	}

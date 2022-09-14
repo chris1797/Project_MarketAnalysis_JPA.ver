@@ -3,31 +3,12 @@
 
 <head>
     <meta charset="utf-8">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>마이페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
-	function deleted() {
-		if(!confirm('삭제하면 복구할 수 없습니다. \n 정말로 삭제하시겠습니까?')) {
-			return false;
-		}
-		
-		
-		$.ajax({
-			url:'/user/deleted',
-			method:'post',
-			cache:false,
-			data:$('#del').serialize(),
-			dataType:'json',
-			success:function(res){
-				alert(res.result ? '삭제 성공':'삭제 실패');
-				location.href="/home";
-			},
-			error:function(xhr,status, err){
-				alert('에러:'+err);
-			}
-		});
-		return false;
-	}
+
 	
 	</script>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -88,7 +69,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="/big/location" class="dropdown-item">데이터 시각화</a>
                             <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
@@ -208,6 +189,7 @@
 				 <div id=button>
 				    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.3s">
 					<form id="update" th:object="${user}" action="/user/updateForm">
+					
 						<input type="hidden" name="idMac" th:value="*{idMac}">
 						<button class="btn btn-outline-success" type="submit">수정</button>
 					</form> 
@@ -321,6 +303,7 @@
 
     <!-- Template Javascript -->
     <script src="/main/js/main.js"></script>
+    <script src="/main/js/user.js"></script>
 </body>
 
 </html>

@@ -16,9 +16,7 @@ import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.User;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class UserService {
 

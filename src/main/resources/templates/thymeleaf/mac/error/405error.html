@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<title>405</title>
+
+<!-- Google font -->
+<link href="https://fonts.googleapis.com/css?family=Kanit:200"
+	rel="stylesheet">
+
+<!-- Font Awesome Icon -->
+<link type="text/css" rel="stylesheet"
+	href="/error/css/font-awesome.min.css" />
+
+<!-- Custom stlylesheet -->
+<link type="text/css" rel="stylesheet" href="/error/css/style.css" />
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+</head>
+<body>
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>405</h1>
+			</div>
+			<h2>요청에 지정된 방법을 사용할 수 없습니다</h2>
+			<p>
+			<ul>
+				<li th:text="${'상태: '+status}">상태
+				<li th:text="${'경로: '+path}">경로
+				<li th:text="${'요청시각: '+timestamp}">요청시각
+				<li th:text="${'예외: '+exception}">예외
+				<li th:text="${'메세지: '+message}">메세지
+			</ul>
+			<a href="/home">홈으로 돌아가기</a>
+			</p>
+		</div>
+	</div>
+
+</body>
+</html>

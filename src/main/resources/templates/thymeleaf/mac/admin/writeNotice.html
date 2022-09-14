@@ -62,9 +62,9 @@
                     </div>
                     <a href="/admin/allUser" class="nav-item nav-link"><i class="bi bi-person-lines-fill"></i>&nbsp;&nbsp;모든계정</a>
                     <a href="/admin/allFreeBoard" class="nav-item nav-link"><i class="bi bi-list-ul"></i>&nbsp;&nbsp;모든 자유게시물</a>
-                    <a href="/admin/allAdsBoard" class="nav-item nav-link active"><i class="bi bi-list-ul"></i>&nbsp;&nbsp;모든 광고게시물</a>
+                    <a href="/admin/allAdsBoard" class="nav-item nav-link"><i class="bi bi-list-ul"></i>&nbsp;&nbsp;모든 광고게시물</a>
                     <a href="/admin/allComment" class="nav-item nav-link"><i class="bi bi-list-ul"></i>&nbsp;&nbsp;모든 댓글</a>
-                    <a href="/admin/writeNotice" class="nav-item nav-link"><i class="bi bi-pencil-square"></i>&nbsp;&nbsp;공지사항 쓰기</a>
+                    <a href="/admin/writeNotice" class="nav-item nav-link active"><i class="bi bi-pencil-square"></i>&nbsp;&nbsp;공지사항 쓰기</a>
                     <a href="/admin/allNoticeBoard" class="nav-item nav-link"><i class="bi bi-list-ul"></i>&nbsp;&nbsp;모든 공지사항</a>
                 </div>
             </nav>
@@ -107,7 +107,7 @@
                     
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">공지사항 쓰기</h6>
+                            <h3 class="mb-4 text-center">공지사항 쓰기</h3>
                            <form onsubmit="return save();" id="input_form">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                            <input type="hidden" value="운영자" name="nickNameMac">

@@ -286,3 +286,99 @@
 		});
 		return false;
 	}(jQuery);
+	
+	
+	
+		//========================================회원탈퇴==========================================
+		
+		function deleted() {
+		if(!confirm('삭제하면 복구할 수 없습니다. \n 정말로 삭제하시겠습니까?')) {
+			return false;
+		}
+		
+		
+		$.ajax({
+			url:'/user/deleted',
+			method:'post',
+			cache:false,
+			data:$('#del').serialize(),
+			dataType:'json',
+			success:function(res){
+				alert(res.result ? '삭제 성공':'삭제 실패');
+				location.href="/home";
+			},
+			error:function(xhr,status, err){
+				alert('에러:'+err);
+			}
+		});
+		return false;
+	}
+//========================================회원탈퇴==========================================	
+	
+function updated() {
+	
+	var pw = document.getElementById('pwMac').value;
+	var id = document.getElementById('idMac').value;
+    var SC = ["!","@","#","$","%"];
+    var check_SC = 0;
+
+    if(pw.length < 6 || pw.length>16){
+        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+        document.getElementById('pwMac').value='';
+        return false;
+    }
+    for(var i=0;i<SC.length;i++){
+        if(pw.indexOf(SC[i]) != -1){
+            check_SC = 1;
+        }
+    }
+    if(check_SC == 0){
+        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+        document.getElementById('pwMac').value='';
+        return false;
+    }
+	
+    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
+            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+            document.getElementById('check').style.color='blue';
+        }
+        else{
+            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+            document.getElementById('check').style.color='red';
+            alert('비밀번호가 일치하지 않습니다.');
+            return false;
+        }
+    }
+	
+	
+	$.ajax({
+		url:'/user/updated',
+		method:'post',
+		cache:false,
+		data:$('#updated').serialize(),
+		dataType:'json',
+		success:function(res){
+			alert(res.result ? '수정 성공':'수정 실패');
+			location.href="/user/detail/"+id;
+		},
+		error:function(xhr,status, err){
+			alert('에러:'+err);
+		}
+	});
+	return false;
+}
+
+function keyevent() {
+	if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
+        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
+            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+            document.getElementById('check').style.color='blue';
+        }
+        else{
+            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+            document.getElementById('check').style.color='red';
+        }
+    }
+}
+	

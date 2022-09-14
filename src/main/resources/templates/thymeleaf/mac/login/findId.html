@@ -71,7 +71,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="/big/location" class="dropdown-item">데이터 시각화</a>
                             <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
@@ -133,7 +133,8 @@
 				<h1 class="mb-0">아이디 찾기</h1>
 			</div>
 			<div class="login-form-backgroud row mx-auto">
-				<form class="form-signin"th:action="@{/login/findId}" method="post">
+				<form class="form-signin" action="/login/findId" method="post">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 					<div class="col-md-4 mb-3 mx-auto">
 					  <div th:if="*{foundId==null}">
 						<input id="nameMac" name="nameMac" placeholder="이름을 입력하세요" type="text"

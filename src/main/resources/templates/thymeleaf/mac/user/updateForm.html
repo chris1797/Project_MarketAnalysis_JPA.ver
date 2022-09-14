@@ -2,74 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
-function updated() {
-	
-	var pw = document.getElementById('pwMac').value;
-    var SC = ["!","@","#","$","%"];
-    var check_SC = 0;
 
-    if(pw.length < 6 || pw.length>16){
-        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
-        document.getElementById('pwMac').value='';
-        return false;
-    }
-    for(var i=0;i<SC.length;i++){
-        if(pw.indexOf(SC[i]) != -1){
-            check_SC = 1;
-        }
-    }
-    if(check_SC == 0){
-        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
-        document.getElementById('pwMac').value='';
-        return false;
-    }
-	
-    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
-        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
-            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
-            document.getElementById('check').style.color='blue';
-        }
-        else{
-            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
-            document.getElementById('check').style.color='red';
-            alert('비밀번호가 일치하지 않습니다.');
-            return false;
-        }
-    }
-	
-	
-	$.ajax({
-		url:'/user/updated',
-		method:'post',
-		cache:false,
-		data:$('#updated').serialize(),
-		dataType:'json',
-		success:function(res){
-			alert(res.result ? '수정 성공':'수정 실패');
-			location.href="/user/detail/"+'[[${user.idMac}]]';
-		},
-		error:function(xhr,status, err){
-			alert('에러:'+err);
-		}
-	});
-	return false;
-}
-
-function keyevent() {
-	if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
-        if(document.getElementById('pwMac').value==document.getElementById('pwMac2').value){
-            document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
-            document.getElementById('check').style.color='blue';
-        }
-        else{
-            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
-            document.getElementById('check').style.color='red';
-        }
-    }
-}
 
 </script>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -130,7 +68,7 @@ function keyevent() {
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="/big/location" class="dropdown-item">데이터 시각화</a>
                             <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
@@ -185,6 +123,7 @@ function keyevent() {
             <div class="input-form-backgroud row mx-auto">
             
 			<form id="updated" th:object="${user}" onsubmit="return updated();" >
+			
 			    <div>
 			        <label for="idMac">아이디</label>
 			        <input class="form-control" type="text" th:field="*{idMac}" id="idMac" placeholder="아이디" readonly="readonly">
@@ -255,6 +194,7 @@ function keyevent() {
 
     <!-- Template Javascript -->
     <script src="/main/js/main.js"></script>
+    <script src="/main/js/user.js"></script>
 </body>
 
 </html>

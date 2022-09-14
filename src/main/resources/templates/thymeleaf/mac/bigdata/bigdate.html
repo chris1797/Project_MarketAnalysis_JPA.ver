@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>게시판 메인화면</title>
+<title>상권정보</title>
 
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Free HTML Templates" name="keywords">
@@ -31,10 +31,8 @@
 <link rel="stylesheet" type="text/css" href="/main/css/style.css">
 <link rel="stylesheet" type="text/css" href="/main/css/ref_swiper.min.css">
 <link rel="stylesheet" type="text/css" href="/main/css/ref_style.css">
+<link rel="stylesheet" type="text/css" href="/main/css/map.css">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-	crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -91,33 +89,219 @@
             
         </nav>
         </div>
+        
 	</header>
-		<br>
-		<br>
-		<br>
+		<br><br><br>
 <!-- Navbar & Carousel End -->
-<section>
-		<div class="map">지도</div>        
-		<div class="data">
-		
-		   <div class="container-fluid pt-4 px-4">
-                <div class="row g-4" id="mapdata">
-                    <div class="col-sm-12 col-xl-6">
+
+<center id="seletedata">
+	<br><br><br><br>
+	<button onclick="dataTable('sales')" class="btn btn-primary py-2 px-4 ms-3 btn-lg">예상 매출 데이터</button>
+	<button onclick="dataTable('population')" class="btn btn-primary py-2 px-4 ms-3 btn-lg">유동인구 데이터</button>
+	<button onclick="dataTable('store')" class="btn btn-primary py-2 px-4 ms-3 btn-lg">점포 데이터</button>
+</center>
+
+	<div class="map">
+   <div id="location" class="paraent">
+	    <div>
+	    <h5>구</h5>
+		<select id="gu" onChange="javascript:guevent()" ><option>-- 구를 선택해주세요 --</option></select>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div>
+		<h5>동</h5>
+		<select id="dong" onChange="javascript:dongevent()" ><option>-- 구를 선택해주세요 --</option></select>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<div>
+		<h5>골목길</h5>
+		<select id="gil" onChange="javascript:gilevent()" ><option>-- 구를 선택해주세요 --</option></select>
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+	</div>
+	<br><br>&nbsp;	
+	<div>
+		<button id="location_serch" type="button" onclick="start2()" class="btn btn-primary py-2 px-4 ms-3">골목길 지도 검색</button>
+	</div>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<div class="map_wrap">
+	    <div id="map" style="width:70%;height:110%;position:relative; left:50px; overflow:hidden;"></div>
+	</div>
+<br>
+<br>
+    </div>        
+	
+
+
+	<div class="data">
+	<br>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+		    <center>
+		        <form id="data" onsubmit="return flask();">
+		        	<input type="hidden" id="dataKind" name="dataKind">
+		        	<input type="hidden" id="trdar_name" name="trdar_name">
+		            <select id="svc_name" name="svc_name" onChange="javascript:svcevent()"><option>서비스명</option></select>
+		            <select id="year" name="year" onChange="javascript:yearevent()"><option>년도</option></select>
+		            <select id="quarter" name="quarter"><option>분기</option></select>
+		            <select id="check_co" name="check_co">
+		            	<option>금액</option>
+		            	<option>건수</option>
+		            </select>
+		        <button id="data_serch" type="submit" class="btn btn-primary py-2 px-4 ms-3">데이터 검색</button>
+		        </form>
+		    </center>
+		    <br>
+			<br>    
+			
+    	 
+    	 
+    	   <div id="sales_view">
+    	   <h3 id="sotre_count"></h3>
+		   <div class="container-fluid ">
+                <div id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
                         <div class="bg-light text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Worldwide Sales</h6>
-                                <a href="">Show All</a>
+                                <h6 class="mb-0">요일별</h6>
                             </div>
-                            <canvas id="sales"></canvas>
+                            <canvas id="sales1"></canvas>
                         </div>
                     </div>
                   
                 </div>
             </div>
-		
-		</div>    
-		
-</section>
+
+             <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">시간대별</h6>
+                            </div>
+                            <canvas id="sales2"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+          
+           
+             <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">성별</h6>
+                            </div>
+                            <canvas id="sales3" width="500" height="200"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+			
+			<div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">연령별</h6>
+                            </div>
+                            <canvas id="sales4"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            </div>
+            
+            
+            <div id="population_view">
+            <h3 id="population_count"></h3>
+            <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">요일별</h6>
+                            </div>
+                            <canvas id="pupulation4"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">시간대별</h6>
+                            </div>
+                            <canvas id="pupulation3"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">성별</h6>
+                            </div>
+                            <canvas id="pupulation1" width="500" height="200"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>	
+            <div class="container-fluid ">
+                <div  id="mapdata">
+                    <div class="col-sm-12 col-xl-10">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">연령별</h6>
+                            </div>
+                            <canvas id="pupulation2"></canvas>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>	
+            
+            
+            
+            </div>
+            
+            <div id="stores_view">
+            <h3 id="store_count"></h3>
+            <table class="table table-striped table-hover" style="width: 75%;">
+            	<tr>
+            		<td >유사업종 점포수</td><td id="store1" ></td>
+            	</tr>
+            	<tr>
+            		<td >개업 점포 수</td><td id="store3" ></td>
+            	</tr>
+            	<tr>
+            		<td>개업 율</td><td id="store2" ></td>
+            	</tr>
+            	<tr>
+            		<td >패업 점포 수</td><td id="store5" ></td>
+            	</tr>
+            	<tr>
+            		<td >패업 율</td><td id="store4" ></td>
+            	</tr>
+            	<tr>
+            		<td >프랜차이즈 점포 수</td><td id="store6"></td>
+            	</tr>
+            </table>
+           	</div>
+            
+	</div> 
+
 
 	    <!-- JavaScript Libraries -->
 			<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -128,23 +312,14 @@
 			<script src="/main/lib/counterup/counterup.min.js"></script>
 			<script src="/main/lib/owlcarousel/owl.carousel.min.js"></script>
 			<script src="/main/lib/chart/chart.min.js"></script>
+			<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	01cb028783685326bfbb992c1e4945ca&libraries=services"></script>
+			
 	
 			<!-- Template Javascript -->
 			<script src="/main/js/main.js"></script>
-			<script src="/main/js/homeMain.js"></script>
+			<script src="/main/js/bigdata.js"></script>
 		</main>
 		</body>
-		<footer class="text-muted py-5">
-			<div class="container">
-				<p class="float-end mb-1">
-					<a href="#">Back to top</a>
-				</p>
-				<p class="mb-1">Album example is &copy; Bootstrap, but please
-					download and customize it for yourself!</p>
-				<p class="mb-0">
-					New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-						href="../getting-started/introduction/">getting started guide</a>.
-				</p>
-			</div>
-		</footer>
+		<br>
+	
 </html>

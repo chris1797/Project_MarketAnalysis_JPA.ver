@@ -24,7 +24,6 @@
     padding: 15px;
 }
 
-
 .board-header {
     margin-bottom: 15px;
     /* background-color: yellow; */
@@ -495,8 +494,9 @@ h6,
 }
 
 .bg-header {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/carousel-1.jpg) center center no-repeat;
+    background:  url(../img/carousel-1.jpg) center center no-repeat;
     background-size: cover;
+    width: 100%;
 }
 
 .link-animated a {
@@ -527,6 +527,7 @@ h6,
       -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
 }
+
 div#findId {
 	position: relative;
 	bottom: 20px;
@@ -572,38 +573,18 @@ footer.text-muted.py-5 {
     top: 80px;
 }
 
-button#search_btn {
-    position: relative;
-    right: 15px;
-    bottom: 1px;
-}
 
-div#search {
-	
-   padding-left:20%;
-   margin-top:-87px;
-}
 
-a#write {
-         position: relative;
-         left: 1300px;
-         bottom: 85px;}
-         
+ /*** board ***/        
 button#cmt_del{
 	
 	  padding-left:24%;
 }
 
-td#board_del{
+div#board_del{
 	float: right;
-	position:relative;
-    bottom:43px;
+margin-top: -9%;
 	
-}
-
-div#comPage {
-    position: relative;
-    top: 500px;
 }
 
 div#myPageWrite {
@@ -625,60 +606,23 @@ div#writepage {
     right:15px;
 }
 
-
-div.map{
-	width:50%;
-	float:left;
-	box-sizing:border-box;
-	
-	height: 800px;
-	position: relative;
-    top: 26px;
-}
-
-div.data{
-	
-	width:50%;
-	float:right;
-	box-sizing:border-box;
-	height: 800px;
-	
-}
-.row.g-4 {
-    width: 60%;
-}
-
-div#mapdata {
-    width: 150%;
-}
+a#write {
+      float: right;  
+      margin-left: 30%;
+      margin-top: -9%}
 
 
-div#storechart {
-    position: relative;
-    left:1120px;
-    bottom: 360px;
-    
-}
-
-
-
-div#alldata {
-    margin-bottom: -23%;
-    margin-top: 1%;
-    position: relative;
-    left:100px;
-    
-   
-}
 
 footer#boardfooter {
     position: relative;
     top: 500px;
 }
 
-div#seletedata {
-    position: relative;
-    left: 100px;
+/*** bigdata***/
+span#seletedata {
+	margin: 0 auto;
+	
+
 }
 
 div#selectloca {
@@ -699,4 +643,66 @@ button#datasearch{
 	 position: relative;
        left:-30px;
        top:30px;
+}
+
+div.map{
+	width:50%;
+	float:left;
+	box-sizing:border-box;
+	
+	height: 800px;
+	position: relative;
+    top:100px;
+    left: 50px;
+}
+
+div.data{
+	
+	width:50%;
+	float:right;
+	box-sizing:border-box;
+	height: 800px;
+	margin-top: 5%;
+	
+	
+}
+.row.g-4 {
+    width: 60%;
+}
+
+
+
+
+
+/*** home chart***/
+.allchart{
+    width: 90%;
+    margin: 10px auto;
+}
+
+.sales{
+    
+    float: left;
+    width:30%;
+    box-sizing: border-box;
+}
+
+.population{
+ 
+    float: left;
+    margin-left: 5%;
+    width:30%;
+    box-sizing: border-box;
+}
+
+.store{
+   
+    float: right;
+    width:30%;
+    box-sizing: border-box;
+}
+/*** home servic***/
+div#homeservice {
+    margin-top:24%;
+    margin-bottom: 0%;
 }
