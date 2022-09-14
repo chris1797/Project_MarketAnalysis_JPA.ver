@@ -15,11 +15,11 @@ import com.mac.demo.model.User;
 public interface BoardMapper {
 
 //	게시글CRUD
-	int saveToFree(Board board);
-	int saveToAds(Board board);
+	int save(Board board);
+//	int saveToAds(Board board);
 	
-	int Freeedit(Board board); //게시글 수정
-	int Adsedit(Board board);
+//	게시글 수정
+	int update(Board board);
 	int Noticeedit(Board board);
 	
 	int Freedelete(int num); //게시글 삭제
@@ -43,8 +43,7 @@ public interface BoardMapper {
 
 	
 //	게시글 목록
-	List<Board> getFreeList(); // 자유게시판
-	List<Board> getAdsList(); // 광고게시판
+	List<Board> getBoardList(String categoryMac); // 자유게시판
 	List<Board> getNoticeList(); // 공지게시판
 	
 //	닉네임, 글내용+제목 검색

@@ -4,8 +4,11 @@
 <meta charset="UTF-8">
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-<title>광고게시판 상세보기</title>
+<title>자유게시판 상세보기</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
 
+</script>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Free HTML Templates" name="keywords">
 <meta content="Free HTML Templates" name="description">
@@ -36,10 +39,7 @@
 <link rel="stylesheet" type="text/css" href="/main/css/ref_style.css">
 <link rel="stylesheet" type="text/css" href="/main/css/all.min.css">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-	crossorigin="anonymous">
-</script>
+
 </head>
 <body>
 	
@@ -106,27 +106,41 @@
 					<div class="col-lg-8 col-md-8" style="margin-left: 8px;">
 						<h1 class="fw-light">자유게시판 수정</h1>
 					</div>
-			<form id="edit_form" onsubmit="return edit();" class="board">
+			<form id="edit_form" onsubmit="return freeedit();" class="board">
 			<div class="board-header">
 			<input type="hidden" id="idMac" name="idMac" th:value="${board.idMac}">
 			<input type="hidden" id="numMac" name="numMac" th:value="${board.numMac}">
+			<input type="hidden" id="categoryMac" name="categoryMac" th:value="${board.categoryMac}">
 			
 			<span th:text="'No. '+${board.numMac}" th:name="numMac"></span>
 				
-					<div>
-				  <input type="text" name="titleMac" th:value='${board.titleMac}'>
-			     </div>
+				<div>
+				<input type="text" name="titleMac" th:value='${board.titleMac}'>
+			  </div>
 					
-						<span th:text='${board.nickNameMac}'></span>
+				<span th:text='${board.nickNameMac}'></span>
 				&nbsp;&nbsp;
-						<span th:text='${board.wdateMac}' th:name='wdateMac'></span>
+				<span th:text='${board.wdateMac}' th:name='wdateMac'></span>
 				
-					</div>
-					<div class="board-body">
-						<span><textarea  cols="110" rows="11" th:name="contentsMac" th:text='${board.contentsMac}'></textarea></span>
-					</div>
-				<input type="submit" value="저장" class="btn btn-primary py-2 px-4 ms-3">
-				</form>
+			</div>
+
+			<div class="board-body">
+					<span><textarea  cols="110" rows="11" th:name="contentsMac" th:text='${board.contentsMac}'></textarea></span>
+			</div>
+			
+			<div>
+					파일첨부 : <input type="file" name="files" id="files" multiple="multiple">
+					<br>
+					<br>
+					<span th:if="${fileindex!=0}">
+						<tr th:each="file : ${filelist}">
+							<p th:text="${file.fileNameMac}"></p>
+							<button th:if="${board.idMac}==${file.idMac}" type="button" th:onclick="javascript:filedelete([[${file.numMac}]]);">삭제</button>
+						</tr>
+					</span>
+			</div>
+			<input type="submit" value="저장" class="btn btn-primary py-2 px-4 ms-3">
+			</form>
 			</div>
 							
 				
@@ -146,19 +160,4 @@
     <script src="/main/js/main.js"></script>
     <script src="/main/js/board.js"></script>
 </body>
-
-	<footer class="text-muted py-5">
-	<br><br><br>
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for yourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
-	</footer>
 </html>

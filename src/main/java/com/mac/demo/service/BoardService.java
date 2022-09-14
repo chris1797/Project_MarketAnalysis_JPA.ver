@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.catalina.authenticator.SavedRequest;
@@ -26,7 +27,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageInfo;
 import com.mac.demo.mappers.AttachMapper;
 import com.mac.demo.mappers.BoardMapper;
 import com.mac.demo.mappers.UserMapper;
@@ -51,16 +54,12 @@ public class BoardService {
 	ResourceLoader resourceLoader;
 	
 //	------------------List-------------------
-	public List<Board> getFreeList(){
-		return boardDao.getFreeList();
+	public List<Board> getBoardList(String categoryMac){
+		return boardDao.getBoardList(categoryMac);
 	}
 	
 	public List<Board> getNoticeList() {
 		return boardDao.getNoticeList();
-	}
-	
-	public List<Board> getAdsList() {
-		return boardDao.getAdsList();
 	}
 
 //	------------------id로 유저정보 가져오기-------------------    
@@ -69,11 +68,8 @@ public class BoardService {
 	}
 	
 //	------------------ SAVE -------------------    
-	public boolean saveToFree(Board board){
-		return 0 < boardDao.saveToFree(board);
-	}
-	public boolean saveToAds(Board board){
-		return 0 < boardDao.saveToAds(board);
+	public boolean save(Board board){
+		return 0 < boardDao.save(board);
 	}
 	
 //	------------------상세보기-------------------    
@@ -97,15 +93,15 @@ public class BoardService {
 	public boolean Noticedelete(int num) {
 		return 0 > boardDao.Noticedelete(num);
 	}
-	public boolean Freeedit(Board board) {
-		return 0 < boardDao.Freeedit(board);
-	}
-	public boolean Adsedit(Board board) {
-		return 0 < boardDao.Adsedit(board);
+	
+//	------------------UPDATE-------------------
+	public boolean update(Board board) {
+		return 0 < boardDao.update(board);
 	}
 	public boolean Noticeedit(Board board) {
 		return 0 < boardDao.Noticeedit(board);
 		
+//  -----------------COMMENT DELETE-----------------
 	}
 	public boolean freeCommentAllDelete(int num) {
 		return 0<boardDao.freeCommentAllDelete(num);
@@ -116,7 +112,7 @@ public class BoardService {
 	}
 	
 	
-//	-----------------------댓글-----------------------
+//	-----------------COMMENT LIST-----------------
 	public List<Comment> getCommentList(int num){
 		return boardDao.getCommentList(num);		
 	}
@@ -156,26 +152,58 @@ public class BoardService {
 	}
 	
 //	------------------------File------------------------
-	public boolean insert(List<Attach> attList) {
-		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
-		int res = attachDao.insertMultiAttach(attList);
-		System.out.println(res + "개 업로드성공");
+	public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		String savePath = context.getRealPath("/WEB-INF/files");
+		String fname_changed = null;
+		
+		// 파일 VO List
+		List<Attach> attList = new ArrayList<>();
+		
+		// 업로드
+		try {
+			for (int i = 0; i < mfiles.length; i++) {
+				// mfiles 파일명 수정
+				String[] token = mfiles[i].getOriginalFilename().split("\\.");
+				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
+				
+					// Attach 객체 만들어서 가공
+					Attach _att = new Attach();
+					_att.setIdMac(board.getIdMac());
+					_att.setNickNameMac(getOne(board.getIdMac()).getNickNameMac());
+					_att.setFileNameMac(fname_changed);
+					_att.setFilepathMac(savePath);
+				
+				attList.add(_att);
 
-		return res==attList.size();
+//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
+				mfiles[i].transferTo(
+						new File(savePath + "/" + fname_changed));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return attList;
 	}
 	
-	public boolean update(List<Attach> attList) {
-		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
-		int res = attachDao.updateMultiAttach(attList);
-		System.out.println(res + "개 업로드성공(update)");
+	public boolean fileinsert(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
+		int res = attachDao.insertMultiAttach(getFileSet(board, mfiles, request));
+		System.out.println(res + "개 파일 업로드성공");
 
-		return res==attList.size();
+		return res==getFileSet(board, mfiles, request).size();
+	}
+	
+	public boolean fileupdate(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
+		int res = attachDao.updateMultiAttach(getFileSet(board, mfiles, request));
+		System.out.println(res + "개 파일 업로드성공(update)");
+
+		return res==getFileSet(board, mfiles, request).size();
 	}
 	
 	public List<Attach> getFileList(int pcodeMac){
 		return attachDao.getFileList(pcodeMac);
 	}
-	
 
 
 	public String getFname(int num) {
@@ -211,38 +239,6 @@ public class BoardService {
 		return removed > 0;
 	}
 
-	@Transactional(rollbackFor = {Exception.class})
-	public boolean delete3(HttpServletRequest request, int num) throws Exception {
-		boolean attDeleted = attachDao.deleteAttInfo(num)>0;
-		if(!attDeleted) throw new Exception("attach_tb rows delete fail");
-		
-		boolean uploadDeleted = attachDao.deleteUpload(num)>0;
-		if(!uploadDeleted) throw new Exception("upload_tb rows delete fail");
-		
-		//게시물 번호를 이용해서 첨부파일명 모두 가져오기
-		List<String> fnameList = attachDao.getAttachByPnum(num);
-		String dir = request.getServletContext().getRealPath("WEB-INF/files/");
-		int delCnt = 0;
-		
-			if(!(fnameList==null) || fnameList.size()==0) {
-				for(int i=0; i<fnameList.size(); i++) {
-					String path = dir + fnameList.get(i);
-					File f = new File(path);
-					if(!f.exists()) {
-						System.out.println("File Not Found, '" + path + "'");
-						continue;
-					}
-					delCnt += f.delete() ? 1:0;
-				}
-				if(delCnt==fnameList.size()) {
-					System.out.println("Successfully deleted!");
-				} else {
-					System.out.println("Faile to delete the files");
-					throw new Exception("file delete fail");
-				}
-			}
-		return true;
-	}
 	
 	public boolean insertMultiAttach(Attach vo) {
 		int pcodeMac = vo.getNumMac();  // 자동 증가된 업로드 번호를 받음
@@ -290,6 +286,18 @@ public class BoardService {
 	
 	
 //	------------------------PAGE------------------------
+	public PageInfo<Board> getPageInfo(String categoryMac) {
+		PageInfo<Board> pageInfo = null;
+		
+		if (categoryMac.contentEquals("notice")) {
+			pageInfo = new PageInfo<>(getNoticeList());
+		} else {
+			pageInfo = new PageInfo<>(getBoardList(categoryMac));
+		}
+		
+		return pageInfo;
+	}
+	
 	public int[] getLinkRange(Page<Board> pageInfo) {
 		int start = 0;
 		int end = 0;
@@ -308,9 +316,5 @@ public class BoardService {
 		}
 		return new int[] { start, end };
 	}
-
-
 	
-
-
 }

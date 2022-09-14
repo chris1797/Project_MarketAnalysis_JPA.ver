@@ -257,7 +257,7 @@ function filedownload(filenum){
 		method:'get',
 		async: false,
 		cache:false,
-		contentType : 'application/json; charset=tf-8',
+		contentType : 'application/json; charset=utf-8',
 		success:function(res){
 			if(idMac == ''){
 				alert("로그인 후 다운로드 가능합니다.");

@@ -35,7 +35,6 @@
 <link rel="stylesheet" type="text/css" href="/main/css/ref_style.css">
 <link rel="stylesheet" type="text/css" href="/main/css/all.min.css">
 
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 	crossorigin="anonymous">
@@ -47,13 +46,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 	crossorigin="anonymous"></script>
+	
 <script type="text/javascript">
 	var msg = '[[${msg}]]';
 	if(msg != ""){
 		alert(msg);
-		location.href="/board/free/list";
+		location.href="/board/ads/list";
 	}
-
 
 </script>
 </head>
@@ -81,8 +80,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">상권 정보 분석</a>
                         <div class="dropdown-menu m-0">
-                         <a href="/big/location" class="dropdown-item">데이터 시각화</a>
-                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
+                            <a href="price.html" class="dropdown-item">그래프 시각화</a>
+                            <a href="feature.html" class="dropdown-item">지도 시각화</a>
                             
                         </div>
                     </div>
@@ -90,8 +89,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle">이용안내</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/home/dataSource" class="dropdown-item">데이터 출처</a>
-                            <a href="/home/siteIntroduction" class="dropdown-item">사이트 소개</a>
+                            <a href="price.html" class="dropdown-item">데이터 시각화</a>
+                            <a href="feature.html" class="dropdown-item">데이터 분석</a>
                             
                         </div>
                     </div>
@@ -105,7 +104,7 @@
 	         <div th:if="${idMac !=null}">
 		         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
 		          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-		          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+		         <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
 	         </div>
 		</nav>
 	</div>
@@ -113,15 +112,15 @@
     
     <br> <br> <br><br> <br> <br>
 	<main>
-		<div class="inner">
+	<div class="inner">
 			<div class="col-lg-8 col-md-8">
-				<h1 class="fw-light">자유게시판</h1>
+				<h1 class="fw-light">광고게시판</h1>
 			</div>
 		<h3>게시판 글 입력 폼</h3>
-		<form id="input_form"  th:object="${board}" onsubmit="return freesave();">
-		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		<form id="input_form" th:object="${board}" onsubmit="return save();">
 			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
 			<input type="hidden" th:value="${idMac}" name="idMac">
+			<input type="hidden" th:field="*{categoryMac}" name="categoryMac" th:value="${board.categoryMac}">
 				<br>
 			<div>
 				<label for="titleMac" class="form-label">
@@ -136,7 +135,6 @@
 				</label>
 				<textarea name="contentsMac" cols="110" rows="11" class="form-control" th:field="*{contentsMac}" style="border-radius:10px;"></textarea>
 			</div>
-			파일첨부 : <input type="file" name="files" id="files" multiple="multiple"><br>
 			<br>
 			<div>
 				<button type="submit" class="btn btn-primary py-2 px-4 ms-3">글쓰기</button>
@@ -160,9 +158,18 @@
 		<script src="/main/js/main.js"></script>
 		<script src="/main/js/board.js"></script>
 	</main>
-	
-
-	<footer class="text-muted py-5">
+	<footer>
+		<div class="container">
+			<p class="float-end mb-1">
+				<a href="#">Back to top</a>
+			</p>
+			<p class="mb-1">Album example is &copy; Bootstrap, but please
+				download and customize it for yourself!</p>
+			<p class="mb-0">
+				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
+					href="../getting-started/introduction/">getting started guide</a>.
+			</p>
+		</div>
 	</footer>
 </body>
 </html>

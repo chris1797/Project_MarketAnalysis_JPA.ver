@@ -11,22 +11,13 @@
 -->
 
 
-	<select id="getAdsList" resultType="com.mac.demo.model.Board">
+	<select id="getBoardList" resultType="com.mac.demo.model.Board" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
 			(SELECT COUNT(*)
 			FROM comment_board c
-			WHERE c.pcodemac = a.nummac) COUNTMAC
-		FROM ads_board a
-		ORDER BY NUMMAC
-		DESC
-	</select>
-
-	<select id="getFreeList" resultType="com.mac.demo.model.Board">
-		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC,
-			(SELECT COUNT(*)
-			FROM comment_board c
-			WHERE c.pcodemac = f.nummac) COUNTMAC
-		FROM free_board f
+			WHERE c.pcodemac = b.nummac) COUNTMAC
+		FROM board b
+		WHERE CATEGORYMAC = #{categoryMax}
 		ORDER BY NUMMAC
 		DESC
 	</select>
@@ -38,13 +29,13 @@
 		DESC
 	</select>
 	
-	<insert id="saveToFree"
+	<insert id="save"
 	        parameterType="com.mac.demo.model.Board" 
 	        useGeneratedKeys="true" 
 	       	keyColumn="NUMMAC" keyProperty="numMac">
 	
-	   INSERT INTO free_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC)
-			VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac})
+	   INSERT INTO board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC, CATEGORYMAC)
+			VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac},#{categoryMac})
 	
 	</insert>
 	
@@ -159,8 +150,10 @@
 	
 	<!-- update/delete -->
 
-	<update id="Freeedit" parameterType="com.mac.demo.model.Board">
-		UPDATE free_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
+	<update id="update" parameterType="com.mac.demo.model.Board">
+		UPDATE BOARD 
+		SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} 
+		WHERE NUMMAC=#{numMac} and CATEGORYMAC=#{categoryMac}
 	</update>
 	<update id="Adsedit" parameterType="com.mac.demo.model.Board">
 		UPDATE ads_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}

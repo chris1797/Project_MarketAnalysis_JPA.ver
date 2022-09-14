@@ -53,20 +53,24 @@ public class BoardController {
 	@Autowired
 	ResourceLoader resourceLoader;
 	
+	
+	
+	
+	
 //	커뮤니티메인화면
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
 		
 //		model.addAttribute((String)session.getAttribute("idMac"));
-		return "thymeleaf/mac/board/boardMain_copy";
+		return "thymeleaf/mac/board/board_main";
 	}
 	
 //======================================== 자유게시판 ========================================
 //	게시글작성폼
-	@GetMapping("/{board_kind}/input")
+	@GetMapping("/{categoryMac}/input")
 	public String input(Model model,
 						HttpSession session,
-						@PathVariable("board_kind") String board_kind) {
+						@PathVariable("categoryMac") String categoryMac) {
 		
 		System.out.println("현재 접속한 ID : " + (String)session.getAttribute("idMac"));
 		
@@ -81,75 +85,32 @@ public class BoardController {
 			//닉네임 가져오기
 			Board board = new Board();
 			board.setNickNameMac(svc.getOne(id).getNickNameMac());
+			board.setCategoryMac(categoryMac);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
 			model.addAttribute("idMac", id);
 		}
 		
-		String linkpath = null;
-		if(board_kind.contentEquals("free")) {
-			linkpath = "thymeleaf/mac/board/free_inputform";
-		} else if(board_kind.contentEquals("ads")) {
-			linkpath = "thymeleaf/mac/board/ads_inputform";
-		} else if(board_kind.contentEquals("notice")) {
-			linkpath = "thymeleaf/mac/board/notice_inputform";
-		}
-		
-		return linkpath;
+		return String.format("thymeleaf/mac/board/%s_board_input", categoryMac);
 	}
 	
 
 //	게시글 저장
-	@PostMapping("/{board_kind}/save")
+	@PostMapping("/{categoryMac}/save")
 	@ResponseBody
 	public Map<String, Object> save(Board board,
-									@PathVariable("board_kind") String board_kind,
+									@PathVariable("categoryMac") String categoryMac,
 									@RequestParam("files") MultipartFile[] mfiles,
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		// categoryMac 컬럼을 넣어줌
+		svc.save(board);
+		svc.fileinsert(board, mfiles, request);
 		
-		ServletContext context = request.getServletContext();
-		String savePath = context.getRealPath("/WEB-INF/files");
-		String fname_changed = null;
-		
-		// 파일 VO List
-		List<Attach> attList = new ArrayList<>();
-		
-		// 업로드
-		try {
-			for (int i = 0; i < mfiles.length; i++) {
-				// mfiles 파일명 수정
-				String[] token = mfiles[i].getOriginalFilename().split("\\.");
-				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
-				
-					// Attach 객체 만들어서 가공
-					Attach _att = new Attach();
-					_att.setIdMac(board.getIdMac());
-					_att.setNickNameMac(svc.getOne(board.getIdMac()).getNickNameMac());
-					_att.setFileNameMac(fname_changed);
-					_att.setFilepathMac(savePath);
-				
-				attList.add(_att);
-
-//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
-				mfiles[i].transferTo(
-						new File(savePath + "/" + fname_changed));
-			}
-			svc.insert(attList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		// 경로를 변수로 받아서 그에 따른 테이블 insert 분기
-		if (board_kind.contentEquals("free")) {
-			svc.saveToFree(board);
-		} else if (board_kind.contentEquals("ads")) {
-			svc.saveToAds(board);
-		}
-		map.put("saved",board.getNumMac());
+		map.put("saved", board.getNumMac());
 		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
 		//그후 그 번호를 가지고 detail로 넘어가독
 		//자세한건 form에 ajax 확인
@@ -157,42 +118,25 @@ public class BoardController {
 		return map;
 	}
 	
-//	자유게시판 리스트
-	@GetMapping("/{board_kind}/list")
+//	리스트
+	@GetMapping("/{categoryMac}/list")
 	public String getListByPage(@RequestParam(name="page", required = false,defaultValue = "1") int page,
-								@PathVariable("board_kind") String board_kind,
+								@PathVariable("categoryMac") String categoryMac,
 								Model model,
 								HttpSession session) {
 		PageHelper.startPage(page, 10);
-		PageInfo<Board> pageInfo = null;
-		
 		model.addAttribute("page", page);
+		model.addAttribute("pageInfo", svc.getPageInfo(categoryMac));
 		model.addAttribute("idMac",(String)session.getAttribute("idMac"));
 		
-		String linkpath = null;
-		
-		// board_kind == "free" 로 하면 오류남
-		if(board_kind.contentEquals("free")) {
-			pageInfo = new PageInfo<>(svc.getFreeList());
-			linkpath = "thymeleaf/mac/board/free_boardList_copy";
-		} else if (board_kind.contentEquals("ads")) {
-			pageInfo = new PageInfo<>(svc.getAdsList());
-			linkpath = "thymeleaf/mac/board/ads_boardList_copy";
-		} else if (board_kind.contentEquals("notice")) {
-			pageInfo = new PageInfo<>(svc.getNoticeList());
-			linkpath = "thymeleaf/mac/board/notice_boardList_copy";
-		}
-		
-		model.addAttribute("pageInfo", pageInfo);
-		
-		return linkpath;
+		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
 	}
 	
 	
 //  게시글 보기
-	@GetMapping("/{board_kind}/detail/{num}")
+	@GetMapping("/{categoryMac}/detail/{num}")
 	public String getDetail(@PathVariable("num") int num,
-							@PathVariable("board_kind") String board_kind,
+							@PathVariable("categoryMac") String categoryMac,
 							@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 							Model model,
 							HttpSession session) {
@@ -215,13 +159,13 @@ public class BoardController {
 		
 		// 게시판 분기
 		String linkpath = null;
-		if(board_kind.contentEquals("free")) {
+		if(categoryMac.contentEquals("free")) {
 			model.addAttribute("board", svc.getFreeDetail(num));
 			linkpath = "thymeleaf/mac/board/free_board_detail_copy";
-		} else if(board_kind.contentEquals("ads")) {
+		} else if(categoryMac.contentEquals("ads")) {
 			model.addAttribute("board", svc.getAdsDetail(num));
 			linkpath = "thymeleaf/mac/board/ads_board_detail_copy";
-		} else if(board_kind.contentEquals("notice")) {
+		} else if(categoryMac.contentEquals("notice")) {
 			model.addAttribute("board", svc.getNoticeDetail(num));
 			linkpath = "thymeleaf/mac/board/notice_board_detail_copy";
 		}
@@ -242,21 +186,21 @@ public class BoardController {
 		
 		// 댓글 삭제를 위한 idMac체크
 		
-		return linkpath;
+		return String.format("thymeleaf/mac/board/%s_board_detail", categoryMac);
 	}
 	
 //  게시글 삭제
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
-	@GetMapping("/{board_kind}/delete/{num}")
+	@GetMapping("/{categoryMac}/delete/{num}")
 	@ResponseBody
 	public Map<String, Object> delete(@PathVariable("num") int num,
-									  @PathVariable("board_kind") String board_kind) {
+									  @PathVariable("categoryMac") String categoryMac) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if (board_kind.equals("free")) {
+		if (categoryMac.equals("free")) {
 			map.put("deleted", svc.Freedelete(num));
 			map.put("commetdeleted", svc.freeCommentAllDelete(num));
-		} else if (board_kind.equals("ads")) {
+		} else if (categoryMac.equals("ads")) {
 			map.put("deleted", svc.Adsdelete(num));
 			map.put("commetdeleted", svc.adsCommentAllDelete(num));
 		}
@@ -264,20 +208,18 @@ public class BoardController {
 	}
 	
 //  게시글 업데이트폼
-	@GetMapping("/{board_kind}/update/{num}")
+	@GetMapping("/{categoryMac}/update/{num}")
 	public String update(@PathVariable("num") int num, 
 						 Model model,
-						 @PathVariable("board_kind") String board_kind) {
+						 @PathVariable("categoryMac") String categoryMac) {
 		
 //		{board_kind}에 따른 html경로 변수 초기화
 		String linkpath = null;
 		
-		if (board_kind.equals("free")) {
+		if (categoryMac.equals("free")) {
 			model.addAttribute("board", svc.getFreeDetail(num));
-			linkpath = "thymeleaf/mac/board/free_updateform";
-		} else if (board_kind.equals("ads")) {
+		} else if (categoryMac.equals("ads")) {
 			model.addAttribute("board", svc.getAdsDetail(num));
-			linkpath = "thymeleaf/mac/board/ads_updateform";
 		}
 		
 		List<Attach> filelist = svc.getFileList(num);;
@@ -285,89 +227,50 @@ public class BoardController {
 		model.addAttribute("filelist", filelist);
 		model.addAttribute("fileindex", filelist.size());
 		
-		return linkpath;
+		return String.format("thymeleaf/mac/board/%s_board_edit", categoryMac);
 	}
 	
 //  게시글 수정
-	@PostMapping("/{board_kind}/edit")
+	@PostMapping("/{categoryMac}/edit")
 	@ResponseBody
 	public Map<String, Object> edit(Board newBoard,
 									@RequestParam("files") MultipartFile[] mfiles,
-									@PathVariable("board_kind") String board_kind,
+									@PathVariable("categoryMac") String categoryMac,
 									HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if (board_kind.equals("free")) {
-			map.put("updated", svc.Freeedit(newBoard));
-		} else if (board_kind.equals("ads")) {
-			map.put("updated", svc.Adsedit(newBoard));
-		}
-		
-		ServletContext context = request.getServletContext();
-		String savePath = context.getRealPath("/WEB-INF/files");
-		String fname_changed = null;
-		
-		// 파일 VO List
-		List<Attach> attList = new ArrayList<>();
-		
-		// 업로드
-		try {
-			for (int i = 0; i < mfiles.length; i++) {
-				// mfiles 파일명 수정
-				String[] token = mfiles[i].getOriginalFilename().split("\\.");
-				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
-				
-					// Attach 객체 만들어서 가공
-					Attach _att = new Attach();
-					_att.setPcodeMac(newBoard.getNumMac());
-					_att.setIdMac(newBoard.getIdMac());
-					_att.setNickNameMac(svc.getOne(newBoard.getIdMac()).getNickNameMac());
-					_att.setFileNameMac(fname_changed);
-					_att.setFilepathMac(savePath);
-				
-				attList.add(_att);
-
-//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
-				mfiles[i].transferTo(
-						new File(savePath + "/" + fname_changed));
-			}
-			svc.update(attList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		newBoard.setCategoryMac(categoryMac);	
+		map.put("updated", svc.update(newBoard));
+		svc.fileupdate(newBoard, mfiles, request);
 		
 		return map;
 	}
 	
 	
 //	게시글 타이틀 검색
-	@GetMapping("/{board_kind}/search")
+	@GetMapping("/{categoryMac}/search")
 	public String getListByTitle(@RequestParam(name="page", required = false,defaultValue = "1") int page,
 								 @RequestParam(name="category", required = false) String category,
 								 @RequestParam(name="keyword", required = false) String keyword,
-								 @PathVariable("board_kind") String board_kind,
+								 @PathVariable("categoryMac") String categoryMac,
 								 Model model) {
 		
 		PageHelper.startPage(page, 10);
 		
-		String linkpath = null;
 		PageInfo<Board> pageInfo = null;
-		if(board_kind.contentEquals("free")) {
-			linkpath = "thymeleaf/mac/board/free_boardList_copy";
+		if(categoryMac.contentEquals("free")) {
 			if(category.equals("contents")) {
 				pageInfo = new PageInfo<>(svc.getFreeListByKeyword(keyword));
 			} else {
 				pageInfo = new PageInfo<>(svc.getFreeListByNickName(keyword));
 			}
-		} else if(board_kind.contentEquals("ads")) {
-			linkpath = "thymeleaf/mac/board/ads_boardList_copy";
+		} else if(categoryMac.contentEquals("ads")) {
 			if(category.equals("contents")) {
 				pageInfo = new PageInfo<>(svc.getAdsListByKeyword(keyword));
 			} else {
 				pageInfo = new PageInfo<>(svc.getAdsListByNickName(keyword));
 			}
-		} else if(board_kind.contentEquals("notice")) {
-			linkpath = "thymeleaf/mac/board/notice_boardList_copy";
+		} else if(categoryMac.contentEquals("notice")) {
 			if(category.equals("contents")) {
 				pageInfo = new PageInfo<>(svc.getAdsListByKeyword(keyword));
 			} else {
@@ -378,7 +281,7 @@ public class BoardController {
 		model.addAttribute("pageInfo",pageInfo);
 		model.addAttribute("page", page);
 		
-		return linkpath;
+		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
 	}
 	
 //======================================== 댓글 ========================================
@@ -396,6 +299,7 @@ public class BoardController {
 		return map;
 	}
 	
+	
 	@GetMapping("/comment/delete/{numMac}")
 	@ResponseBody
 	public Map<String, Object> comment_delte(@PathVariable int numMac, Model model, HttpSession session) {
@@ -412,7 +316,6 @@ public class BoardController {
 	public Map<String, Object> file_delte(@PathVariable("numMac") int numMac, 
 										  Model model, HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		System.out.println("삭제할 파일 No. : " + numMac);
 		map.put("filedeleted", svc.filedelete(numMac));
 		return map;
@@ -422,7 +325,6 @@ public class BoardController {
 	@ResponseBody
 	public ResponseEntity<Resource> download(HttpServletRequest request,
 											 @PathVariable(name="filenum", required = false) int FileNum) throws Exception {
-		
 		return svc.download(request, FileNum);
 	}
 }

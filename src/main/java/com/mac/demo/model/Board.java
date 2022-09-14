@@ -2,6 +2,7 @@ package com.mac.demo.model;
 
 import java.sql.Date;
 
+
 public class Board {
 
 	private int numMac; //번호
@@ -13,9 +14,16 @@ public class Board {
 	private String idMac; //유저아이디
 	private int countMac;
 	private String tableMac;
+	private String categoryMac;
 
 	
 	
+	public String getCategoryMac() {
+		return categoryMac;
+	}
+	public void setCategoryMac(String categoryMac) {
+		this.categoryMac = categoryMac;
+	}
 	public int getCountMac() {
 		return countMac;
 	}
