@@ -29,8 +29,7 @@ public interface BoardMapper {
 	int freeCommentAllDelete(int num);//게시글 삭제하면 댓글도 삭제
 	int adsCommentAllDelete(int num);
 	
-	Board getFreeDetail(int num); //게시글 상세보기
-	Board getAdsDetail(int num);
+	Board getDetail(int numMac, String categoryMac); //게시글 상세보기
 	Board getNoticeDetail(int num);
 	
 //	댓글

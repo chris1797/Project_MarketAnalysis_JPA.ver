@@ -134,9 +134,9 @@ $(function() {
 			dataType : 'json',
 			success : function(res) {
 				
-				if(res.saved!=0){
+				if(res.savednum!=0){
 					alert('저장성공');	
-					location.href="/board/free/detail/"+res.saved;
+					location.href="/board/free/detail/"+res.savednum;
 				};
 			},
 			error : function(xhr, status, err) {
@@ -164,7 +164,7 @@ $(function() {
 					location.href="/board/free/detail/"+numMac;
 			},
 			error:function(xhr,status,err){
-				alert(err);
+				alert("Error : " + err);
 			}
 		});
 		return false;

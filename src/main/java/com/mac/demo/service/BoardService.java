@@ -73,11 +73,8 @@ public class BoardService {
 	}
 	
 //	------------------상세보기-------------------    
-	public Board getFreeDetail(int num) {
-		return boardDao.getFreeDetail(num);
-	}
-	public Board getAdsDetail(int num) {
-		return boardDao.getAdsDetail(num);
+	public Board getDetail(int numMac, String categoryMac) {
+		return boardDao.getDetail(numMac, categoryMac);
 	}
 	public Board getNoticeDetail(int num) {
 		return boardDao.getNoticeDetail(num);
@@ -187,6 +184,41 @@ public class BoardService {
 		return attList;
 	}
 	
+	public List<Attach> getUpdateFileSet(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		String savePath = context.getRealPath("/WEB-INF/files");
+		String fname_changed = null;
+		
+		// 파일 VO List
+		List<Attach> attList = new ArrayList<>();
+		
+		// 업로드
+		try {
+			for (int i = 0; i < mfiles.length; i++) {
+				// mfiles 파일명 수정
+				String[] token = mfiles[i].getOriginalFilename().split("\\.");
+				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
+				
+					// Attach 객체 만들어서 가공
+					Attach _att = new Attach();
+					_att.setPcodeMac(board.getNumMac());			_att.setIdMac(board.getIdMac());
+					_att.setNickNameMac(getOne(board.getIdMac()).getNickNameMac());
+					_att.setFileNameMac(fname_changed);
+					_att.setFilepathMac(savePath);
+				
+				attList.add(_att);
+
+//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
+				mfiles[i].transferTo(
+						new File(savePath + "/" + fname_changed));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return attList;
+	}
+	
 	public boolean fileinsert(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
 		int res = attachDao.insertMultiAttach(getFileSet(board, mfiles, request));
 		System.out.println(res + "개 파일 업로드성공");
@@ -195,7 +227,7 @@ public class BoardService {
 	}
 	
 	public boolean fileupdate(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
-		int res = attachDao.updateMultiAttach(getFileSet(board, mfiles, request));
+		int res = attachDao.updateMultiAttach(getUpdateFileSet(board, mfiles, request));
 		System.out.println(res + "개 파일 업로드성공(update)");
 
 		return res==getFileSet(board, mfiles, request).size();
@@ -211,28 +243,6 @@ public class BoardService {
 		return fname;
 	}
 
-	public Attach getDetailByNum(int _num) {
-		List<Map<String,Object>> list = attachDao.getDetailByNum(_num);
-		
-//		Fileupload vo = new Fileupload();
-		for(int i=0; i<list.size(); i++) {
-			Map<String, Object> map = list.get(i);
-			
-			int num = ((BigDecimal)map.get("NUM")).intValue();
-			String writer = (String)map.get("WRITER");
-			Date udate = new Date(((Timestamp)map.get("UDATE")).getTime());
-			String comments = (String)map.get("COMMENTS");
-			
-			String fname = (String)map.get("FNAME");
-			
-			if(fname != null) {
-				Attach attvo = new Attach();
-				int fnum = ((BigDecimal)map.get("FNUM")).intValue();
-			}
-		}
-		return null;
-	}
-	
 
 	public boolean filedelete(int num) {
 		int removed = attachDao.filedelete(num);

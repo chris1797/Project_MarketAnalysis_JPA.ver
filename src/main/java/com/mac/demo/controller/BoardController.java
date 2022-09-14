@@ -110,7 +110,7 @@ public class BoardController {
 		svc.save(board);
 		svc.fileinsert(board, mfiles, request);
 		
-		map.put("saved", board.getNumMac());
+		map.put("savednum", board.getNumMac());
 		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
 		//그후 그 번호를 가지고 detail로 넘어가독
 		//자세한건 form에 ajax 확인
@@ -142,14 +142,12 @@ public class BoardController {
 							HttpSession session) {
 		
 		//test용
-		String idMac = null;
 		Comment comment = new Comment();
 		if(session.getAttribute("idMac") != null) {
-			idMac = (String)session.getAttribute("idMac");
 			comment.setIdMac((String) session.getAttribute("idMac"));
-			comment.setNickNameMac(svc.getOne(idMac).getNickNameMac());	
+			comment.setNickNameMac(svc.getOne((String)session.getAttribute("idMac")).getNickNameMac());	
 			comment.setPcodeMac(num);
-			model.addAttribute("idMac", idMac);
+			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
@@ -157,31 +155,24 @@ public class BoardController {
 		// 글 번호
 		model.addAttribute("num", num);
 		
-		// 게시판 분기
-		String linkpath = null;
-		if(categoryMac.contentEquals("free")) {
-			model.addAttribute("board", svc.getFreeDetail(num));
-			linkpath = "thymeleaf/mac/board/free_board_detail_copy";
-		} else if(categoryMac.contentEquals("ads")) {
-			model.addAttribute("board", svc.getAdsDetail(num));
-			linkpath = "thymeleaf/mac/board/ads_board_detail_copy";
+//		게시판 분기
+		if(categoryMac.contentEquals("free") || categoryMac.contentEquals("ads")) {
+			model.addAttribute("board", svc.getDetail(num, categoryMac));
 		} else if(categoryMac.contentEquals("notice")) {
 			model.addAttribute("board", svc.getNoticeDetail(num));
-			linkpath = "thymeleaf/mac/board/notice_board_detail_copy";
 		}
 		
-		// 페이지네이션
+//		Pagenation
 		PageHelper.startPage(page, 7);
-		PageInfo<Comment> pageInfo = new PageInfo<>(svc.getCommentList(num));
-		
-		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("pageInfo", new PageInfo<>(svc.getCommentList(num)));
 		model.addAttribute("page", page);
-		// 댓글
+		
+//		Comment
 		model.addAttribute("comment", comment);
 		
-		List<Attach> filelist = svc.getFileList(num);
-		model.addAttribute("filelist", filelist);
-		model.addAttribute("fileindex", filelist.size());
+//		File
+		model.addAttribute("filelist", svc.getFileList(num));
+		model.addAttribute("fileindex", svc.getFileList(num).size());
 		
 		
 		// 댓글 삭제를 위한 idMac체크
@@ -213,19 +204,9 @@ public class BoardController {
 						 Model model,
 						 @PathVariable("categoryMac") String categoryMac) {
 		
-//		{board_kind}에 따른 html경로 변수 초기화
-		String linkpath = null;
-		
-		if (categoryMac.equals("free")) {
-			model.addAttribute("board", svc.getFreeDetail(num));
-		} else if (categoryMac.equals("ads")) {
-			model.addAttribute("board", svc.getAdsDetail(num));
-		}
-		
-		List<Attach> filelist = svc.getFileList(num);;
-		
-		model.addAttribute("filelist", filelist);
-		model.addAttribute("fileindex", filelist.size());
+		model.addAttribute("board", svc.getDetail(num, categoryMac));
+		model.addAttribute("filelist", svc.getFileList(num));
+		model.addAttribute("fileindex", svc.getFileList(num).size());
 		
 		return String.format("thymeleaf/mac/board/%s_board_edit", categoryMac);
 	}

@@ -56,7 +56,7 @@
 		<selectKey keyProperty="num" resultType="integer" order="BEFORE">
 	    	<!--  현재 인덱스 값을 가져오는 것 -->
 	        SELECT CASE WHEN MAX(NUMMAC)+1 is null THEN 1
-                    ELSE MAX(NUMMAC)+1 END
+                    ELSE MAX(NUMMAC) END
             FROM BOARD
 	    </selectKey>
 	    

@@ -136,12 +136,8 @@
 	
 	<!-- 상세보기 -->
 	
-	<select id="getFreeDetail" resultType="com.mac.demo.model.Board">
-		SELECT * FROM free_board WHERE NUMMAC=#{numMac}
-	</select>
-	
-	<select id="getAdsDetail" resultType="com.mac.demo.model.Board">
-		SELECT * FROM ads_board WHERE NUMMAC=#{numMac}
+	<select id="getDetail" resultType="com.mac.demo.model.Board">
+		SELECT * FROM board WHERE NUMMAC=#{numMac} and categoryMac=#{categoryMac}
 	</select>
 	
 	<select id="getNoticeDetail" resultType="com.mac.demo.model.Board">
