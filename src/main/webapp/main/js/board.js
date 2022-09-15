@@ -191,11 +191,11 @@ $(function() {
 	}(jQuery);
 	
 	
-	function freecomment(){
+	function comment(){
 			
 		if(msg != ""){
 			alert(msg);
-			location.href='/board/free/detail/'+numMac;
+			location.href='/board/'+categoryMac+'/detail/'+numMac;
 		} else {
 			$.ajax({
 				url:'/board/comment',
@@ -205,7 +205,7 @@ $(function() {
 				dataType:'json',
 				success:function(res){ //res는 object
 						/* alert(res.commented ? '댓글작성성공' : '댓글작성실패'); */
-						location.href='/board/free/detail/'+numMac;
+						location.href='/board/'+categoryMac+'/detail/'+numMac;
 				},
 				error:function(xhr,status,err){
 					alert(err);
@@ -215,7 +215,7 @@ $(function() {
 		return false;
 	}(jQuery);
 	
-		function freecommentdelete(num){
+		function commentdelete(num){
 		if(confirm("해당 댓글을 삭제하시겠습니까?")){
 			$.ajax({
 				url:'/board/comment/delete/'+num,
@@ -224,7 +224,7 @@ $(function() {
 				dataType:'json',
 				success:function(res){ //res는 object
 						alert(res.deleted ? '댓글이 삭제되었습니다.' : '댓글 삭제가 취소되었습니다.');
-						location.href='/board/free/detail/'+numMac;
+						location.href='/board/'+categoryMac+'/detail/'+numMac;
 				},
 				error:function(xhr,status,err){
 					alert(err);
@@ -243,6 +243,7 @@ function filedelete(filenum){
 		dataType:'json',
 		success:function(res){ //res는 object
 				alert(res.filedeleted ? '파일삭제성공' : '파일삭제실패');
+				location.href='/board/'+categoryMac+'/update/'+numMac;
 		},
 		error:function(xhr,status,err){
 			alert(err);

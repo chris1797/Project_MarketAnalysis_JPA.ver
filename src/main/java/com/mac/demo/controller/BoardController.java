@@ -191,9 +191,10 @@ public class BoardController {
 //  게시글 업데이트폼
 	@GetMapping("/{categoryMac}/update/{num}")
 	public String update(@PathVariable("num") int num, 
+						 HttpSession session,
 						 Model model,
 						 @PathVariable("categoryMac") String categoryMac) {
-		
+		model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		model.addAttribute("board", svc.getDetail(num, categoryMac));
 		model.addAttribute("filelist", svc.getFileList(num));
 		model.addAttribute("fileindex", svc.getFileList(num).size());
@@ -210,8 +211,11 @@ public class BoardController {
 									HttpServletRequest request) {
 //		Map<String, Object> map = new HashMap<String, Object>();
 //		map.put("updated", svc.update(newBoard));
-		
-		if(mfiles.length > 1) {svc.fileupdate(newBoard, mfiles, request);};
+		System.out.println(mfiles[0].isEmpty());
+		if(mfiles[0].isEmpty() != true) {
+			svc.fileupdate(newBoard, mfiles, request);
+		}
+			
 		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard));
 	}
 	

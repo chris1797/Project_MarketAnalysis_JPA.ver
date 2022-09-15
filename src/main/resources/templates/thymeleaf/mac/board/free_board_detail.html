@@ -148,7 +148,7 @@ var numMac='[[${board.numMac}]]';
 										<td th:text="${comment.wdateMac}"></td>
 										<td th:text="${board.wdateMac}">
 									    <td th:if="${idMac}==${comment.idMac}">
-										<button th:onclick="javascript:freecommentdelete([[${comment.numMac}]]);">X</button>
+										<button th:onclick="javascript:commentdelete([[${comment.numMac}]]);">X</button>
 												<!-- <a th:href="'/board/comment/delete/'+${comment.numMac}">X</a> -->
 										</td>
 									</tr>
@@ -156,7 +156,7 @@ var numMac='[[${board.numMac}]]';
 									
 								
 							</table>
-								<form id="comment_form" onsubmit="return freecomment();">
+								<form id="comment_form" onsubmit="return comment();">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 							<input type="hidden" th:name="nickNameMac" th:value="${comment.nickNameMac}">
 							<input type="hidden" th:name="pcodeMac" th:value="${comment.pcodeMac}">

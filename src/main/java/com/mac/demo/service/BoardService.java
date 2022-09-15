@@ -214,12 +214,14 @@ public class BoardService {
 		return res==getFileSet(board, mfiles, request).size();
 	}
 	
+	
 	public boolean fileupdate(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
 		int res = attachDao.updateMultiAttach(getUpdateFileSet(board, mfiles, request));
 		System.out.println(res + "개 파일 업로드성공(update)");
 
 		return res==getFileSet(board, mfiles, request).size();
 	}
+	
 	
 	public List<Attach> getFileList(int pcodeMac){
 		return attachDao.getFileList(pcodeMac);
@@ -294,25 +296,6 @@ public class BoardService {
 		}
 		
 		return pageInfo;
-	}
-	
-	public int[] getLinkRange(Page<Board> pageInfo) {
-		int start = 0;
-		int end = 0;
-		
-		if (pageInfo.getNumber() - 2 < 0) {
-			start = 0;
-		} else {
-			start = pageInfo.getNumber() - 2;
-		}
-		
-		if (pageInfo.getTotalPages() < (start + 4)) {
-			end = pageInfo.getTotalPages();
-			start = (end - 4) < 0 ? 0 : (end - 4);
-		} else {
-			end = start + 4;
-		}
-		return new int[] { start, end };
 	}
 	
 }

@@ -13,9 +13,7 @@
 		SELECT MAX(NUMMAC) 
 		FROM
 		(
-		SELECT NUMMAC FROM free_board
-		UNION
-		SELECT NUMMAC FROM ads_board
+		SELECT NUMMAC FROM board
 		)
 	</select>
 	
@@ -26,25 +24,10 @@
 	</select>
 	
 	
-	<select id="getList" resultType="map">
-				SELECT u.num AS num, writer, udate, comments, a.num AS fnum, pnum, fname
-				  FROM upload_tb u
-	   LEFT OUTER JOIN attach_tb a
-		            ON u.num=a.pnum
-	</select>
-	
 	<select id="getFname" parameterType="Integer" resultType="String">
 				SELECT filenamemac
 				  FROM attach
 				 WHERE numMac=#{numMac}
-	</select>
-	
-	<select id="getDetailByNum" parameterType="Integer" resultType="map">
-				SELECT u.num AS num, writer, udate, comments, a.num AS fnum, fname
-				  FROM upload_tb u
-	   LEFT OUTER JOIN attach_tb a
-				    ON u.num = a.pnum
-				 WHERE u.num=#{num}
 	</select>
 	
 	<delete id="filedelete" parameterType="Integer">
@@ -70,7 +53,7 @@
 	</update>
 	
 	<!-- 수정폼에서 FILE UPDATE -->
-	<update id="updateMultiAttach" parameterType="java.util.List">
+	<insert id="updateMultiAttach" parameterType="java.util.List">
 	    
     	INSERT INTO ATTACH (NUMMAC, PCODEMAC, IDMAC, NICKNAMEMAC, WDATEMAC, FILENAMEMAC, FILEPATHMAC)
     	SELECT ATTACH_NUM.NEXTVAL, t.* FROM
@@ -79,6 +62,6 @@
 			SELECT #{item.pcodeMac}, #{item.idMac}, #{item.nickNameMac}, SYSDATE, #{item.fileNameMac}, #{item.filepathMac} FROM DUAL
     	</foreach>
     	) t
-	</update>
+	</insert>
 	
 </mapper>
