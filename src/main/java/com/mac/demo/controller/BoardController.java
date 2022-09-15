@@ -108,7 +108,9 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// categoryMac 컬럼을 넣어줌
 		svc.save(board);
-		svc.fileinsert(board, mfiles, request);
+		if(mfiles.length > 1) {
+			svc.fileinsert(board, mfiles, request);
+		}
 		
 		map.put("savednum", board.getNumMac());
 		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
@@ -152,9 +154,6 @@ public class BoardController {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
 		
-		// 글 번호
-		model.addAttribute("num", num);
-		
 //		게시판 분기
 		if(categoryMac.contentEquals("free") || categoryMac.contentEquals("ads")) {
 			model.addAttribute("board", svc.getDetail(num, categoryMac));
@@ -184,18 +183,9 @@ public class BoardController {
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
 	@GetMapping("/{categoryMac}/delete/{num}")
 	@ResponseBody
-	public Map<String, Object> delete(@PathVariable("num") int num,
+	public String delete(@PathVariable("num") int num,
 									  @PathVariable("categoryMac") String categoryMac) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		if (categoryMac.equals("free")) {
-			map.put("deleted", svc.Freedelete(num));
-			map.put("commetdeleted", svc.freeCommentAllDelete(num));
-		} else if (categoryMac.equals("ads")) {
-			map.put("deleted", svc.Adsdelete(num));
-			map.put("commetdeleted", svc.adsCommentAllDelete(num));
-		}
-		return map;
+		return String.format("{\"deleted\":\"%b\"}", svc.delete(num));
 	}
 	
 //  게시글 업데이트폼
@@ -214,17 +204,15 @@ public class BoardController {
 //  게시글 수정
 	@PostMapping("/{categoryMac}/edit")
 	@ResponseBody
-	public Map<String, Object> edit(Board newBoard,
+	public String edit(Board newBoard,
 									@RequestParam("files") MultipartFile[] mfiles,
 									@PathVariable("categoryMac") String categoryMac,
 									HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("updated", svc.update(newBoard));
 		
-		newBoard.setCategoryMac(categoryMac);	
-		map.put("updated", svc.update(newBoard));
-		svc.fileupdate(newBoard, mfiles, request);
-		
-		return map;
+		if(mfiles.length > 1) {svc.fileupdate(newBoard, mfiles, request);};
+		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard));
 	}
 	
 	

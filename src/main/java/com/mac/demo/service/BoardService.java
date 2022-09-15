@@ -81,11 +81,8 @@ public class BoardService {
 	}
 	
 //	------------------DELETE-------------------    
-	public boolean Freedelete(int num) {
-		return 0 > boardDao.Freedelete(num);
-	}
-	public boolean Adsdelete(int num) {
-		return 0 > boardDao.Adsdelete(num);
+	public boolean delete(int num) {
+		return 0 > boardDao.delete(num);
 	}
 	public boolean Noticedelete(int num) {
 		return 0 > boardDao.Noticedelete(num);
@@ -98,18 +95,9 @@ public class BoardService {
 	public boolean Noticeedit(Board board) {
 		return 0 < boardDao.Noticeedit(board);
 		
-//  -----------------COMMENT DELETE-----------------
-	}
-	public boolean freeCommentAllDelete(int num) {
-		return 0<boardDao.freeCommentAllDelete(num);
-		
-	}
-	public boolean adsCommentAllDelete(int num) {
-		return 0<boardDao.adsCommentAllDelete(num);
+//  -----------------COMMENT-----------------
 	}
 	
-	
-//	-----------------COMMENT LIST-----------------
 	public List<Comment> getCommentList(int num){
 		return boardDao.getCommentList(num);		
 	}
@@ -121,7 +109,7 @@ public class BoardService {
 	public boolean commentdelete(int numMac) {
 		return 0 < boardDao.commentdelete(numMac);
 	}
-
+	
 //	-----------------------SEARCH-----------------------	
 	public List<Board> getFreeListByKeyword(String titleMac){
 		return boardDao.getFreeListByKeyword(titleMac);

@@ -34,7 +34,7 @@
 	        useGeneratedKeys="true" 
 	       	keyColumn="NUMMAC" keyProperty="numMac">
 	
-	   INSERT INTO board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC, CATEGORYMAC)
+	   INSERT INTO BOARD(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC, CATEGORYMAC)
 			VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac},#{categoryMac})
 	
 	</insert>
@@ -55,11 +55,12 @@
 			(SELECT COUNT(*)
 			FROM comment_board c
 			WHERE c.pcodemac = f.nummac) COUNTMAC
-		FROM free_board f
+		FROM board f
 		WHERE TITLEMAC 
-		LIKE '%'||#{keyword}||'%'
-		OR CONTENTSMAC
-		LIKE '%'||#{keyword}||'%'
+			  LIKE '%'||#{keyword}||'%'
+			  OR CONTENTSMAC
+			  LIKE '%'||#{keyword}||'%' 
+			  AND CATEGORYMAC='free'
 	</select>
 	
 	<select id="getFreeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
@@ -67,9 +68,10 @@
 			(SELECT COUNT(*)
 			FROM comment_board c
 			WHERE c.pcodemac = f.nummac) COUNTMAC
-		FROM free_board f
+		FROM board f
 		WHERE NICKNAMEMAC 
-		LIKE '%'||#{nickNameMac}||'%'
+		LIKE '%'||#{nickNameMac}||'%' 
+		AND CATEGORYMAC='free'
 		ORDER BY NUMMAC
 		DESC
 	</select>
@@ -84,6 +86,7 @@
 		LIKE '%'||#{keyword}||'%'
 		OR CONTENTSMAC
 		LIKE '%'||#{keyword}||'%'
+		AND CATEGORYMAC='ads'
 	</select>
 	
 	<select id="getAdsListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
@@ -94,6 +97,7 @@
 		FROM ads_board f
 		WHERE NICKNAMEMAC 
 		LIKE '%'||#{nickNameMac}||'%'
+		AND CATEGORYMAC='ads'
 		ORDER BY NUMMAC
 		DESC
 	</select>
@@ -151,19 +155,15 @@
 		SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} 
 		WHERE NUMMAC=#{numMac} and CATEGORYMAC=#{categoryMac}
 	</update>
-	<update id="Adsedit" parameterType="com.mac.demo.model.Board">
-		UPDATE ads_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
-	</update>
+	
 	<update id="Noticeedit" parameterType="com.mac.demo.model.Board">
 		UPDATE notice_board SET TITLEMAC=#{titleMac}, CONTENTSMAC=#{contentsMac} WHERE NUMMAC=#{numMac}
 	</update>
 	
-	<delete id="Freedelete" parameterType="com.mac.demo.model.Board">
-		DELETE FROM free_board WHERE NUMMAC=#{numMac}
+	<delete id="delete" parameterType="com.mac.demo.model.Board">
+		DELETE FROM BOARD WHERE NUMMAC=#{numMac}
 	</delete>
-	<delete id="Adsdelete" parameterType="com.mac.demo.model.Board">
-		DELETE FROM ads_board WHERE NUMMAC=#{numMac}
-	</delete>
+	
 	<delete id="Noticedelete" parameterType="com.mac.demo.model.Board">
 		DELETE FROM notice_board WHERE NUMMAC=#{numMac}
 	</delete>
@@ -171,14 +171,6 @@
 	<delete id="commentdelete" parameterType="com.mac.demo.model.Board">
 		DELETE FROM comment_board WHERE NUMMAC=#{numMac}
 	</delete>
-	
-	<delete id="freeCommentAllDelete" parameterType="com.mac.demo.model.Comment">
-		DELETE FROM comment_board WHERE PCODEMAC=#{numMac}
-	</delete>
-	<delete id="adsCommentAllDelete" parameterType="com.mac.demo.model.Comment">
-		DELETE FROM comment_board WHERE PCODEMAC=#{numMac}
-	</delete>
-	
 	
 	
 	<!-- 닉네임에서 id로 가져오기 -->

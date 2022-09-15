@@ -22,12 +22,10 @@ public interface BoardMapper {
 	int update(Board board);
 	int Noticeedit(Board board);
 	
-	int Freedelete(int num); //게시글 삭제
-	int Adsdelete(int num); 
+	int delete(int num); //게시글 삭제
 	int Noticedelete(int num); 
 	
-	int freeCommentAllDelete(int num);//게시글 삭제하면 댓글도 삭제
-	int adsCommentAllDelete(int num);
+	int commentAllDelete(int num);//게시글 삭제하면 댓글도 삭제
 	
 	Board getDetail(int numMac, String categoryMac); //게시글 상세보기
 	Board getNoticeDetail(int num);
