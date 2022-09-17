@@ -43,7 +43,7 @@
 var msg = '[[${msg}]]';
 var idMac = '[[${idMac}]]';
 var numMac='[[${board.numMac}]]';
-
+var categoryMac='[[${board.categoryMac}]]';
 </script>
 </head>
 <body>
@@ -203,7 +203,7 @@ var numMac='[[${board.numMac}]]';
 						
 						<div th:if="${idMac}==${board.idMac}" id="board_del">
 									<a th:href="@{'/board/free/update/' + ${board.numMac}}" class="btn btn-primary py-2 px-4 ms-3">수정하기</a> &nbsp;&nbsp;
-									<a href="javascript:freeremove();" class="btn btn-primary py-2 px-4 ms-3">삭제</a>
+									<a href="javascript:remove();" class="btn btn-primary py-2 px-4 ms-3">삭제</a>
 								</div>
 					</div>
 					</tr>

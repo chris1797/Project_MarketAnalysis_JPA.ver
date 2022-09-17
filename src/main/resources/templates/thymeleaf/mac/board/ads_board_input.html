@@ -53,7 +53,8 @@
 		alert(msg);
 		location.href="/board/ads/list";
 	}
-
+	var idMac = '[[${idMac}]]';
+	var categoryMac='[[${board.categoryMac}]]';
 </script>
 </head>
 <body>
@@ -135,6 +136,7 @@
 				</label>
 				<textarea name="contentsMac" cols="110" rows="11" class="form-control" th:field="*{contentsMac}" style="border-radius:10px;"></textarea>
 			</div>
+			파일첨부 : <input type="file" name="files" id="files" multiple="multiple"><br>
 			<br>
 			<div>
 				<button type="submit" class="btn btn-primary py-2 px-4 ms-3">글쓰기</button>
@@ -158,18 +160,5 @@
 		<script src="/main/js/main.js"></script>
 		<script src="/main/js/board.js"></script>
 	</main>
-	<footer>
-		<div class="container">
-			<p class="float-end mb-1">
-				<a href="#">Back to top</a>
-			</p>
-			<p class="mb-1">Album example is &copy; Bootstrap, but please
-				download and customize it for yourself!</p>
-			<p class="mb-0">
-				New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-					href="../getting-started/introduction/">getting started guide</a>.
-			</p>
-		</div>
-	</footer>
 </body>
 </html>

@@ -55,8 +55,6 @@ public class BoardController {
 	
 	
 	
-	
-	
 //	커뮤니티메인화면
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
@@ -99,25 +97,21 @@ public class BoardController {
 //	게시글 저장
 	@PostMapping("/{categoryMac}/save")
 	@ResponseBody
-	public Map<String, Object> save(Board board,
+	public String save(Board board,
 									@PathVariable("categoryMac") String categoryMac,
 									@RequestParam("files") MultipartFile[] mfiles,
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		// categoryMac 컬럼을 넣어줌
 		svc.save(board);
-		if(mfiles.length > 1) {
+		
+		// file 객체 배열의 첫번째 값이 비었는지 검사, 파일이 있을 경우에만 실행되도록 조건문 부여
+		if(mfiles[0].isEmpty() != true) {
 			svc.fileinsert(board, mfiles, request);
 		}
 		
-		map.put("savednum", board.getNumMac());
-		//insert 후 시퀸스의 값을 가져와 map에 넣은뒤 다시 폼으로
-		//그후 그 번호를 가지고 detail로 넘어가독
-		//자세한건 form에 ajax 확인
-		
-		return map;
+		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
+		return String.format("{\"savednum\":\"%d\"}", board.getNumMac());
 	}
 	
 //	리스트
@@ -210,8 +204,7 @@ public class BoardController {
 									@PathVariable("categoryMac") String categoryMac,
 									HttpServletRequest request) {
 //		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("updated", svc.update(newBoard));
-		System.out.println(mfiles[0].isEmpty());
+//		boolean updated = svc.update(newBoard);
 		if(mfiles[0].isEmpty() != true) {
 			svc.fileupdate(newBoard, mfiles, request);
 		}

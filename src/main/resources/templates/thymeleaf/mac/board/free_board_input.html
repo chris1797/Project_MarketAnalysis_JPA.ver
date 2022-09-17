@@ -53,7 +53,8 @@
 		alert(msg);
 		location.href="/board/free/list";
 	}
-
+	var idMac = '[[${idMac}]]';
+	var categoryMac='[[${board.categoryMac}]]';
 
 </script>
 </head>
@@ -118,7 +119,7 @@
 				<h1 class="fw-light">자유게시판</h1>
 			</div>
 		<h3>게시판 글 입력 폼</h3>
-		<form id="input_form"  th:object="${board}" onsubmit="return freesave();">
+		<form id="input_form"  th:object="${board}" onsubmit="return save();">
 		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
 			<input type="hidden" th:value="${idMac}" name="idMac">

@@ -39,15 +39,6 @@
 	
 	</insert>
 	
-	<insert id="saveToAds"
-	        parameterType="com.mac.demo.model.Board" 
-	        useGeneratedKeys="true" 
-	       	keyColumn="NUMMAC" keyProperty="numMac">
-	
-	   INSERT INTO ads_board(NUMMAC,NICKNAMEMAC,TITLEMAC,CONTENTSMAC,WDATEMAC,IDMAC)
-			VALUES(BOARD_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac})
-	
-	</insert>
 	
 <!-- 검색 : 닉네임, 제목+내용 -->
 	<select id="getFreeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
