@@ -149,11 +149,7 @@ public class BoardController {
 		}
 		
 //		게시판 분기
-		if(categoryMac.contentEquals("free") || categoryMac.contentEquals("ads")) {
-			model.addAttribute("board", svc.getDetail(num, categoryMac));
-		} else if(categoryMac.contentEquals("notice")) {
-			model.addAttribute("board", svc.getNoticeDetail(num));
-		}
+		model.addAttribute("board", svc.getDetail(num, categoryMac));
 		
 //		Pagenation
 		PageHelper.startPage(page, 7);
