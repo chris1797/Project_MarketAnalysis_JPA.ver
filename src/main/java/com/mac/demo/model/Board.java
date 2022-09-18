@@ -1,8 +1,13 @@
 package com.mac.demo.model;
 
-import java.sql.Date;
 
+import org.springframework.stereotype.Component;
 
+import lombok.*;
+
+@Getter
+@Setter
+@Component
 public class Board {
 
 	private int numMac; //번호
@@ -18,68 +23,4 @@ public class Board {
 
 	
 	
-	public String getCategoryMac() {
-		return categoryMac;
-	}
-	public void setCategoryMac(String categoryMac) {
-		this.categoryMac = categoryMac;
-	}
-	public int getCountMac() {
-		return countMac;
-	}
-	public void setCountMac(int countMac) {
-		this.countMac = countMac;
-	}
-	public int getNumMac() {
-		return numMac;
-	}
-	public void setNumMac(int numMac) {
-		this.numMac = numMac;
-	}
-	public String getNickNameMac() {
-		return nickNameMac;
-	}
-	public void setNickNameMac(String nickNameMac) {
-		this.nickNameMac = nickNameMac;
-	}
-	public String getTitleMac() {
-		return titleMac;
-	}
-	public void setTitleMac(String titleMac) {
-		this.titleMac = titleMac;
-	}
-	public String getContentsMac() {
-		return contentsMac;
-	}
-	public void setContentsMac(String contentsMac) {
-		this.contentsMac = contentsMac;
-	}
-	public java.sql.Date getWdateMac() {
-		return wdateMac;
-	}
-	public void setWdateMac(java.sql.Date wdateMac) {
-		this.wdateMac = wdateMac;
-	}
-	public String getTypeMac() {
-		return typeMac;
-	}
-	public void setTypeMac(String typeMac) {
-		this.typeMac = typeMac;
-	}
-	public String getIdMac() {
-		return idMac;
-	}
-	public void setIdMac(String idMac) {
-		this.idMac = idMac;
-	}
-	public String getTableMac() {
-		return tableMac;
-	}
-	public void setTableMac(String tableMac) {
-		this.tableMac = tableMac;
-	}
-
-	
-	
-
 }
