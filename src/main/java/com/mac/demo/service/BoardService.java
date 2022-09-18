@@ -41,17 +41,20 @@ import com.mac.demo.model.User;
 @Service
 public class BoardService {
 
-	@Autowired
 	private BoardMapper boardDao;
-	
-	@Autowired
 	private UserMapper userDao;
-	
-	@Autowired
 	private AttachMapper attachDao;
-	
-	@Autowired
 	ResourceLoader resourceLoader;
+	
+	
+	public BoardService(BoardMapper boardDao, UserMapper userDao, AttachMapper attachDao,
+						ResourceLoader resourceLoader) {
+		this.boardDao = boardDao;
+		this.userDao = userDao;
+		this.attachDao = attachDao;
+		this.resourceLoader = resourceLoader;
+	}
+	
 	
 //	------------------List-------------------
 	public List<Board> getBoardList(String categoryMac){

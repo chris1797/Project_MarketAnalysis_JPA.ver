@@ -47,12 +47,13 @@ import com.mac.demo.service.BoardService;
 @Controller
 public class BoardController {
 	
-	@Autowired
+	
 	private BoardService svc;
 	
-	@Autowired
-	ResourceLoader resourceLoader;
-	
+//	생성자가 1개일 경우, @Autowired를 생략해도 주입가능
+	public BoardController(BoardService svc) {
+		this.svc = svc;
+	}
 	
 	
 //	커뮤니티메인화면
