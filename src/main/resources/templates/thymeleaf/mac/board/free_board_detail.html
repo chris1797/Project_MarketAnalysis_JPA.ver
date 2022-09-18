@@ -109,9 +109,9 @@ var categoryMac='[[${board.categoryMac}]]';
 
 		<section>
 			<div class="inner">
-					<div class="col-lg-8 col-md-8" style="margin-left: 8px;">
-						<h1 class="fw-light">자유게시판</h1>
-					</div>
+				<div class="col-lg-8 col-md-8" style="margin-left: 8px;">
+					<h1 class="fw-light">자유게시판</h1>
+				</div>
 				<div class="board">
 					<div class="board-header">
 						<span th:text="'No. '+${board.numMac}"></span>
@@ -124,19 +124,19 @@ var categoryMac='[[${board.categoryMac}]]';
 					<div style="border-top: solid; margin-top: 22%">
 						<span th:if="${fileindex!=0}">
 							<tr th:each="file : ${filelist}">
-								<li th:text="${file.fileNameMac}"></li>
-								<button type="button" th:onclick="javascript:filedownload([[${file.numMac}]]);">↓</button>
+								<div>
+									<span th:text="${file.fileNameMac}"></span>
+									<button type="button" th:onclick="javascript:filedownload([[${file.numMac}]]);">↓</button>
+								</div>	
 									<!-- th:onclick="|location.href='@{/board/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p> -->
 									<!-- <p><button th:onclick="javascript:filedownload([[${file.numMac}]]);" id="cmt_del">↓</button></p> -->
-								</tr>
+							</tr>
 						</span>
 					</div>
 				</div>
+				</div>
 					<br>
 				<table>
-					<tr>
-					
-					</tr>
 					<tr>
 						<div class="board-comment-li">
 						<th><h5 class="board-comment-header">댓글</h5></th>
@@ -209,7 +209,7 @@ var categoryMac='[[${board.categoryMac}]]';
 					</tr>
 						
 				</table>
-			</div>
+				</div>
 		</section>
 		&nbsp;&nbsp;
 		
