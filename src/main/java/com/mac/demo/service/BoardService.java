@@ -261,31 +261,33 @@ public class BoardService {
 	}
 	
 	public ResponseEntity<Resource> download (HttpServletRequest request, int FileNum) throws Exception{
-		String filename = getFname(FileNum);
-		String originFilename = URLDecoder.decode(filename, "UTF-8");
-		Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
-		System.out.println("파일명:" + resource.getFilename());
-		String contentType = null;
-		try {
-			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-//			System.out.println(contentType); // return : image/jpeg
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	      String filename = getFname(FileNum);
+	      String originFilename = URLDecoder.decode(filename, "UTF-8");
+	      Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
+	      System.out.println("파일명:" + resource.getFilename());
+	      String contentType = null;
+	      try {
+	         contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//	         System.out.println(contentType); // return : image/jpeg
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	      }
 
-		if (contentType == null) {
-			contentType = "application/octet-stream";
-		}
-		
-		ResponseEntity<Resource> file =  ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				// HttpHeaders.CONTENT_DISPOSITION는 http header를 조작하는 것, 화면에 띄우지 않고 첨부화면으로
-				// 넘어가게끔한다
-				// filename=\"" + resource.getFilename() + "\"" 는 http프로토콜의 문자열을 고대로 쓴 것
-				.body(resource);
-		
-		return file;
-	}
+	      if (contentType == null) {
+	         contentType = "application/octet-stream";
+	      }
+	      
+	      ResponseEntity<Resource> file =  ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(resource.getFilename().getBytes("UTF-8"), "ISO-8859-1") + "\"")
+	                  
+	            // .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+	            // HttpHeaders.CONTENT_DISPOSITION는 http header를 조작하는 것, 화면에 띄우지 않고 첨부화면으로
+	            // 넘어가게끔한다ㄴ
+	            // filename=\"" + resource.getFilename() + "\"" 는 http프로토콜의 문자열을 고대로 쓴 것
+	            .body(resource);
+	      
+	      return file;
+	   }
 	
 	
 //	------------------------PAGE------------------------
