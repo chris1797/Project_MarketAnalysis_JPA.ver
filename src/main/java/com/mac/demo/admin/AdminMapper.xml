@@ -9,19 +9,17 @@
 		SELECT nummac, idmac, pkg_crypto.decrypt(pwmac) pwMac, nicknamemac, emailmac, gendermac, birthmac, phonenummac, citymac, townmac, villagemac, namemac FROM USER_TB
 	</select>
 	<select id="findAllFreeBoard" resultType="com.mac.demo.model.Board">
-		SELECT * FROM free_board
+		SELECT * FROM board where categoryMac='free'
 	</select>
 	<select id="findAllAdsBoard" resultType="com.mac.demo.model.Board">
-		SELECT * FROM ads_board
+		SELECT * FROM board where categoryMac='ads'
 	</select>
 	
-	<delete id="freeBoardDeleted" parameterType="Integer">
-		DELETE FROM free_board WHERE numMac=#{numMac}
+	<delete id="boardDeleted" parameterType="Integer">
+		DELETE FROM board WHERE numMac=#{numMac}
 	</delete>
 	
-	<delete id="adsBoardDeleted" parameterType="Integer">
-		DELETE FROM ads_board WHERE numMac=#{numMac}
-	</delete>
+	
 	
 	<delete id="userDeleted" parameterType="Integer">
 		DELETE FROM user_tb WHERE numMac=#{numMac}
@@ -32,9 +30,27 @@
 		VALUES(NOTICE_NUM.NEXTVAL,#{nickNameMac},#{titleMac},#{contentsMac},SYSDATE,#{idMac})
 	</insert>
 	
+		<update id="insertNoticeMultiAttach" parameterType="java.util.List">
+		<selectKey keyProperty="num" resultType="integer" order="BEFORE">
+	    	<!--  현재 인덱스 값을 가져오는 것 -->
+	         SELECT CASE WHEN MAX(NUMMAC) is null THEN 1
+                    ELSE MAX(NUMMAC)END
+               FROM NOTICE_BOARD
+	    </selectKey>
+	    
+    	INSERT INTO NOTICE_ATTACH (NUMMAC, PCODEMAC, IDMAC, NICKNAMEMAC, WDATEMAC, FILENAMEMAC, FILEPATHMAC)
+    	SELECT NOTICE_ATTACH_NUM.NEXTVAL, t.* FROM
+    	(
+    	<foreach collection="list" item="item" index="index" separator="union all">
+			SELECT #{num}, #{item.idMac}, #{item.nickNameMac}, SYSDATE, #{item.fileNameMac}, #{item.filepathMac} FROM DUAL
+    	</foreach>
+    	) t
+	</update>
+	
+	
 	
 	<select id="findAllNoticeBoard" resultType="com.mac.demo.model.Board">
-		SELECT * FROM notice_board
+		SELECT * FROM notice_board ORDER BY NUMMAC DESC
 	</select>
 	
 	<delete id="noticeBoardDeleted" parameterType="Integer">
@@ -49,10 +65,35 @@
 		DELETE FROM comment_board WHERE numMac=#{numMac}
 	</delete>
 	
+	
+			<select id="getfreeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM board 
+		WHERE TITLEMAC 
+		LIKE '%'||#{keyword}||'%'
+		OR CONTENTSMAC
+		LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getfreeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
+		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
+		FROM board 
+		WHERE NICKNAMEMAC 
+		LIKE '%'||#{nickNameMac}||'%'
+		AND
+        categorymac='free'
+		ORDER BY NUMMAC
+		DESC
+	</select>
+	
+	
 		<select id="getAdsListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
-		FROM ads_board f
-		WHERE TITLEMAC 
+		FROM board 
+		WHERE 
+        categorymac='free'
+		AND
+		TITLEMAC 
 		LIKE '%'||#{keyword}||'%'
 		OR CONTENTSMAC
 		LIKE '%'||#{keyword}||'%'
@@ -60,7 +101,7 @@
 	
 	<select id="getAdsListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
-		FROM ads_board f
+		FROM board 
 		WHERE NICKNAMEMAC 
 		LIKE '%'||#{nickNameMac}||'%'
 		ORDER BY NUMMAC
@@ -70,27 +111,25 @@
 	
 		<select id="getNoticeListByKeyword" resultType="com.mac.demo.model.Board" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
-		FROM notice_board f
-		WHERE TITLEMAC 
+		FROM notice_board 
+		WHERE 
+		WHERE 
+        categorymac='ads'
+		TITLEMAC 
 		LIKE '%'||#{keyword}||'%'
 		OR CONTENTSMAC
 		LIKE '%'||#{keyword}||'%'
 	</select>
 	
-	<select id="getNoticeListByNickName" resultType="com.mac.demo.model.Board" parameterType="String">
-		SELECT NUMMAC, IDMAC, NICKNAMEMAC, TITLEMAC, CONTENTSMAC, WDATEMAC
-		FROM notice_board f
-		WHERE NICKNAMEMAC 
-		LIKE '%'||#{nickNameMac}||'%'
-		ORDER BY NUMMAC
-		DESC
-	</select>
+
 	
 	<select id="getCommentListByKeyword" resultType="com.mac.demo.model.Comment" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, COMMENTMAC,PCODEMAC, WDATEMAC
 		FROM comment_board f
 	    WHERE COMMENTMAC
 		LIKE '%'||#{keyword}||'%'
+		AND
+        categorymac='ads'
 	</select>
 	
 	<select id="getCommentListByNickName" resultType="com.mac.demo.model.Comment" parameterType="String">
@@ -108,6 +147,28 @@
 	    WHERE IDMAC
 		LIKE '%'||#{keyword}||'%'
 	</select>
+	
+	<!-- 메인서비스의 공지사항 서비스 -->
+	
+		<select id="getNoticeDetail" resultType="com.mac.demo.model.Board">
+		SELECT * FROM notice_board WHERE NUMMAC=#{numMac}
+	</select>
+		<select id="getNoticeFileList" parameterType="Integer" resultType="com.mac.demo.model.Attach">
+		SELECT *
+		FROM NOTICE_ATTACH
+		WHERE PCODEMAC=#{pcodeMac}
+	</select>
+	<select id="getNoticeFname" parameterType="Integer" resultType="String">
+				SELECT filenamemac
+				  FROM notice_attach
+				 WHERE numMac=#{numMac}
+	</select>
+	
+	
+	
+	
+	
+	
 	
 
 </mapper>

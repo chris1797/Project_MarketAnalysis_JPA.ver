@@ -20,7 +20,7 @@
 	<select id="getFileList" parameterType="Integer" resultType="com.mac.demo.model.Attach">
 		SELECT *
 		FROM ATTACH
-		WHERE PCODEMAC=#{pcodeMac}
+		WHERE PCODEMAC = #{pcodeMac}
 	</select>
 	
 	

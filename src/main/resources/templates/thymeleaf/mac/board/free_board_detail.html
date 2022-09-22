@@ -145,9 +145,10 @@ var categoryMac='[[${board.categoryMac}]]';
 											
 										<td th:text="${comment.wdateMac}"></td>
 										<td th:text="${board.wdateMac}">
+									    <td th:if="${idMac}!=${comment.idMac}">
+										</td>
 									    <td th:if="${idMac}==${comment.idMac}">
-										<button th:onclick="javascript:commentdelete([[${comment.numMac}]]);">X</button>
-												<!-- <a th:href="'/board/comment/delete/'+${comment.numMac}">X</a> -->
+											<button th:onclick="javascript:commentdelete([[${comment.numMac}]]);">삭제</button>
 										</td>
 									</tr>
 									

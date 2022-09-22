@@ -1,15 +1,40 @@
 package com.mac.demo.admin;
 
+import java.net.URLDecoder;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.mac.demo.mappers.AttachMapper;
 import com.mac.demo.mappers.BoardMapper;
+import com.mac.demo.model.Attach;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.model.User;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import org.apache.catalina.authenticator.SavedRequest;
+
+import org.springframework.http.MediaType;
+
+import org.springframework.data.convert.SimplePropertyValueConversions;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import com.github.pagehelper.PageInfo;
+import com.mac.demo.mappers.UserMapper;
 
 @Service
 public class AdminService {
@@ -17,9 +42,10 @@ public class AdminService {
 	@Autowired 
 	private AdminMapper dao;
 	
-	@Autowired 
-	private BoardMapper bao;
+	@Autowired
+	ResourceLoader resourceLoader;
 	
+
 
     //모든 유저
 	public List<User> findAllUser() {
@@ -37,15 +63,11 @@ public class AdminService {
 	}
 
 	//자유게시물 삭제
-	public boolean freeBoardDeleted(int numMac) {
-		return dao.freeBoardDeleted(numMac);
+	public boolean boardDeleted(int numMac) {
+		return dao.boardDeleted(numMac);
 	}
 
-	//광고게시물 삭제
-	public boolean adsBoardDeleted(int numMac) {
-		return  dao.adsBoardDeleted(numMac);
-	}
-
+	
 	//계정 삭제
 	public boolean userDeleted(int numMac) {
 		return dao.userDeleted(numMac);
@@ -55,6 +77,15 @@ public class AdminService {
 	public int save(Board board) {
 		return dao.saveNotice(board);
 	}
+	
+	public boolean attachinsert(List<Attach> attList) {
+		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
+		int res = dao.insertNoticeMultiAttach(attList);
+		System.out.println(res + "개 업로드성공");
+
+		return res==attList.size();
+	}
+
 
 	//공지사항 리스트
 	public List<Board> findAllNoticeBoard() {
@@ -62,7 +93,7 @@ public class AdminService {
 	}
 
 	//공지사항 삭제
-	public boolean noticeBoardDeleted(int numMac) {
+	public boolean noticeBordDeleted(int numMac) {
 		return dao.noticeBoardDeleted(numMac);
 	}
 
@@ -79,10 +110,10 @@ public class AdminService {
 
 	//자유게시물 검색
 	public List<Board> getFreeListByKeyword(String titleMac){
-		return bao.getFreeListByKeyword(titleMac);
+		return dao.getfreeListByKeyword(titleMac);
 	}
 	public List<Board> getFreeListByNickName(String nickNameMac) {
-		return bao.getFreeListByNickName(nickNameMac);
+		return dao.getfreeListByNickName(nickNameMac);
 	}
 
 	//광고게시물 검색
@@ -100,10 +131,7 @@ public class AdminService {
 		
 		return dao.getNoticeListByKeyword(keyword);
 	}
-	public List<Board> getNoticeListByNickName(String keyword) {
-		
-		return dao.getNoticeListByNickName(keyword);
-	}
+
 
 	//댓글 검색
 	public List<Comment> getCommentListByKeyword(String keyword) {
@@ -119,5 +147,47 @@ public class AdminService {
 	public List<User> getUserListByKeyword(String keyword) {
 		return dao.getUserListByKeyword(keyword);
 	}
+	
+	
+	//메인서비스의 공지사항 서비스
+	
+	public Board getNoticeDetail(int num) {
+		return dao.getNoticeDetail(num);
+	}
+	
+	public List<Attach> getNoticeFileList(int pcodeMac) {
+		return dao.getNoticeFileList(pcodeMac);
+	}
+
+	public ResponseEntity<Resource> noticeDownload(HttpServletRequest request, int fileNum) throws Exception {
+		String filename = dao.getNoticeFname(fileNum);
+		String originFilename = URLDecoder.decode(filename, "UTF-8");
+		Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
+		System.out.println("파일명:" + resource.getFilename());
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//			System.out.println(contentType); // return : image/jpeg
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		ResponseEntity<Resource> file =  ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				// HttpHeaders.CONTENT_DISPOSITION는 http header를 조작하는 것, 화면에 띄우지 않고 첨부화면으로
+				// 넘어가게끔한다
+				// filename=\"" + resource.getFilename() + "\"" 는 http프로토콜의 문자열을 고대로 쓴 것
+				.body(resource);
+
+		return file;
+	}
+
+
+	
+	
 
 }

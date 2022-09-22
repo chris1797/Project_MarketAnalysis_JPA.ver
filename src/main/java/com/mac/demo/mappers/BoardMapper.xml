@@ -17,7 +17,7 @@
 			FROM comment_board c
 			WHERE c.pcodemac = b.nummac) COUNTMAC
 		FROM board b
-		WHERE CATEGORYMAC = #{categoryMax}
+		WHERE CATEGORYMAC = #{categoryMac}
 		ORDER BY NUMMAC
 		DESC
 	</select>
