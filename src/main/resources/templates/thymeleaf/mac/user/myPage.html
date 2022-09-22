@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+   <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>마이페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	<script type="text/javascript">
+   <script type="text/javascript">
 
-	
-	</script>
+   
+   </script>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -126,162 +126,161 @@
             </div>
             
             <div class="input-form-backgroud">
-				<div class="col-md-20 mb-3" th:if="*{idMac!=null}">
-				
-					<div class="row">
-					
-					<div class="col-sm-6">
-					<img src="/main/img/defultProfile.png" style="width: 260px; height: 350px;">
-					</div>
-					
-					<div>&nbsp;</div>
-					
-					<div class="col-sm-12" id="info">
-							        <div class="card mb-4" id="usertable">
-							          <div class="card-body">
-							            <div class="row">
-							              <div class="col-sm-3">
-							                <p class="mb-0" >이름</p>
-							              </div>
-							              <div class="col-sm-9">
-							                <p class="text-muted mb-0" th:text="${user.nameMac}"></p>
-							              </div>
-							            </div>
-							            <hr>
-							            <div class="row">
-							              <div class="col-sm-3">
-							                <p class="mb-0">닉네임</p>
-							              </div>
-							              <div class="col-sm-9">
-							                <p class="text-muted mb-0" th:text="${user.nickNameMac}"></p>
-							              </div>
-							            </div>
-							            <hr>
-							            <div class="row">
-							              <div class="col-sm-3">
-							                <p class="mb-0">이메일</p>
-							              </div>
-							              <div class="col-sm-9">
-							                <p class="text-muted mb-0" th:text="${user.emailMac}"></p>
-							              </div>
-							            </div>
-							            <hr>
-							            <div class="row">
-							              <div class="col-sm-3">
-							                <p class="mb-0">전화번호</p>
-							              </div>
-							              <div class="col-sm-9">
-							                <p class="text-muted mb-0" th:text="${user.phoneNumMac}"></p>
-							              </div>
-							            </div>
-							            <hr>
-							            <div class="row">
-							              <div class="col-sm-3">
-							                <p class="mb-0">주소</p>
-							              </div>
-							              <div class="col-sm-9">
-							                <p class="text-muted mb-0" th:text="${user.cityMac}+'-'+${user.townMac}+'-'+${user.villageMac}"></p>
-							              </div> 
-							            </div>
-							             <hr>
+            <div class="col-md-20 mb-3" th:if="*{idMac!=null}">
+            
+               <div class="row">
+               
+               <div class="col-sm-6">
+               <img src="/main/img/defultProfile.png" style="width: 260px; height: 350px;">
+               </div>
+               
+               <div>&nbsp;</div>
+               
+               <div class="col-sm-12" id="info">
+                             <div class="card mb-4" id="usertable">
+                               <div class="card-body">
+                                 <div class="row">
+                                   <div class="col-sm-3">
+                                     <p class="mb-0" >이름</p>
+                                   </div>
+                                   <div class="col-sm-9">
+                                     <p class="text-muted mb-0" th:text="${user.nameMac}"></p>
+                                   </div>
+                                 </div>
+                                 <hr>
+                                 <div class="row">
+                                   <div class="col-sm-3">
+                                     <p class="mb-0">닉네임</p>
+                                   </div>
+                                   <div class="col-sm-9">
+                                     <p class="text-muted mb-0" th:text="${user.nickNameMac}"></p>
+                                   </div>
+                                 </div>
+                                 <hr>
+                                 <div class="row">
+                                   <div class="col-sm-3">
+                                     <p class="mb-0">이메일</p>
+                                   </div>
+                                   <div class="col-sm-9">
+                                     <p class="text-muted mb-0" th:text="${user.emailMac}"></p>
+                                   </div>
+                                 </div>
+                                 <hr>
+                                 <div class="row">
+                                   <div class="col-sm-3">
+                                     <p class="mb-0">전화번호</p>
+                                   </div>
+                                   <div class="col-sm-9">
+                                     <p class="text-muted mb-0" th:text="${user.phoneNumMac}"></p>
+                                   </div>
+                                 </div>
+                                 <hr>
+                                 <div class="row">
+                                   <div class="col-sm-3">
+                                     <p class="mb-0">주소</p>
+                                   </div>
+                                   <div class="col-sm-9">
+                                     <p class="text-muted mb-0" th:text="${user.cityMac}+'-'+${user.townMac}+'-'+${user.villageMac}"></p>
+                                   </div> 
+                                 </div>
+                                  <hr>
 
-							          </div>
-				 <div id=button>
-				    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.3s">
-					<form id="update" th:object="${user}" action="/user/updateForm">
-					
-						<input type="hidden" name="idMac" th:value="*{idMac}">
-						<button class="btn btn-outline-success" type="submit">수정</button>
-					</form> 
-					
-					<form id="del" th:object="${user}" onsubmit="return deleted();">
-						<input type="hidden" name="idMac" th:value="*{idMac}">
-						<button class="btn btn-outline-danger" type="submit">회원 탈퇴</button>
-					</form>
-			</div>
-			</div>
-							       
-					</div>
-				</div>
+                               </div>
+             <div id=button>
+                <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.3s">
+               <form id="update" th:object="${user}" action="/user/updateForm">
+               
+                  <input type="hidden" name="idMac" th:value="*{idMac}">
+                  <button class="btn btn-outline-success" type="submit">수정</button>
+               </form> 
+               
+               <form id="del" th:object="${user}" onsubmit="return deleted();">
+                  <input type="hidden" name="idMac" th:value="*{idMac}">
+                  <button class="btn btn-outline-danger" type="submit">회원 탈퇴</button>
+               </form>
+         </div>
+         </div>
+                            
+               </div>
             </div>
             </div>
-				
+            </div>
+            
         </div>
         </div>
         <div class="col" >
         <div class="input-form" id="myPageWrite">
-        	<div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+           <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h1 class="mb-0">My Write</h1>
                 
             </div>
             <div class="inner">
-          	<div class="col-sm-12" id="writetable">
-							        <div class="card mb-4" id="table">
-							          <div class="card-body">
-							          
-							      <table class="table project-table table-centered">
-								<thead>
-									<tr>
-										<th scope="col">No.</th>
-										<th scope="col">제목</th>
-										<th scope="col">작성자</th>
-										<th scope="col">작성일</th>
-										<th scope="col">게시판 이름</th>
-										
-									
-									</tr>
-								</thead>
-									  <tbody>
-									<tr th:each="myWrite : ${pageInfo.list}">
-										<td th:text="${myWrite.numMac}"></td>
-										<td th:if="${myWrite.tableMac}=='ADS_BOARD'"><a th:text="${myWrite.titleMac}"
-											th:href="@{'/board/ads/detail/'+ ${myWrite.numMac}}"></a> 
-										</td>
-										
-										<td th:if="${myWrite.tableMac}=='FREE_BOARD'"><a th:text="${myWrite.titleMac}"
-											th:href="@{'/board/free/detail/'+ ${myWrite.numMac}}"></a> 
-										</td>
-										<td th:text="${myWrite.nickNameMac}"></td>
-										<td th:text="${myWrite.wdateMac}"></td>
-										<td th:if="${myWrite.tableMac}=='ADS_BOARD'">광고 게시판</td>
-										<td th:if="${myWrite.tableMac}=='FREE_BOARD'">자유 게시판</td>
-									</tr>
-								</tbody>
-								
-					        <div class="pt-3" align="center" id="writepage">
-							<ul class="pagination justify-content-center mb-0">
-								<span th:if="${page!=1}"> <a class="page-link"
-									th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a>
-								</span>
-								<span th:unless="${page!=1}">
-									<li class="page-item disabled"><a class="page-link"
-										th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a></li>
-								</span>
-								<span th:each="i :${pageInfo.navigatepageNums}"> <span
-									th:if="${i==pageInfo.pageNum}">
-										<li class="page-item active"><span class="page-link"
-											th:text="${i}"></span></li>
-								</span> <span th:if="${i!=pageInfo.pageNum}"> <a
-										class="page-link" th:text='${i}'
-										th:href="'/user/detail/'+${idMac}+'?page='+(${i})"></a>
-								</span>
-								</span>
-								<span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
-									class="page-link"
-									th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a>
-								</span>
-								<span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
-									<li class="page-item disabled"><a class="page-link"
-										th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a></li>
-								</span>
-							</ul>
-						</div>
-							</table>
-							            
-	
-							       
-					</div>
-				</div>
+             <div class="col-sm-12" id="writetable">
+                             <div class="card mb-4" id="table">
+                               <div class="card-body">
+                               
+                           <table class="table project-table table-centered">
+                        <thead>
+                           <tr>
+                              <th scope="col">No.</th>
+                              <th scope="col">제목</th>
+                              <th scope="col">작성자</th>
+                              <th scope="col">작성일</th>
+                              <th scope="col">게시판 이름</th>
+                              
+                           
+                           </tr>
+                        </thead>
+                             <tbody>
+                           <tr th:each="myWrite : ${pageInfo.list}">
+                              <td th:if="${myWrite.categoryMac =='ads'}"><a th:text="${myWrite.titleMac}"
+                                 th:href="@{'/board/ads/detail/'+ ${myWrite.numMac}}"></a> 
+                              </td>
+                              <td th:if="${myWrite.categoryMac =='free'}"><a th:text="${myWrite.titleMac}"
+                                 th:href="@{'/board/free/detail/'+ ${myWrite.numMac}}"></a> 
+                              </td>
+                              
+                              <td th:text="${myWrite.nickNameMac}"></td>
+                              <td th:text="${myWrite.wdateMac}"></td>
+                              <td th:text="${myWrite.categoryMac}"></td>
+                        
+                           </tr>
+                        </tbody>
+                        
+                       <div class="pt-3" align="center" id="writepage">
+                     <ul class="pagination justify-content-center mb-0">
+                        <span th:if="${page!=1}"> <a class="page-link"
+                           th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a>
+                        </span>
+                        <span th:unless="${page!=1}">
+                           <li class="page-item disabled"><a class="page-link"
+                              th:href="@{'/user/detail/'+${idMac}+'?page='+${page-1}}">Previous</a></li>
+                        </span>
+                        <span th:each="i :${pageInfo.navigatepageNums}"> <span
+                           th:if="${i==pageInfo.pageNum}">
+                              <li class="page-item active"><span class="page-link"
+                                 th:text="${i}"></span></li>
+                        </span> <span th:if="${i!=pageInfo.pageNum}"> <a
+                              class="page-link" th:text='${i}'
+                              th:href="'/user/detail/'+${idMac}+'?page='+(${i})"></a>
+                        </span>
+                        </span>
+                        <span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
+                           class="page-link"
+                           th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a>
+                        </span>
+                        <span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
+                           <li class="page-item disabled"><a class="page-link"
+                              th:href="@{'/user/detail/'+${idMac}+'?page='+${page+1}}">Next</a></li>
+                        </span>
+                     </ul>
+                  </div>
+                     </table>
+                                 
+   
+                            
+               </div>
+            </div>
                 </div>
         </div>
         </div>
