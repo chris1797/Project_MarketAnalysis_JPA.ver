@@ -68,7 +68,7 @@ public class BoardController {
 			
 			//닉네임 가져오기
 			Board board = new Board();
-			board.setNicknamemac(svc.getOne(id).getNickNamemac());
+			board.setNicknamemac(svc.getOne(id).getNicknamemac());
 			board.setCategorymac(categoryMac);
 			model.addAttribute("board", board);
 			
@@ -97,7 +97,7 @@ public class BoardController {
 		}
 		
 		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
-		return String.format("{\"savednum\":\"%d\"}", board.getNumMac());
+		return String.format("{\"savednum\":\"%d\"}", board.getNummac());
 	}
 	
 //	리스트
@@ -126,9 +126,9 @@ public class BoardController {
 		//test용
 		Comment comment = new Comment();
 		if(session.getAttribute("idMac") != null) {
-			comment.setIdMac((String) session.getAttribute("idMac"));
-			comment.setNickNameMac(svc.getOne((String)session.getAttribute("idMac")).getNickNamemac());	
-			comment.setPcodeMac(num);
+			comment.setIdmac((String) session.getAttribute("idMac"));
+			comment.setNicknamemac(svc.getOne((String)session.getAttribute("idMac")).getNicknamemac());	
+			comment.setPcodemac(num);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");

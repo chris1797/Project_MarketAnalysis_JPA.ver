@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Data
-@Table(name="USER")
+@Table(name="USER_TB")
 public class User {
 
 	@SequenceGenerator(sequenceName = "USER_NUM_SEQ", allocationSize = 1, name = "USER_NUM_SEQ")
@@ -29,7 +29,7 @@ public class User {
 	private String idmac;
 	
 	private String pwmac; 
-	private String nickNamemac; 
+	private String nicknamemac; 
 	private String emailmac;
 	private String gendermac;
 	private Date birthmac;

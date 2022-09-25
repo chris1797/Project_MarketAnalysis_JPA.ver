@@ -1,55 +1,35 @@
 package com.mac.demo.model;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-@Component
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Data
+@Table(name="COMMENT_TB")
 public class Comment {
 	
-	private int numMac;
-	private int pcodeMac;
-	private String idMac;
-	private String nickNameMac;
-	private String commentMac;
-	private java.sql.Date wdateMac;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMENT_NUM_SEQ")
+	@SequenceGenerator(sequenceName = "COMMENT_NUM_SEQ", allocationSize = 1, name = "COMMENT_NUM_SEQ")
+	private int nummac;
 	
+	private int pcodemac;
+	private String idmac;
+	private String nicknamemac;
+	private String commentmac;
+	private java.sql.Date wdatemac;
 	
-	
-	
-	public String getNickNameMac() {
-		return nickNameMac;
-	}
-	public void setNickNameMac(String nickNameMac) {
-		this.nickNameMac = nickNameMac;
-	}
-	public int getNumMac() {
-		return numMac;
-	}
-	public void setNumMac(int numMac) {
-		this.numMac = numMac;
-	}
-	public int getPcodeMac() {
-		return pcodeMac;
-	}
-	public void setPcodeMac(int pcodeMac) {
-		this.pcodeMac = pcodeMac;
-	}
-	public String getIdMac() {
-		return idMac;
-	}
-	public void setIdMac(String idMac) {
-		this.idMac = idMac;
-	}
-	public String getCommentMac() {
-		return commentMac;
-	}
-	public void setCommentMac(String commentMac) {
-		this.commentMac = commentMac;
-	}
-	public java.sql.Date getWdateMac() {
-		return wdateMac;
-	}
-	public void setWdateMac(java.sql.Date wdateMac) {
-		this.wdateMac = wdateMac;
-	}
 	
 }

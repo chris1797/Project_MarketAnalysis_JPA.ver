@@ -48,19 +48,9 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 	
-	/*
-	public BoardService(BoardMapper boardDao, UserMapper userDao, AttachMapper attachDao,
-						ResourceLoader resourceLoader) {
-		this.boardDao = boardDao;
-		this.userDao = userDao;
-		this.attachDao = attachDao;
-		this.resourceLoader = resourceLoader;
-	}
-	*/
-	
 //	------------------List-------------------
 	public List<Board> getBoardList(String categoryMac){
-		return boardDao.getBoardList(categoryMac);
+		return boardRepository.getBoardList(categoryMac);
 	}
 	
 	public List<Board> getNoticeList() {
@@ -160,7 +150,7 @@ public class BoardService {
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
 					_att.setIdMac(board.getIdmac());
-					_att.setNickNameMac(getOne(board.getIdmac()).getNickNamemac());
+					_att.setNickNameMac(getOne(board.getIdmac()).getNicknamemac());
 					_att.setFileNameMac(fname_changed);
 					_att.setFilepathMac(savePath);
 				
@@ -194,8 +184,8 @@ public class BoardService {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setPcodeMac(board.getNumMac());			_att.setIdMac(board.getIdmac());
-					_att.setNickNameMac(getOne(board.getIdmac()).getNickNamemac());
+					_att.setPcodeMac(board.getNummac());			_att.setIdMac(board.getIdmac());
+					_att.setNickNameMac(getOne(board.getIdmac()).getNicknamemac());
 					_att.setFileNameMac(fname_changed);
 					_att.setFilepathMac(savePath);
 				
