@@ -1,25 +1,53 @@
 package com.mac.demo.model;
 
 
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Column;
 
-import lombok.*;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@Component
+@Entity
+@Data
+@Table(name="BOARD")
 public class Board {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_NUM_SEQ")
+	@SequenceGenerator(sequenceName = "BOARD_NUM_SEQ", allocationSize = 1, name = "BOARD_NUM_SEQ")
+	@Column(name="NUMMAC")
 	private int numMac; //번호
-	private String nickNameMac; //닉네임
-	private String titleMac; //제목
-	private String contentsMac; //내용
-	private java.sql.Date wdateMac; //작성일
-	private String typeMac; //속성(업종등)
-	private String idMac; //유저아이디
-	private int countMac;
-	private String tableMac;
-	private String categoryMac;
+	/*
+	@GeneratedValue는 기본키를 설정하는 것으로, strategy = GenerationType.SEQUENCE는
+	DB의 Sequence Object를 사용하겠다는 뜻
+	
+	@SequenceGenerator
+	DB에 생성한 시퀀스를 바탕으로 식별자를 생성하는 시퀀스 생성기를 설정
+	allocationSize 옵션은 DB의 시퀀스 증가값이 1인 경우 반드시 1로 설정 
+	*/
+	
+	
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
+	
+	private String idmac; //유저아이디
+	private String nicknamemac;
+	private String titlemac; //제목
+	private String contentsmac; //내용
+	private java.sql.Date wdatemac; //작성일
+	private String categorymac;
 
 	
 	

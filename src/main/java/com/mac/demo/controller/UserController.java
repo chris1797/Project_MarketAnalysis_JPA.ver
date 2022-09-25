@@ -42,7 +42,7 @@ public class UserController {
 	@PostMapping("/addForm/{idMac}")
 	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
 		User user = new User();
-		user.setIdMac(idMac);
+		user.setIdmac(idMac);
 		model.addAttribute("user", user);
 		return "thymeleaf/mac/User/addForm";
 	}
@@ -53,8 +53,8 @@ public class UserController {
 			@PathVariable("emailMac")String emailMac, 
 			@RequestParam(name ="check", defaultValue="0")String check, Model model) {
 		User user = new User();
-		user.setIdMac(idMac);
-		user.setEmailMac(emailMac);
+		user.setIdmac(idMac);
+		user.setEmailmac(emailMac);
 		if(Integer.parseInt(check) == 1) {
 			model.addAttribute("user", user);
 			return "thymeleaf/mac/User/addForm";
@@ -113,7 +113,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String,Object> deleted(User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		String idMac = user.getIdMac();
+		String idMac = user.getIdmac();
 		boolean result = svc.deleted(idMac);
 		map.put("result", result);
 		
@@ -133,7 +133,7 @@ public class UserController {
 	@GetMapping("/updateForm")
 	public String update(User user, Model model) {
 //		System.out.println("여기누");
-		User user2 = svc.getOne(user.getIdMac());
+		User user2 = svc.getOne(user.getIdmac());
 		model.addAttribute("user", user2);
 		return "thymeleaf/mac/User/updateForm";
 	}

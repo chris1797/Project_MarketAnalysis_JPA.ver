@@ -25,7 +25,9 @@ import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.service.BoardService;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestMapping("/board")
 @Controller
 public class BoardController {
@@ -66,8 +68,8 @@ public class BoardController {
 			
 			//닉네임 가져오기
 			Board board = new Board();
-			board.setNickNameMac(svc.getOne(id).getNickNameMac());
-			board.setCategoryMac(categoryMac);
+			board.setNicknamemac(svc.getOne(id).getNickNamemac());
+			board.setCategorymac(categoryMac);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
@@ -86,7 +88,7 @@ public class BoardController {
 									@RequestParam("files") MultipartFile[] mfiles,
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
-		
+		log.trace(board.toString());
 		svc.save(board);
 		
 		// file 객체 배열의 첫번째 값이 비었는지 검사, 파일이 있을 경우에만 실행되도록 조건문 부여
@@ -125,7 +127,7 @@ public class BoardController {
 		Comment comment = new Comment();
 		if(session.getAttribute("idMac") != null) {
 			comment.setIdMac((String) session.getAttribute("idMac"));
-			comment.setNickNameMac(svc.getOne((String)session.getAttribute("idMac")).getNickNameMac());	
+			comment.setNickNameMac(svc.getOne((String)session.getAttribute("idMac")).getNickNamemac());	
 			comment.setPcodeMac(num);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		} else {
@@ -183,8 +185,9 @@ public class BoardController {
 									@RequestParam("files") MultipartFile[] mfiles,
 									@PathVariable("categoryMac") String categoryMac,
 									HttpServletRequest request) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		boolean updated = svc.update(newBoard);
+		log.trace(newBoard.toString());
+		log.trace(mfiles.toString());
+		
 		if(mfiles[0].isEmpty() != true) {
 			svc.fileupdate(newBoard, mfiles, request);
 		}
@@ -234,6 +237,8 @@ public class BoardController {
 	@PostMapping("/comment")
 	@ResponseBody
 	public Map<String, Object> comment(Comment comment, Model model, HttpSession session) {
+		log.trace(comment.toString());
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴

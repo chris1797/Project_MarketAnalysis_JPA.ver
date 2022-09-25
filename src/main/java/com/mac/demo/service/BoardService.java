@@ -1,13 +1,8 @@
 package com.mac.demo.service;
 
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLDecoder;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,17 +11,13 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.authenticator.SavedRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.convert.SimplePropertyValueConversions;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
@@ -37,7 +28,11 @@ import com.mac.demo.model.Attach;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.model.User;
+import com.mac.demo.repository.BoardRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BoardService {
 
@@ -46,7 +41,14 @@ public class BoardService {
 	private AttachMapper attachDao;
 	ResourceLoader resourceLoader;
 	
+	@Autowired
+	private BoardRepository boardRepository;
 	
+	public BoardService(BoardRepository boardRepository) {
+		this.boardRepository = boardRepository;
+	}
+	
+	/*
 	public BoardService(BoardMapper boardDao, UserMapper userDao, AttachMapper attachDao,
 						ResourceLoader resourceLoader) {
 		this.boardDao = boardDao;
@@ -54,7 +56,7 @@ public class BoardService {
 		this.attachDao = attachDao;
 		this.resourceLoader = resourceLoader;
 	}
-	
+	*/
 	
 //	------------------List-------------------
 	public List<Board> getBoardList(String categoryMac){
@@ -157,8 +159,8 @@ public class BoardService {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setIdMac(board.getIdMac());
-					_att.setNickNameMac(getOne(board.getIdMac()).getNickNameMac());
+					_att.setIdMac(board.getIdmac());
+					_att.setNickNameMac(getOne(board.getIdmac()).getNickNamemac());
 					_att.setFileNameMac(fname_changed);
 					_att.setFilepathMac(savePath);
 				
@@ -192,8 +194,8 @@ public class BoardService {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setPcodeMac(board.getNumMac());			_att.setIdMac(board.getIdMac());
-					_att.setNickNameMac(getOne(board.getIdMac()).getNickNameMac());
+					_att.setPcodeMac(board.getNumMac());			_att.setIdMac(board.getIdmac());
+					_att.setNickNameMac(getOne(board.getIdmac()).getNickNamemac());
 					_att.setFileNameMac(fname_changed);
 					_att.setFilepathMac(savePath);
 				
