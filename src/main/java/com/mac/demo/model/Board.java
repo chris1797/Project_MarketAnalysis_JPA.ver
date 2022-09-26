@@ -8,6 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Column;
 
@@ -20,6 +24,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Data
+@DynamicInsert
 @Table(name="BOARD_TB")
 public class Board {
 
@@ -44,9 +49,11 @@ public class Board {
 	private String contentsmac; //내용
 	private java.sql.Date wdatemac; //작성일
 	
+	@ColumnDefault("0")
+	private int comment_cntmac;
+	
 //	Entity 클래스로 등록한 클래스지만, DB 테이블과는 별도로 기능이(추가 필드나 메소드) 필요한 경우
-	@Transient
-	private int countmac;
+//	@Transient
 	
 	private String categorymac;
 

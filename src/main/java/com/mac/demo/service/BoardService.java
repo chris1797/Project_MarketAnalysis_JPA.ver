@@ -49,8 +49,8 @@ public class BoardService {
 	}
 	
 //	------------------List-------------------
-	public List<Board> getBoardList(String categoryMac){
-		return boardRepository.getBoardList(categoryMac);
+	public List<Board> findByCategorymac(String categoryMac){
+		return boardRepository.findByCategorymac(categoryMac);
 	}
 	
 	public List<Board> getNoticeList() {
@@ -289,7 +289,7 @@ public class BoardService {
 		if (categoryMac.contentEquals("notice")) {
 			pageInfo = new PageInfo<>(getNoticeList());
 		} else {
-			pageInfo = new PageInfo<>(getBoardList(categoryMac));
+			pageInfo = new PageInfo<>(findByCategorymac(categoryMac));
 		}
 		
 		return pageInfo;

@@ -121,13 +121,13 @@
                         </thead>
                         <tbody>
                            <tr th:each="board : ${pageInfo.list}">
-                              <td th:text="${board.numMac}"></td>
-                              <td><a th:text="${board.titleMac}"
-                                 th:href="@{'/board/free/detail/'+ ${board.numMac}}"></a> 
-                                 <span th:text="'   ['+${board.countMac}+']'"></span>
+                              <td th:text="${board.nummac}"></td>
+                              <td><a th:text="${board.titlemac}"
+                                 th:href="@{'/board/free/detail/'+ ${board.nummac}}"></a> 
+                                 <span th:text="'   ['+${board.comment_cntmac}+']'"></span>
                               </td>
-                              <td th:text="${board.nickNameMac}"></td>
-                              <td th:text="${board.wdateMac}">
+                              <td th:text="${board.nicknamemac}"></td>
+                              <td th:text="${board.wdatemac}">
                               <td></td>
                            </tr>
                         </tbody>
