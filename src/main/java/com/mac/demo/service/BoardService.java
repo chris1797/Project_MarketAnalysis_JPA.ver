@@ -93,8 +93,8 @@ public class BoardService {
 //  -----------------COMMENT-----------------
 	}
 	
-	public List<Comment> getCommentList(int num){
-		return boardDao.getCommentList(num);		
+	public List<Comment> getCommentList(int boardnum){
+		return boardDao.getCommentList(boardnum);		
 	}
 	
 	public boolean commentsave(Comment comment) {

@@ -117,7 +117,7 @@ public class BoardController {
 	
 //  게시글 보기
 	@GetMapping("/{categoryMac}/detail/{num}")
-	public String getDetail(@PathVariable("num") int num,
+	public String getDetail(@PathVariable("num") int boardnum,
 							@PathVariable("categoryMac") String categoryMac,
 							@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 							Model model,
@@ -128,26 +128,26 @@ public class BoardController {
 		if(session.getAttribute("idMac") != null) {
 			comment.setIdmac((String) session.getAttribute("idMac"));
 			comment.setNicknamemac(svc.getOne((String)session.getAttribute("idMac")).getNicknamemac());	
-			comment.setPcodemac(num);
+			comment.setPcodemac(boardnum);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
 		
 //		게시판 분기
-		model.addAttribute("board", svc.getDetail(num, categoryMac));
+		model.addAttribute("board", svc.getDetail(boardnum, categoryMac));
 		
 //		Pagenation
 		PageHelper.startPage(page, 7);
-		model.addAttribute("pageInfo", new PageInfo<>(svc.getCommentList(num)));
+		model.addAttribute("pageInfo", new PageInfo<>(svc.getCommentList(boardnum)));
 		model.addAttribute("page", page);
 		
 //		Comment
 		model.addAttribute("comment", comment);
 		
 //		File
-		model.addAttribute("filelist", svc.getFileList(num));
-		model.addAttribute("fileindex", svc.getFileList(num).size());
+		model.addAttribute("filelist", svc.getFileList(boardnum));
+		model.addAttribute("fileindex", svc.getFileList(boardnum).size());
 		
 		
 		// 댓글 삭제를 위한 idMac체크

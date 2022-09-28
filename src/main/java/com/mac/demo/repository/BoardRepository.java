@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mac.demo.model.Board;
+import com.mac.demo.model.Comment;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer>{
@@ -34,6 +35,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 
 	Board findByNummac(int nummac);
     
+	List<Comment> findBypcode(int pcodemac);
 	/*
 	@Transactional
 	@Modifying
