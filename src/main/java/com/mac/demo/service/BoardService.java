@@ -29,6 +29,7 @@ import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.model.User;
 import com.mac.demo.repository.BoardRepository;
+import com.mac.demo.repository.UserRepositroy;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,15 +38,19 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardService {
 
 	private BoardMapper boardDao;
-	private UserMapper userDao;
 	private AttachMapper attachDao;
-	ResourceLoader resourceLoader;
+	
+	@Autowired
+	private UserRepositroy userRepository;
 	
 	@Autowired
 	private BoardRepository boardRepository;
 	
-	public BoardService(BoardRepository boardRepository) {
+	ResourceLoader resourceLoader;
+	
+	public BoardService(BoardRepository boardRepository, UserRepositroy userRepository) {
 		this.boardRepository = boardRepository;
+		this.userRepository = userRepository;
 	}
 	
 //	------------------List-------------------
@@ -53,13 +58,10 @@ public class BoardService {
 		return boardRepository.findByCategorymac(categoryMac);
 	}
 	
-	public List<Board> getNoticeList() {
-		return boardDao.getNoticeList();
-	}
 
 //	------------------id로 유저정보 가져오기-------------------    
-	public User getOne(String idMac) {
-		return userDao.getOne(idMac);
+	public User getOne(String idmac) {
+		return userRepository.findByIdmac(idmac);
 	}
 	
 //	------------------ SAVE -------------------    
@@ -284,13 +286,7 @@ public class BoardService {
 	
 //	------------------------PAGE------------------------
 	public PageInfo<Board> getPageInfo(String categoryMac) {
-		PageInfo<Board> pageInfo = null;
-		
-		if (categoryMac.contentEquals("notice")) {
-			pageInfo = new PageInfo<>(getNoticeList());
-		} else {
-			pageInfo = new PageInfo<>(findByCategorymac(categoryMac));
-		}
+		PageInfo<Board> pageInfo = new PageInfo<>(findByCategorymac(categoryMac));;
 		
 		return pageInfo;
 	}

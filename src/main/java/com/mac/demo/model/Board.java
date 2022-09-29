@@ -28,11 +28,6 @@ import lombok.Setter;
 @Table(name="BOARD_TB")
 public class Board {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_NUM_SEQ")
-	@SequenceGenerator(sequenceName = "BOARD_NUM_SEQ", allocationSize = 1, name = "BOARD_NUM_SEQ")
-	@Column(name="NUMMAC")
-	private int nummac; //번호
 	/*
 	@GeneratedValue는 기본키를 설정하는 것으로, strategy = GenerationType.SEQUENCE는
 	DB의 Sequence Object를 사용하겠다는 뜻
@@ -42,6 +37,15 @@ public class Board {
 	allocationSize 옵션은 DB의 시퀀스 증가값이 1인 경우 반드시 1로 설정 
 	*/
 	
+//	Entity 클래스로 등록한 클래스지만, DB 테이블과는 별도로 기능이(추가 필드나 메소드) 필요한 경우
+//	@Transient
+	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_NUM_SEQ")
+	@SequenceGenerator(sequenceName = "BOARD_NUM_SEQ", allocationSize = 1, name = "BOARD_NUM_SEQ")
+	@Column(name="NUMMAC")
+	private int nummac; //번호
 	
 	private String idmac;
 	private String nicknamemac;
@@ -52,8 +56,6 @@ public class Board {
 	@ColumnDefault("0")
 	private int comment_cntmac;
 	
-//	Entity 클래스로 등록한 클래스지만, DB 테이블과는 별도로 기능이(추가 필드나 메소드) 필요한 경우
-//	@Transient
 	
 	private String categorymac;
 

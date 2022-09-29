@@ -36,6 +36,9 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	Board findByNummac(int nummac);
     
 	List<Comment> findBypcode(int pcodemac);
+	
+	<S> S save(Board board);
+	
 	/*
 	@Transactional
 	@Modifying
