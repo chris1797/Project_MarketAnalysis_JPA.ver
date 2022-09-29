@@ -66,7 +66,7 @@ public class BoardService {
 	
 //	------------------ SAVE -------------------    
 	public boolean save(Board board){
-		return 0 < boardDao.save(board);
+		return boardRepository.save(board) != null;
 	}
 	
 //	------------------상세보기-------------------    

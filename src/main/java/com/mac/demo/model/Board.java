@@ -20,6 +20,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+ * @Entity : JPA에서 관리할 객체를 선언
+ * 
+ */
+
 @Getter
 @Setter
 @Entity
@@ -27,6 +32,7 @@ import lombok.Setter;
 @DynamicInsert
 @Table(name="BOARD_TB")
 public class Board {
+	
 
 	/*
 	@GeneratedValue는 기본키를 설정하는 것으로, strategy = GenerationType.SEQUENCE는
