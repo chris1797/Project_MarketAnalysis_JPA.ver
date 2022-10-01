@@ -13,7 +13,7 @@ import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Integer>{
+public interface CommentRepository extends JpaRepository<Comment, Integer>{
 
 	/*
 	 * Generic type은 관리하는 Entity와 그 Entity의 primary type (idmac)
@@ -27,29 +27,22 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	 *
 	*/
 	
-	List<Board> findByCategorymac(String categorymac); //User테이블을 대상을 이름을 검색
-	
-	Board findByNummacAndCategorymac(int nummac, String categorymac);
-	Board findByNummac(int nummac);
-	
-	int deleteByNummac(int nummac);
-	
-	@Transactional
-	int update(Board board);
 	
 	/*
 	num값이 5~10 사이에 있는 행을 추출하려고 한다. 내가 만든 메소드에 내가 만든 쿼리문을 넣은 것
 	JPQL, 이름은 아무렇게나 써도 상관없음
 	@Query("SELECT b FROM Board b WHERE b.num BETWEEN ?1 AND ?2")
 	List<Board> findAllNumBet(@Param("start") int start, @Param("end")int end); // named parameter
-	*/	
+	 */	
 
-    
+	List<Comment> findByPcodemac(int pcodemac);
+	
 	/*
-	 * @Transactional
-	 * @Modifying
-	 * @Query("UPDATE Board b SET b.title=?2, b.contents=?3 WHERE b.num = ?1")
-	 * int update(int num, String title, String contents);
-	 * UPDATE "Board" 는 DB의 테이블명이 아닌 클래스명
+	@Transactional
+	@Modifying
+	@Query("UPDATE Board b SET b.title=?2, b.contents=?3 WHERE b.num = ?1")
+	int update(int num, String title, String contents);
+	
+	// UPDATE "Board" 는 DB의 테이블명이 아닌 클래스명
 	*/
 }

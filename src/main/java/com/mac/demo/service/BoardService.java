@@ -29,6 +29,7 @@ import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.model.User;
 import com.mac.demo.repository.BoardRepository;
+import com.mac.demo.repository.CommentRepository;
 import com.mac.demo.repository.UserRepositroy;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BoardService {
 
+	@Autowired
 	private BoardMapper boardDao;
+	
+	@Autowired
 	private AttachMapper attachDao;
 	
 	@Autowired
@@ -46,11 +50,18 @@ public class BoardService {
 	@Autowired
 	private BoardRepository boardRepository;
 	
+	@Autowired
+	private CommentRepository cmtRepository;
+	
 	ResourceLoader resourceLoader;
 	
-	public BoardService(BoardRepository boardRepository, UserRepositroy userRepository) {
+	
+	public BoardService(BoardRepository boardRepository, 
+						UserRepositroy userRepository,
+						CommentRepository cmtRepository) {
 		this.boardRepository = boardRepository;
 		this.userRepository = userRepository;
+		this.cmtRepository = cmtRepository;
 	}
 	
 //	------------------List-------------------
@@ -69,34 +80,26 @@ public class BoardService {
 		return boardRepository.save(board) != null;
 	}
 	
-//	------------------상세보기-------------------    
-	public Board getDetail(int numMac, String categoryMac) {
-		return boardDao.getDetail(numMac, categoryMac);
-	}
-	public Board getNoticeDetail(int num) {
-		return boardDao.getNoticeDetail(num);
+//	------------------ Board Detail -------------------    
+	public Board getDetail(int nummac, String categorymac) {
+		return boardRepository.findByNummacAndCategorymac(nummac, categorymac);
 	}
 	
-//	------------------DELETE-------------------    
-	public boolean delete(int num) {
-		return 0 > boardDao.delete(num);
-	}
-	public boolean Noticedelete(int num) {
-		return 0 > boardDao.Noticedelete(num);
+//	------------------ DELETE -------------------    
+	public boolean delete(int nummac) {
+		return 0 > boardRepository.deleteByNummac(nummac);
 	}
 	
 //	------------------UPDATE-------------------
 	public boolean update(Board board) {
-		return 0 < boardDao.update(board);
+		return 0 < boardRepository.update(board);
 	}
-	public boolean Noticeedit(Board board) {
-		return 0 < boardDao.Noticeedit(board);
 		
-//  -----------------COMMENT-----------------
-	}
 	
-	public List<Comment> getCommentList(int boardnum){
-		return boardDao.getCommentList(boardnum);		
+//  -----------------COMMENT-----------------
+	
+	public List<Comment> getCommentList(int boardnum) { // pcode
+		return cmtRepository.findByPcodemac(boardnum);		
 	}
 	
 	public boolean commentsave(Comment comment) {

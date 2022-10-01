@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.mac.demo.model.User;
 
 @Repository
-public interface UserRepositroy extends JpaRepository<User, Integer>{
+public interface UserRepositroy extends JpaRepository<User, String>{
 
 	User findByIdmac(String idmac);
 }
