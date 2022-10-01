@@ -18,7 +18,7 @@ import lombok.Data;
 public class User {
 
 	@SequenceGenerator(sequenceName = "USER_NUM_SEQ", allocationSize = 1, name = "USER_NUM_SEQ")
-	private int nummac;
+	private long nummac;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

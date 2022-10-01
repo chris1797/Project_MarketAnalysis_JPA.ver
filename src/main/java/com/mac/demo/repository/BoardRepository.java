@@ -22,7 +22,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	
 		@Transaction : 오류가 발생했을 때 모든 작업들을 원상태로 되돌림
 		@Modifying : @Query를 통해 작성된 INSERT, UPDATE, DELETE (SELECT 제외) 쿼리에서 사용
-				 주로 단건이 아닌 Bulk연산과 함께 사용
+				     주로 단건이 아닌 Bulk연산과 함께 사용
 	 *
 	 *
 	*/
@@ -35,7 +35,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	int deleteByNummac(int nummac);
 	
 	@Transactional
-	int update(Board board);
+	@Query("UPDATE Board b SET b.titlemac=?1, b.contentsmac=?2 WHERE b.nummac=?3")
+	int update(String titlemac, String contentsmac, long nummac);
 	
 	/*
 	num값이 5~10 사이에 있는 행을 추출하려고 한다. 내가 만든 메소드에 내가 만든 쿼리문을 넣은 것

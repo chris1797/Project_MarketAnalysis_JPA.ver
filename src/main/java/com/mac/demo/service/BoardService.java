@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.mappers.AttachMapper;
 import com.mac.demo.mappers.BoardMapper;
-import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.model.Attach;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
@@ -32,30 +31,24 @@ import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.repository.CommentRepository;
 import com.mac.demo.repository.UserRepositroy;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 
-@Slf4j
+
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-	@Autowired
 	private BoardMapper boardDao;
-	
-	@Autowired
 	private AttachMapper attachDao;
 	
-	@Autowired
-	private UserRepositroy userRepository;
-	
-	@Autowired
-	private BoardRepository boardRepository;
-	
-	@Autowired
-	private CommentRepository cmtRepository;
+	private final UserRepositroy userRepository;
+	private final BoardRepository boardRepository;
+	private final CommentRepository cmtRepository;
 	
 	ResourceLoader resourceLoader;
 	
-	
+	/*
+	생성자 주입, @RequiredArgsConstructor로 따로 생성자 안만들어도 됨
 	public BoardService(BoardRepository boardRepository, 
 						UserRepositroy userRepository,
 						CommentRepository cmtRepository) {
@@ -63,6 +56,7 @@ public class BoardService {
 		this.userRepository = userRepository;
 		this.cmtRepository = cmtRepository;
 	}
+	*/
 	
 //	------------------List-------------------
 	public List<Board> findByCategorymac(String categoryMac){
@@ -92,7 +86,7 @@ public class BoardService {
 	
 //	------------------UPDATE-------------------
 	public boolean update(Board board) {
-		return 0 < boardRepository.update(board);
+		return 0 < boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
 	}
 		
 	
@@ -154,10 +148,10 @@ public class BoardService {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setIdMac(board.getIdmac());
-					_att.setNickNameMac(getOne(board.getIdmac()).getNicknamemac());
-					_att.setFileNameMac(fname_changed);
-					_att.setFilepathMac(savePath);
+					_att.setIdmac(board.getIdmac());
+					_att.setNicknamemac(getOne(board.getIdmac()).getNicknamemac());
+					_att.setFilenamemac(fname_changed);
+					_att.setFilepathmac(savePath);
 				
 				attList.add(_att);
 
@@ -189,10 +183,11 @@ public class BoardService {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setPcodeMac(board.getNummac());			_att.setIdMac(board.getIdmac());
-					_att.setNickNameMac(getOne(board.getIdmac()).getNicknamemac());
-					_att.setFileNameMac(fname_changed);
-					_att.setFilepathMac(savePath);
+					_att.setPcodemac(board.getNummac());			
+					_att.setIdmac(board.getIdmac());
+					_att.setNicknamemac(getOne(board.getIdmac()).getNicknamemac());
+					_att.setFilenamemac(fname_changed);
+					_att.setFilepathmac(savePath);
 				
 				attList.add(_att);
 
@@ -241,17 +236,17 @@ public class BoardService {
 
 	
 	public boolean insertMultiAttach(Attach vo) {
-		int pcodeMac = vo.getNumMac();  // 자동 증가된 업로드 번호를 받음
+		long pcodeMac = vo.getNummac();  // 자동 증가된 업로드 번호를 받음
 		
-		List<Attach> attList = vo.getAttListMac();
+		List<Attach> attList = vo.getAttListmac();
 
 		int totalSuccess = 0;
 		for(int i=0;i<attList.size();i++)
 		{
 			Map<String,Object> fmap = new HashMap<>();
-			fmap.put("pcodeMac", Integer.valueOf(pcodeMac));
-			fmap.put("fileNameMac", attList.get(i).getFileNameMac());
-			fmap.put("filepathMac", vo.getFilepathMac());
+			fmap.put("pcodeMac", Long.valueOf(pcodeMac));
+			fmap.put("fileNameMac", attList.get(i).getFilenamemac());
+			fmap.put("filepathMac", vo.getFilepathmac());
 //			totalSuccess += attchDao.insertAttach(fmap);   // 첨부파일 정보 저장
 		}
 		return totalSuccess==attList.size();

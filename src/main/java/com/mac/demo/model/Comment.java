@@ -23,9 +23,9 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMENT_NUM_SEQ")
 	@SequenceGenerator(sequenceName = "COMMENT_NUM_SEQ", allocationSize = 1, name = "COMMENT_NUM_SEQ")
-	private int nummac;
+	private long nummac;
 	
-	private int pcodemac;
+	private long pcodemac;
 	private String idmac;
 	private String nicknamemac;
 	private String commentmac;

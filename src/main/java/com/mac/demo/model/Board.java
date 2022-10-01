@@ -50,7 +50,7 @@ public class Board {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_NUM_SEQ")
 	@SequenceGenerator(sequenceName = "BOARD_NUM_SEQ", allocationSize = 1, name = "BOARD_NUM_SEQ")
 	@Column(name="NUMMAC")
-	private int nummac; // 번호
+	private long nummac; // 번호
 	
 	private String idmac; // 유저 아이디
 	private String nicknamemac;
