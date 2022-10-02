@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,25 +39,27 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardService {
 
-	private BoardMapper boardDao;
 	private AttachMapper attachDao;
 	
 	private final UserRepositroy userRepository;
 	private final BoardRepository boardRepository;
-	private final CommentRepository cmtRepository;
+	private final CommentRepository commentRepository;
 	
 	ResourceLoader resourceLoader;
 	
-	/*
-	생성자 주입, @RequiredArgsConstructor로 따로 생성자 안만들어도 됨
-	public BoardService(BoardRepository boardRepository, 
-						UserRepositroy userRepository,
-						CommentRepository cmtRepository) {
-		this.boardRepository = boardRepository;
-		this.userRepository = userRepository;
-		this.cmtRepository = cmtRepository;
-	}
-	*/
+/*
+ * 
+ * 생성자 주입, @RequiredArgsConstructor로 따로 생성자 안만들어도 됨
+ *
+ * public BoardService(BoardRepository boardRepository, 
+ *						UserRepositroy userRepository,
+ *						CommentRepository cmtRepository) {
+ *		this.boardRepository = boardRepository;
+ *		this.userRepository = userRepository;
+ *		this.cmtRepository = cmtRepository;
+ * }
+ * 
+*/
 	
 //	------------------List-------------------
 	public List<Board> findByCategorymac(String categoryMac){
@@ -93,41 +96,24 @@ public class BoardService {
 //  -----------------COMMENT-----------------
 	
 	public List<Comment> getCommentList(int boardnum) { // pcode
-		return cmtRepository.findByPcodemac(boardnum);		
+		return commentRepository.findByPcodemac(boardnum);		
 	}
 	
 	public boolean commentsave(Comment comment) {
-		return 0 < boardDao.commentsave(comment);	
+		return commentRepository.save(comment) != null;	
 	}
 	
 	public boolean commentdelete(int numMac) {
-		return 0 < boardDao.commentdelete(numMac);
+		return 0 < commentRepository.deleteByNummac(numMac);
 	}
 	
 //	-----------------------SEARCH-----------------------	
-	public List<Board> getFreeListByKeyword(String titleMac){
-		return boardDao.getFreeListByKeyword(titleMac);
+	public List<Board> getListByKeyword(String keyword, String categorymac){
+		return boardRepository.getListByKeyword(keyword, categorymac);
 	}
 
-	public List<Board> getFreeListByNickName(String nickNameMac) {
-		return boardDao.getFreeListByNickName(nickNameMac);
-	}
-	
-	public List<Board> getAdsListByKeyword(String titleMac){
-		return boardDao.getAdsListByKeyword(titleMac);
-	}
-
-	public List<Board> getAdsListByNickName(String nickNameMac) {
-		return boardDao.getAdsListByNickName(nickNameMac);
-	}
-	
-	public List<Board> getNoticeListByKeyword(String titleMac) {
-		
-		return boardDao.getNoticeListByKeyword(titleMac);
-	}
-
-	public List<Board> getNoticeListByNickName(String nickNameMac) {
-		return boardDao.getNoticeListByNickName(nickNameMac);
+	public List<Board> getListByNickName(String nickname, String categorymac) {
+		return boardRepository.getListByNickname(nickname, categorymac);
 	}
 	
 //	------------------------File------------------------

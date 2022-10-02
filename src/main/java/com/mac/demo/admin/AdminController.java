@@ -160,10 +160,10 @@ public class AdminController {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setIdMac(board.getIdmac());
-					_att.setNickNameMac(board.getNicknamemac());
-					_att.setFileNameMac(fname_changed);
-					_att.setFilepathMac(savePath);
+					_att.setIdmac(board.getIdmac());
+					_att.setNicknamemac(board.getNicknamemac());
+					_att.setFilenamemac(fname_changed);
+					_att.setFilepathmac(savePath);
 				
 				attList.add(_att);
 

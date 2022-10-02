@@ -19,30 +19,18 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>{
 	 * Generic type은 관리하는 Entity와 그 Entity의 primary type (idmac)
 	 * 
 	 * JPA는 메소드 이름을 이용하여 SQL을 파생한다. (Query Method)
-	
-		@Transaction : 오류가 발생했을 때 모든 작업들을 원상태로 되돌림
-		@Modifying : @Query를 통해 작성된 INSERT, UPDATE, DELETE (SELECT 제외) 쿼리에서 사용
-				 주로 단건이 아닌 Bulk연산과 함께 사용
+	 *
+	 * @Transaction : 오류가 발생했을 때 모든 작업들을 원상태로 되돌림
+	 * @Modifying : @Query를 통해 작성된 INSERT, UPDATE, DELETE (SELECT 제외) 쿼리에서 사용
+	 *			 	주로 단건이 아닌 Bulk연산과 함께 사용
 	 *
 	 *
-	*/
+	 */
 	
-	
-	/*
-	num값이 5~10 사이에 있는 행을 추출하려고 한다. 내가 만든 메소드에 내가 만든 쿼리문을 넣은 것
-	JPQL, 이름은 아무렇게나 써도 상관없음
-	@Query("SELECT b FROM Board b WHERE b.num BETWEEN ?1 AND ?2")
-	List<Board> findAllNumBet(@Param("start") int start, @Param("end")int end); // named parameter
-	 */	
-
+//	게시판 글번호를 받아 해당 번호에 달린 댓글리스트 얻어오기
 	List<Comment> findByPcodemac(int pcodemac);
 	
-	/*
-	@Transactional
-	@Modifying
-	@Query("UPDATE Board b SET b.title=?2, b.contents=?3 WHERE b.num = ?1")
-	int update(int num, String title, String contents);
+	int deleteByNummac(int nummac);
 	
-	// UPDATE "Board" 는 DB의 테이블명이 아닌 클래스명
-	*/
+
 }

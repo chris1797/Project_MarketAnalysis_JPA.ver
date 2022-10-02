@@ -205,31 +205,18 @@ public class BoardController {
 								 Model model) {
 		
 		PageHelper.startPage(page, 10);
-		
 		PageInfo<Board> pageInfo = null;
-		if(categoryMac.contentEquals("free")) {
-			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getFreeListByKeyword(keyword));
-			} else {
-				pageInfo = new PageInfo<>(svc.getFreeListByNickName(keyword));
-			}
-		} else if(categoryMac.contentEquals("ads")) {
-			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getAdsListByKeyword(keyword));
-			} else {
-				pageInfo = new PageInfo<>(svc.getAdsListByNickName(keyword));
-			}
-		} else if(categoryMac.contentEquals("notice")) {
-			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getAdsListByKeyword(keyword));
-			} else {
-				pageInfo = new PageInfo<>(svc.getAdsListByNickName(keyword));
-			}
+		
+//		검색옵션(글제목+내용 or 닉네임)에 따른 List 분류
+		if (category.equals("contents")) {
+			pageInfo = new PageInfo<>(svc.getListByKeyword(keyword, categoryMac));
+		} else {
+			pageInfo = new PageInfo<>(svc.getListByNickName(keyword, categoryMac));
 		}
-		
-		model.addAttribute("pageInfo",pageInfo);
+
+		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("page", page);
-		
+
 		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
 	}
 	

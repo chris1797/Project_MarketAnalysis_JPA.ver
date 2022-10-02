@@ -7,34 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.mac.demo.mappers.AttachMapper;
-import com.mac.demo.mappers.BoardMapper;
 import com.mac.demo.model.Attach;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.model.User;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import org.apache.catalina.authenticator.SavedRequest;
 
 import org.springframework.http.MediaType;
 
-import org.springframework.data.convert.SimplePropertyValueConversions;
-
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import com.github.pagehelper.PageInfo;
-import com.mac.demo.mappers.UserMapper;
 
 @Service
 public class AdminService {
@@ -79,7 +64,7 @@ public class AdminService {
 	}
 	
 	public boolean attachinsert(List<Attach> attList) {
-		System.out.println("BoardService : " + attList.get(0).getFileNameMac());
+		System.out.println("BoardService : " + attList.get(0).getFilenamemac());
 		int res = dao.insertNoticeMultiAttach(attList);
 		System.out.println(res + "개 업로드성공");
 

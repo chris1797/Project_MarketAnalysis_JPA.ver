@@ -28,6 +28,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	*/
 	
 	List<Board> findByCategorymac(String categorymac); //User테이블을 대상을 이름을 검색
+	List<Board> findAllByTitlemacAndCategorymac(String titlemac, String categorymac);
 	
 	Board findByNummacAndCategorymac(int nummac, String categorymac);
 	Board findByNummac(int nummac);
@@ -35,8 +36,17 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	int deleteByNummac(int nummac);
 	
 	@Transactional
+	@Modifying
 	@Query("UPDATE Board b SET b.titlemac=?1, b.contentsmac=?2 WHERE b.nummac=?3")
 	int update(String titlemac, String contentsmac, long nummac);
+	
+	
+	@Query("SELECT b FROM Board b WHERE b.titlemac LIKE CONCAT('%', :keyword, '%') OR b.contentsmac LIKE CONCAT('%', :keyword, '%') AND b.categorymac = :categorymac")
+	List<Board> getListByKeyword(@Param("keyword")String keyword, @Param("categorymac")String categorymac);
+	
+	
+	@Query("SELECT b FROM Board b WHERE b.nicknamemac LIKE CONCAT('%', :nickname, '%') AND b.categorymac = :categorymac")
+	List<Board> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
 	
 	/*
 	num값이 5~10 사이에 있는 행을 추출하려고 한다. 내가 만든 메소드에 내가 만든 쿼리문을 넣은 것
