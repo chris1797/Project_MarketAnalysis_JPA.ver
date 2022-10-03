@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class BoardController {
 	@GetMapping("/{categoryMac}/input")
 	public String input(Model model,
 						HttpSession session,
-						@PathVariable("categoryMac") String categoryMac) {
+						@PathVariable("categoryMac") String categorymac) {
 		
 		System.out.println("현재 접속한 ID : " + (String)session.getAttribute("idMac"));
 		
@@ -62,42 +63,36 @@ public class BoardController {
 		if((String)session.getAttribute("idMac") == null){
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
 			model.addAttribute("board", new Board());
-			
+			return "thymeleaf/mac/login/loginForm";
 		} else {
 			String id = (String)session.getAttribute("idMac");
 			
 			//닉네임 가져오기
 			Board board = new Board();
 			board.setNicknamemac(svc.getOne(id).getNicknamemac());
-			board.setCategorymac(categoryMac);
+			board.setCategorymac(categorymac);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
 			model.addAttribute("idMac", id);
 		}
 		
-		return String.format("thymeleaf/mac/board/%s_board_input", categoryMac);
+		return String.format("thymeleaf/mac/board/%s_board_input", categorymac);
 	}
 	
 
 //	게시글 저장
 	@PostMapping("/{categoryMac}/save")
 	@ResponseBody
-	public String save(Board board,
+	public String save(@Valid Board board,
 									@PathVariable("categoryMac") String categoryMac,
 									@RequestParam("files") MultipartFile[] mfiles,
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
 		log.trace(board.toString());
-		svc.save(board);
-		
-		// file 객체 배열의 첫번째 값이 비었는지 검사, 파일이 있을 경우에만 실행되도록 조건문 부여
-		if(mfiles[0].isEmpty() != true) {
-			svc.fileinsert(board, mfiles, request);
-		}
 		
 		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
-		return String.format("{\"savednum\":\"%d\"}", board.getNummac());
+		return String.format("{\"savednum\":\"%d\"}", svc.save(board, mfiles, request));
 	}
 	
 //	리스트
@@ -181,18 +176,14 @@ public class BoardController {
 //  게시글 수정
 	@PostMapping("/{categoryMac}/edit")
 	@ResponseBody
-	public String edit(Board newBoard,
-									@RequestParam("files") MultipartFile[] mfiles,
-									@PathVariable("categoryMac") String categoryMac,
-									HttpServletRequest request) {
+	public String edit(@Valid Board newBoard,
+						@RequestParam("files") MultipartFile[] mfiles,
+						@PathVariable("categoryMac") String categoryMac,
+						HttpServletRequest request) {
 		log.trace(newBoard.toString());
 		log.trace(mfiles.toString());
-		
-		if(mfiles[0].isEmpty() != true) {
-			svc.fileupdate(newBoard, mfiles, request);
-		}
 			
-		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard));
+		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard, mfiles, request));
 	}
 	
 	
@@ -251,11 +242,11 @@ public class BoardController {
 	
 	@GetMapping("/file/delete/{numMac}")
 	@ResponseBody
-	public Map<String, Object> file_delte(@PathVariable("numMac") int numMac, 
+	public Map<String, Object> file_delte(@PathVariable("numMac") int file_Id, 
 										  Model model, HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("삭제할 파일 No. : " + numMac);
-		map.put("filedeleted", svc.filedelete(numMac));
+		System.out.println("삭제할 파일 No. : " + file_Id);
+		map.put("filedeleted", svc.filedelete(file_Id));
 		return map;
 	}
 	

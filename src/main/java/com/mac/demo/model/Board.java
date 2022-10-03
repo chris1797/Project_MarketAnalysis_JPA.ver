@@ -16,6 +16,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.SequenceGenerator;
+
+import java.util.Date;
+
 import javax.persistence.Column;
 
 
@@ -59,7 +62,8 @@ public class Board {
 	@Column(length=500)
 	private String contentsmac; // 내용
 	
-	private java.sql.Date wdatemac; // 작성일
+	@Temporal(TemporalType.DATE)
+	private Date wdatemac; // 작성일
 	
 	@ColumnDefault("0")
 	private int comment_cntmac;

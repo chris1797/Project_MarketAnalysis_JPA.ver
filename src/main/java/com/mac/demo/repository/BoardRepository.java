@@ -24,7 +24,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 		@Modifying : @Query를 통해 작성된 INSERT, UPDATE, DELETE (SELECT 제외) 쿼리에서 사용
 				     주로 단건이 아닌 Bulk연산과 함께 사용
 	 *
-	 *
 	*/
 	
 	List<Board> findByCategorymac(String categorymac); //User테이블을 대상을 이름을 검색
@@ -49,8 +48,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	List<Board> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
 	
 	/*
-	num값이 5~10 사이에 있는 행을 추출하려고 한다. 내가 만든 메소드에 내가 만든 쿼리문을 넣은 것
-	JPQL, 이름은 아무렇게나 써도 상관없음
+	num값이 5~10 사이에 있는 행을 추출
 	@Query("SELECT b FROM Board b WHERE b.num BETWEEN ?1 AND ?2")
 	List<Board> findAllNumBet(@Param("start") int start, @Param("end")int end); // named parameter
 	*/	

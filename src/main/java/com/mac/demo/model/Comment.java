@@ -1,20 +1,18 @@
 package com.mac.demo.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Data
 @Table(name="COMMENT_TB")
@@ -29,7 +27,9 @@ public class Comment {
 	private String idmac;
 	private String nicknamemac;
 	private String commentmac;
-	private java.sql.Date wdatemac;
+	
+	@Temporal(TemporalType.DATE)
+	private Date wdatemac;
 	
 	
 }

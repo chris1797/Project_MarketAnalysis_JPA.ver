@@ -53,8 +53,8 @@
 		alert(msg);
 		location.href="/board/free/list";
 	}
-	var idMac = '[[${idMac}]]';
-	var categoryMac='[[${board.categoryMac}]]';
+	var idMac = '[[${idmac}]]';
+	var categoryMac='[[${board.categorymac}]]';
 
 </script>
 </head>
@@ -96,15 +96,15 @@
                     </div>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <div th:if="${idMac==null}">
+                <div th:if="${idmac==null}">
 	                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
 	                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
          		</div>
          	</div>
-	         <div th:if="${idMac !=null}">
-		         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
+	         <div th:if="${idmac !=null}">
+		         <h5 th:text="${idmac}+'님 환영합니다'" th:style="'color:gray'"></h5>
 		          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-		          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+		          <a th:href="'/user/detail/'+${idmac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
 	         </div>
 		</nav>
 	</div>
@@ -119,22 +119,22 @@
 		<h3>게시판 글 입력 폼</h3>
 		<form id="input_form"  th:object="${board}" onsubmit="return save();">
 		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-			<input type="hidden" th:field="*{nickNameMac}" name="nickNameMac">
-			<input type="hidden" th:value="${idMac}" name="idMac">
-			<input type="hidden" th:field="*{categoryMac}" name="categoryMac" th:value="${board.categoryMac}">
+			<input type="hidden" th:field="*{nicknamemac}" name="nicknamemac">
+			<input type="hidden" th:value="${idmac}" name="idmac">
+			<input type="hidden" th:field="*{categorymac}" name="categorymac" th:value="${board.categorymac}">
 				<br>
 			<div>
-				<label for="titleMac" class="form-label">
+				<label for="titlemac" class="form-label">
 					<font size="4">제목</font>
 				</label>
-				<input type="text" class="form-control" name="titleMac" th:field="*{titleMac}" style="border-radius:10px;">
+				<input type="text" class="form-control" name="titlemac" th:field="*{titlemac}" style="border-radius:10px;">
 			</div>
 			&nbsp;
 			<div>
-				<label for="contentsMac" class="form-label">
+				<label for="contentsmac" class="form-label">
 					<font size="4">글내용</font>
 				</label>
-				<textarea name="contentsMac" cols="110" rows="11" class="form-control" th:field="*{contentsMac}" style="border-radius:10px;"></textarea>
+				<textarea name="contentsmac" cols="110" rows="11" class="form-control" th:field="*{contentsmac}" style="border-radius:10px;"></textarea>
 			</div>
 			파일첨부 : <input type="file" name="files" id="files" multiple="multiple"><br>
 			<br>
