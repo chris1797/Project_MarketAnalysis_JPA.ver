@@ -31,7 +31,7 @@ import com.mac.demo.model.User;
 import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.repository.CommentRepository;
-import com.mac.demo.repository.UserRepositroy;
+import com.mac.demo.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardService {
 
-	private final UserRepositroy userRepository;
+	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
 	private final CommentRepository commentRepository;
 	private final AttachRepository attachRepository;
@@ -83,17 +83,15 @@ public class BoardService {
 	
 //	------------------UPDATE-------------------
 	public Boolean update(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
-		Boolean update_check;
 		try {
 			boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
 			List<Attach> attlist = getFileSet(board, mfiles, request);
 			if(attlist!=null) attachRepository.saveAll(attlist);
-			update_check = true;
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			update_check = false;
+			return false;
 		}
-		return update_check;
 	}
 	
 //	------------------ Board Detail -------------------    
@@ -143,16 +141,13 @@ public class BoardService {
 	
 //	파일 지우기 Ajax
 	public boolean filedelete(int file_Id) {
-		Boolean filedelete;
-		
 		try {
 			attachRepository.deleteById(file_Id);
-			filedelete = true;
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			filedelete = false;
+			return false;
 		}
-		return filedelete;
 	}
 	
 //	파일 리스트 구성
@@ -225,7 +220,6 @@ public class BoardService {
 //	------------------------PAGE------------------------
 	public PageInfo<Board> getPageInfo(String categoryMac) {
 		PageInfo<Board> pageInfo = new PageInfo<>(findByCategorymac(categoryMac));;
-		
 		return pageInfo;
 	}
 	

@@ -1,53 +1,61 @@
 package com.mac.demo.service;
 
-import java.util.List;
-import java.util.UUID;
+import com.mac.demo.mappers.UserMapper;
+import com.mac.demo.model.Board;
+import com.mac.demo.model.User;
+import com.mac.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-import com.mac.demo.mappers.UserMapper;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.User;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 	//유저 맵퍼
 	@Autowired
 	private UserMapper dao;
+	
+	private final UserRepository userRepository;
 
 	@Autowired
 	private JavaMailSender sender;
 	
 	//회원가입
 	public boolean add(User user) {
-		return dao.add(user) > 0;
+		return userRepository.save(user) != null;
 	}
 
 	//회원리스트
 	public List<User> getList() {
-		
-		return dao.getList();
+		return userRepository.findAll();
 	}
 
 	//회원정보
-	public User getOne(String idMac) {
-		User user = dao.getOne(idMac);
+	public User getOne(String idmac) {
+		// idmac : User_tb의 id (String)
+		User user = userRepository.findByIdmac(idmac);
 		return user;
 	}
 
 	//회원삭제
 	public boolean deleted(String idMac) {
-		boolean result = dao.deleted(idMac);
-		return result;
+		try {
+			userRepository.deleteById(idMac);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	//회원정보 수정

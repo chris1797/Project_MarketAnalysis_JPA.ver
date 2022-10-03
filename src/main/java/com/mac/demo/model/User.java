@@ -1,16 +1,10 @@
 package com.mac.demo.model;
 
 
-import java.sql.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import lombok.Data;
+
+import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Data
@@ -23,7 +17,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String idmac;
-	
+
 	private String pwmac; 
 	private String nicknamemac; 
 	private String emailmac;
@@ -35,5 +29,4 @@ public class User {
 	private String villagemac;
 	private int managermac;
 	private String namemac;
-	
 }
