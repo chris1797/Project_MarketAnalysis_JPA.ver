@@ -1,13 +1,15 @@
 package com.mac.demo.model;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="USER_TB")
 public class User {
 
@@ -18,7 +20,8 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String idmac;
 
-	private String pwmac; 
+	private String pwmac;
+
 	private String nicknamemac; 
 	private String emailmac;
 	private String gendermac;
