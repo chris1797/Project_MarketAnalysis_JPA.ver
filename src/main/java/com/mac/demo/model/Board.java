@@ -56,4 +56,7 @@ public class Board {
 	
 	private String categorymac;
 
+	@ManyToOne
+	@JoinColumn(name = "user_idmac")
+	private User user;
 }
