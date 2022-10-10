@@ -56,7 +56,8 @@ public class Board {
 	
 	private String categorymac;
 
-	@ManyToOne
+	// Fetch 타입 LAZY 설정
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_idmac")
 	private User user;
 }
