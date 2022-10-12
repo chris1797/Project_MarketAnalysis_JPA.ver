@@ -1,32 +1,23 @@
 package com.mac.demo.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.Comment;
 import com.mac.demo.service.BoardService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/board")
@@ -34,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	
 	
-	private BoardService svc;
+	private final BoardService svc;
 	
 //	생성자가 1개일 경우, @Autowired를 생략해도 주입가능
 	public BoardController(BoardService svc) {
@@ -56,25 +47,29 @@ public class BoardController {
 	public String input(Model model,
 						HttpSession session,
 						@PathVariable("categoryMac") String categorymac) {
-		
-		System.out.println("현재 접속한 ID : " + (String)session.getAttribute("idMac"));
-		
+
 		// login check
-		if((String)session.getAttribute("idMac") == null){
+		String id = null;
+		String idMac = null;
+		try {
+			idMac = (String)session.getAttribute("idMac");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(idMac == null){
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
 			model.addAttribute("board", new Board());
 			return "thymeleaf/mac/login/loginForm";
 		} else {
-			String id = (String)session.getAttribute("idMac");
-			
+
 			//닉네임 가져오기
 			Board board = new Board();
-			board.setNicknamemac(svc.getOne(id).getNicknamemac());
+			board.setNicknamemac(svc.getOne(idMac).getNicknamemac());
 			board.setCategorymac(categorymac);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
-			model.addAttribute("idMac", id);
+			model.addAttribute("idMac", idMac);
 		}
 		
 		return String.format("thymeleaf/mac/board/%s_board_input", categorymac);
@@ -101,11 +96,19 @@ public class BoardController {
 								@PathVariable("categoryMac") String categoryMac,
 								Model model,
 								HttpSession session) {
-		PageHelper.startPage(page, 10);
+		try {
+			PageHelper.startPage(page, 10);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("page", page);
 		model.addAttribute("pageInfo", svc.getPageInfo(categoryMac));
-		model.addAttribute("idMac",(String)session.getAttribute("idMac"));
-		
+		try {
+			model.addAttribute("idMac",(String)session.getAttribute("idMac"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
 	}
 	
@@ -152,7 +155,7 @@ public class BoardController {
 	
 //  게시글 삭제
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
-	@GetMapping("/{categoryMac}/delete/{num}")
+	@DeleteMapping("/{categoryMac}/delete/{num}")
 	@ResponseBody
 	public String delete(@PathVariable("num") int num,
 									  @PathVariable("categoryMac") String categoryMac) {
@@ -160,7 +163,7 @@ public class BoardController {
 	}
 	
 //  게시글 업데이트폼
-	@GetMapping("/{categoryMac}/update/{num}")
+	@PutMapping("/{categoryMac}/update/{num}")
 	public String update(@PathVariable("num") int num, 
 						 HttpSession session,
 						 Model model,
@@ -174,15 +177,14 @@ public class BoardController {
 	}
 	
 //  게시글 수정
-	@PostMapping("/{categoryMac}/edit")
+	@PutMapping("/{categoryMac}/edit")
 	@ResponseBody
 	public String edit(@Valid Board newBoard,
 						@RequestParam("files") MultipartFile[] mfiles,
 						@PathVariable("categoryMac") String categoryMac,
 						HttpServletRequest request) {
 		log.trace(newBoard.toString());
-		log.trace(mfiles.toString());
-			
+
 		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard, mfiles, request));
 	}
 	
@@ -214,7 +216,7 @@ public class BoardController {
 //======================================== 댓글 ========================================
 	@PostMapping("/comment")
 	@ResponseBody
-	public Map<String, Object> comment(Comment comment, Model model, HttpSession session) {
+	public Map<String, Object> comment(Comment comment, HttpSession session) {
 		log.trace(comment.toString());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -229,9 +231,9 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping("/comment/delete/{numMac}")
+	@DeleteMapping("/comment/delete/{numMac}")
 	@ResponseBody
-	public Map<String, Object> comment_delte(@PathVariable int numMac, Model model, HttpSession session) {
+	public Map<String, Object> comment_delte(@PathVariable int numMac) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		System.out.println("삭제할 댓글 No. : " + numMac);
@@ -240,10 +242,10 @@ public class BoardController {
 	}
 //======================================== 파일 ========================================
 	
-	@GetMapping("/file/delete/{numMac}")
+	@DeleteMapping("/file/delete/{numMac}")
 	@ResponseBody
 	public Map<String, Object> file_delte(@PathVariable("numMac") int file_Id, 
-										  Model model, HttpSession session) {
+										  HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("삭제할 파일 No. : " + file_Id);
 		map.put("filedeleted", svc.filedelete(file_Id));
