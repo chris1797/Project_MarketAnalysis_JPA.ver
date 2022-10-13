@@ -98,7 +98,7 @@ public class UserController {
 	}
 	
 //	계정 삭제
-	@PostMapping("/deleted")
+	@DeleteMapping("/deleted")
 	@ResponseBody
 	public Map<String,Object> deleted(User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
@@ -121,14 +121,13 @@ public class UserController {
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
 	public String update(User user, Model model) {
-//		System.out.println("여기누");
 		User user2 = svc.getOne(user.getIdmac());
 		model.addAttribute("user", user2);
 		return "thymeleaf/mac/User/updateForm";
 	}
 	
 //  유저 정보 수정
-	@PostMapping("/updated")
+	@PutMapping("/updated")
 	@ResponseBody
 	public Map<String, Object> edit(User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();

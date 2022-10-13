@@ -299,7 +299,7 @@
 		
 		$.ajax({
 			url:'/user/deleted',
-			method:'post',
+			method:'delete',
 			cache:false,
 			data:$('#del').serialize(),
 			dataType:'json',
@@ -354,7 +354,7 @@ function updated() {
 	
 	$.ajax({
 		url:'/user/updated',
-		method:'post',
+		method:'put',
 		cache:false,
 		data:$('#updated').serialize(),
 		dataType:'json',
