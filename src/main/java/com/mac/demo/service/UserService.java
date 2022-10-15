@@ -60,8 +60,13 @@ public class UserService {
 
 	//회원정보 수정
 	public boolean updated(User user) {
-		boolean result = dao.updated(user);
-		return result;
+		try {
+//			userRepository.update(user.getPwmac(), user.getEmailmac());
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	//아이디 체크
@@ -90,7 +95,7 @@ public class UserService {
 	         sender.send(mimeMessage);
 	         return random;
 	      } catch (MessagingException e) {
-	  
+			  e.printStackTrace();
 	      }
 		return null;
 	}
