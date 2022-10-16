@@ -1,8 +1,9 @@
 package com.mac.demo.model;
 
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,10 +12,16 @@ import javax.validation.constraints.Pattern;
 import java.sql.Date;
 
 @Entity
+@Builder
 @Getter
-@Setter
+@RequiredArgsConstructor
 @Table(name="USER_TB")
 public class User {
+	/*
+	 * User의 VO(Value Object), read-Only 특징
+	 * 사용하는 도중에 변경 불가능하며 오직 읽기만 가짐
+	 * DTO와 비슷하지만 DTO는 setter를 가지고 있어 값이 변할 수 있음
+	 */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_NUM_SEQ")

@@ -1,9 +1,12 @@
 package com.mac.demo.dto;
 
 
+import com.mac.demo.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -14,7 +17,7 @@ public class UserDTO {
     private String nicknamemac;
     private String emailmac;
     private String gendermac;
-    private java.util.Date birthmac;
+    private Date birthmac;
     private String phonenummac;
     private String citymac;
     private String townmac;
@@ -24,20 +27,26 @@ public class UserDTO {
     private java.util.Date datemac;
 
     @Builder
-    public UserDTO(String idmac, String pwmac, String nicknamemac,
-                    String emailmac, java.util.Date birthmac,
-                   String phonenummac, String citymac, String townmac, String villagemac,
-                   String namemac) {
-        this.idmac = idmac;
+    public UserDTO(String pwmac, String emailmac, Date birthmac, String phonenummac,
+                   String citymac, String townmac, String villagemac
+                   ) {
         this.pwmac = pwmac;
-        this.nicknamemac = nicknamemac;
-        this.emailmac = emailmac;
         this.birthmac = birthmac;
         this.phonenummac = phonenummac;
         this.citymac = citymac;
         this.townmac = townmac;
         this.villagemac = villagemac;
-        this.namemac = namemac;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .pwmac(pwmac)
+                .birthmac((java.sql.Date) birthmac)
+                .phonenummac(phonenummac)
+                .citymac(citymac)
+                .townmac(townmac)
+                .villagemac(villagemac)
+                .build();
     }
 
 }
