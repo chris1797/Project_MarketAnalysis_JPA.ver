@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -67,6 +68,11 @@ public class UserService {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Transactional
+	public boolean update(String id) {
+		return true;
 	}
 
 	//아이디 체크
