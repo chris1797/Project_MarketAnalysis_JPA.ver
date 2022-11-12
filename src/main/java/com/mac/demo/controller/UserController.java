@@ -2,6 +2,7 @@ package com.mac.demo.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mac.demo.dto.UserDTO;
 import com.mac.demo.model.Board;
 import com.mac.demo.model.User;
 import com.mac.demo.service.UserService;
@@ -25,14 +26,14 @@ public class UserController {
 //	계정추가폼
 	@GetMapping("/addForm")
 	public String addForm(Model model) {
-		model.addAttribute("user", new User());
+		model.addAttribute("user", new UserDTO());
 		return "thymeleaf/mac/User/addForm";
 	}
 	
 //	아이디 체크후 추가폼
 	@PostMapping("/addForm/{idMac}")
 	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
-		User user = new User();
+		UserDTO user = new UserDTO();
 		user.setIdmac(idMac);
 		model.addAttribute("user", user);
 		return "thymeleaf/mac/User/addForm";
@@ -43,7 +44,7 @@ public class UserController {
 	public String addForm3(@PathVariable("idMac")String idMac, 
 			@PathVariable("emailMac")String emailMac, 
 			@RequestParam(name ="check", defaultValue="0")String check, Model model) {
-		User user = new User();
+		UserDTO user = new UserDTO();
 		user.setIdmac(idMac);
 		user.setEmailmac(emailMac);
 		if(Integer.parseInt(check) == 1) {

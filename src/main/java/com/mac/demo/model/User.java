@@ -1,9 +1,10 @@
 package com.mac.demo.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,8 +15,9 @@ import java.sql.Date;
 @Entity
 @Builder
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name="USER_TB")
+@NoArgsConstructor
 public class User {
 	/*
 	 * User의 VO(Value Object), read-Only 특징

@@ -2,15 +2,18 @@ package com.mac.demo.dto;
 
 
 import com.mac.demo.model.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+@Builder
+@Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
+
+
     private long nummac;
     private String idmac;
     private String pwmac;
