@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.mac.demo.model.Attach;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
+import com.mac.demo.dto.Attach;
+import com.mac.demo.dto.Comment;
 import com.mac.demo.model.User;
 
 @Mapper

@@ -1,8 +1,8 @@
 package com.mac.demo.service;
 
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.User;
 import com.mac.demo.mappers.UserMapper;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.User;
 import com.mac.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,8 @@ public class UserService {
 	//유저 맵퍼
 	@Autowired
 	private UserMapper dao;
-	
+
+	@Autowired
 	private final UserRepository userRepository;
 
 	@Autowired
@@ -43,7 +44,6 @@ public class UserService {
 
 	//회원정보
 	public User getOne(String idmac) {
-		// idmac : User_tb의 id (String)
 		User user = userRepository.findByIdmac(idmac);
 		return user;
 	}
@@ -77,7 +77,7 @@ public class UserService {
 
 	//아이디 체크
 	public boolean idcheck(String idMac) {
-		User user = dao.getOne(idMac);
+		com.mac.demo.model.User user = dao.getOne(idMac);
 		return user == null;
 	}
 
@@ -108,15 +108,13 @@ public class UserService {
 
 	//닉네임 중복 체크
 	public boolean nickCheck(String nick) {
-		User user = dao.getOneNick(nick);
+		com.mac.demo.model.User user = dao.getOneNick(nick);
 		return user == null;
 	}
 
 	public List<Board> findWrite(String idMac) {
 		System.out.println("111");
 		return dao.findWrite(idMac);
-		
-		
 	}
 	
 

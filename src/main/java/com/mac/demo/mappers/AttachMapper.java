@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.mac.demo.model.Attach;
+import com.mac.demo.dto.Attach;
 //import com.mac.demo.model.Fileupload;
-import com.mac.demo.model.Comment;
+
 
 @Mapper
 public interface AttachMapper {

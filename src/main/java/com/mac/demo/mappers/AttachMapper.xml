@@ -4,7 +4,7 @@
 	<mapper namespace="com.mac.demo.mappers.AttachMapper">
 	
 	
-	<insert id="insertAttach" parameterType="com.mac.demo.model.Attach">
+	<insert id="insertAttach" parameterType="com.mac.demo.dto.Attach">
 				INSERT INTO ATTACH(NUMMAC, PCODEMAC, IDMAC, NICKNAMEMAC, WDATEMAC, FILENAMEMAC, FILEPATHMAC) 
 				VALUES(attach_num.NEXTVAL, #{pcodeMac}, #{idMac}, #{nickNameMac}, #{wdateMac}, #{fileNameMac}, #{filepathMac})
 	</insert>
@@ -17,7 +17,7 @@
 		)
 	</select>
 	
-	<select id="getFileList" parameterType="Integer" resultType="com.mac.demo.model.Attach">
+	<select id="getFileList" parameterType="Integer" resultType="com.mac.demo.dto.Attach">
 		SELECT *
 		FROM ATTACH
 		WHERE PCODEMAC = #{pcodeMac}

@@ -57,7 +57,7 @@
 		DELETE FROM notice_board WHERE numMac=#{numMac}
 	</delete>
 	
-	<select id="findAllCommentBoard" resultType="com.mac.demo.model.Comment">
+	<select id="findAllCommentBoard" resultType="com.mac.demo.dto.Comment">
 	SELECT * FROM comment_board
 	</select>
 	
@@ -123,7 +123,7 @@
 	
 
 	
-	<select id="getCommentListByKeyword" resultType="com.mac.demo.model.Comment" parameterType="String">
+	<select id="getCommentListByKeyword" resultType="com.mac.demo.dto.Comment" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, COMMENTMAC,PCODEMAC, WDATEMAC
 		FROM comment_board f
 	    WHERE COMMENTMAC
@@ -132,7 +132,7 @@
         categorymac='ads'
 	</select>
 	
-	<select id="getCommentListByNickName" resultType="com.mac.demo.model.Comment" parameterType="String">
+	<select id="getCommentListByNickName" resultType="com.mac.demo.dto.Comment" parameterType="String">
 		SELECT NUMMAC, IDMAC, NICKNAMEMAC, COMMENTMAC,PCODEMAC, WDATEMAC
 		FROM comment_board f
 		WHERE IDMAC 
@@ -153,7 +153,7 @@
 		<select id="getNoticeDetail" resultType="com.mac.demo.model.Board">
 		SELECT * FROM notice_board WHERE NUMMAC=#{numMac}
 	</select>
-		<select id="getNoticeFileList" parameterType="Integer" resultType="com.mac.demo.model.Attach">
+		<select id="getNoticeFileList" parameterType="Integer" resultType="com.mac.demo.dto.Attach">
 		SELECT *
 		FROM NOTICE_ATTACH
 		WHERE PCODEMAC=#{pcodeMac}

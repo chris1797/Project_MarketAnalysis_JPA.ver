@@ -1,14 +1,13 @@
 package com.mac.demo.mappers;
 
-import java.awt.print.Pageable;
-import java.util.List;
-
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.Comment;
+import com.mac.demo.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Page;
 
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
-import com.mac.demo.model.User;
+import java.awt.print.Pageable;
+import java.util.List;
 
 
 @Mapper

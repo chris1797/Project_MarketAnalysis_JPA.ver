@@ -2,9 +2,8 @@ package com.mac.demo.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.UserDTO;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.User;
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.User;
 import com.mac.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,14 +25,14 @@ public class UserController {
 //	계정추가폼
 	@GetMapping("/addForm")
 	public String addForm(Model model) {
-		model.addAttribute("user", new UserDTO());
+		model.addAttribute("user", new User());
 		return "thymeleaf/mac/User/addForm";
 	}
 	
 //	아이디 체크후 추가폼
 	@PostMapping("/addForm/{idMac}")
 	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
-		UserDTO user = new UserDTO();
+		User user = new User();
 		user.setIdmac(idMac);
 		model.addAttribute("user", user);
 		return "thymeleaf/mac/User/addForm";
@@ -44,7 +43,7 @@ public class UserController {
 	public String addForm3(@PathVariable("idMac")String idMac, 
 			@PathVariable("emailMac")String emailMac, 
 			@RequestParam(name ="check", defaultValue="0")String check, Model model) {
-		UserDTO user = new UserDTO();
+		User user = new User();
 		user.setIdmac(idMac);
 		user.setEmailmac(emailMac);
 		if(Integer.parseInt(check) == 1) {
@@ -72,25 +71,19 @@ public class UserController {
 	
 //	마이페이지
 	@GetMapping("/detail/{idMac}")
-	public String mypage(@PathVariable("idMac")String idMac, Model model, HttpSession session,@RequestParam(name="page", required = false,defaultValue = "1") int page) {
+	public String mypage(@PathVariable("idMac")String idMac,
+						 Model model,
+						 HttpSession session,
+						 @RequestParam(name="page", required = false,defaultValue = "1") int page) {
 		User user = svc.getOne(idMac);
-	
-		
-		if(idMac.equals((String)session.getAttribute("idMac"))==false) {
-			return "redirect:/home";
-		};
-	
-		
-		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
-			return "thymeleaf/mac/home/home";
-		};
-		
-		
+		if(idMac.equals((String)session.getAttribute("idMac"))==false) return "redirect:/home";
+
+		if((String)session.getAttribute("idMac") == null) return "thymeleaf/mac/home/home";
+
 		model.addAttribute("user", user);
 		
 		PageHelper.startPage(page, 5);
 		PageInfo<Board> pageInfo = new PageInfo<>(svc.findWrite(idMac));
-		System.out.println(svc.findWrite(idMac).toString());
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("page", page);
 		
@@ -101,7 +94,7 @@ public class UserController {
 //	계정 삭제
 	@DeleteMapping("/deleted")
 	@ResponseBody
-	public Map<String,Object> deleted(User user, HttpSession session) {
+	public Map<String,Object> deleted(com.mac.demo.model.User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		String idMac = user.getIdmac();
 		boolean result = svc.deleted(idMac);
@@ -121,7 +114,7 @@ public class UserController {
 	
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
-	public String update(User user, Model model) {
+	public String update(com.mac.demo.model.User user, Model model) {
 		User user2 = svc.getOne(user.getIdmac());
 		model.addAttribute("user", user2);
 		return "thymeleaf/mac/User/updateForm";

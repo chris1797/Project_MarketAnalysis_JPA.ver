@@ -1,11 +1,10 @@
 package com.mac.demo.mappers;
 
-import java.util.List;
-
+import com.mac.demo.dto.Board;
+import com.mac.demo.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.mac.demo.model.Board;
-import com.mac.demo.model.User;
+import java.util.List;
 
 
 @Mapper

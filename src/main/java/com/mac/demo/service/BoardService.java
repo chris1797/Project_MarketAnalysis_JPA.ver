@@ -1,39 +1,30 @@
 package com.mac.demo.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.PageInfo;
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.User;
+import com.mac.demo.dto.Attach;
+import com.mac.demo.dto.Comment;
+import com.mac.demo.repository.AttachRepository;
+import com.mac.demo.repository.BoardRepository;
+import com.mac.demo.repository.CommentRepository;
+import com.mac.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.pagehelper.PageInfo;
-import com.mac.demo.mappers.AttachMapper;
-import com.mac.demo.mappers.BoardMapper;
-import com.mac.demo.model.Attach;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
-import com.mac.demo.model.User;
-import com.mac.demo.repository.AttachRepository;
-import com.mac.demo.repository.BoardRepository;
-import com.mac.demo.repository.CommentRepository;
-import com.mac.demo.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -84,7 +75,7 @@ public class BoardService {
 //	------------------UPDATE-------------------
 	public Boolean update(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
 		try {
-			boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
+//			boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
 			List<Attach> attlist = getFileSet(board, mfiles, request);
 			if(attlist!=null) attachRepository.saveAll(attlist);
 			return true;

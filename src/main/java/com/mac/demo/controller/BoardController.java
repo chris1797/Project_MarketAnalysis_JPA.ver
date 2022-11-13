@@ -2,9 +2,10 @@ package com.mac.demo.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.Comment;
 import com.mac.demo.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +22,14 @@ import java.util.Map;
 
 @Slf4j
 @RequestMapping("/board")
+@RequiredArgsConstructor
 @Controller
 public class BoardController {
-	
-	
+
 	private final BoardService svc;
 	
 //	생성자가 1개일 경우, @Autowired를 생략해도 주입가능
-	public BoardController(BoardService svc) {
-		this.svc = svc;
-	}
-	
+
 	
 //	커뮤니티메인화면
 	@GetMapping("/main")

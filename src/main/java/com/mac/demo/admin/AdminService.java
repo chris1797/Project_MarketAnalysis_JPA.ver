@@ -1,32 +1,31 @@
 package com.mac.demo.admin;
 
-import java.net.URLDecoder;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
+import com.mac.demo.dto.Attach;
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.Comment;
+import com.mac.demo.model.User;
+import com.mac.demo.repository.AdminRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.mac.demo.model.Attach;
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
-import com.mac.demo.model.User;
-
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
-import org.springframework.http.MediaType;
+import java.net.URLDecoder;
+import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class AdminService {
-	
-	@Autowired 
-	private AdminMapper dao;
-	
+
+	private final AdminRepository adminRepository;
+
 	@Autowired
 	ResourceLoader resourceLoader;
 	

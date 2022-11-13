@@ -111,7 +111,7 @@
 		DESC
 	</select>
 	
-	<select id="getCommentList" resultType="com.mac.demo.model.Comment">
+	<select id="getCommentList" resultType="com.mac.demo.dto.Comment">
 		SELECT * 
 		FROM comment_board 
 		WHERE PCODEMAC=#{pcodeMac}
@@ -120,7 +120,7 @@
 		
 	</select>
 	<insert id="commentsave"
-	        parameterType="com.mac.demo.model.Comment" 
+	        parameterType="com.mac.demo.dto.Comment"
 	        useGeneratedKeys="true" 
 	       	keyColumn="NUMMAC" keyProperty="numMac">
 	

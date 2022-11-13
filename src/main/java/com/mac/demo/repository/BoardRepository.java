@@ -1,16 +1,12 @@
 package com.mac.demo.repository;
 
-import java.util.List;
-
+import com.mac.demo.dto.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.mac.demo.model.Board;
-import com.mac.demo.model.Comment;
+import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer>{
@@ -34,17 +30,17 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	
 	int deleteByNummac(int nummac);
 	
-	@Transactional
-	@Modifying
-	@Query("UPDATE Board b SET b.titlemac=?1, b.contentsmac=?2 WHERE b.nummac=?3")
-	int update(String titlemac, String contentsmac, long nummac);
+//	@Transactional
+//	@Modifying
+//	@Query(value = "UPDATE Board b SET b.titlemac=?1, b.contentsmac=?2 WHERE b.nummac=?3", nativeQuery = true)
+//	int update(String titlemac, String contentsmac, long nummac);
 	
 	
-	@Query("SELECT b FROM Board b WHERE b.titlemac LIKE CONCAT('%', :keyword, '%') OR b.contentsmac LIKE CONCAT('%', :keyword, '%') AND b.categorymac = :categorymac")
+	@Query(value = "SELECT b FROM Board b WHERE b.titlemac LIKE CONCAT('%', :keyword, '%') OR b.contentsmac LIKE CONCAT('%', :keyword, '%') AND b.categorymac = :categorymac", nativeQuery = true)
 	List<Board> getListByKeyword(@Param("keyword")String keyword, @Param("categorymac")String categorymac);
 	
 	
-	@Query("SELECT b FROM Board b WHERE b.nicknamemac LIKE CONCAT('%', :nickname, '%') AND b.categorymac = :categorymac")
+	@Query(value = "SELECT b FROM Board b WHERE b.nicknamemac LIKE CONCAT('%', :nickname, '%') AND b.categorymac = :categorymac", nativeQuery = true)
 	List<Board> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
 	
 	/*
