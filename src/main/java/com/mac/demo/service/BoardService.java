@@ -38,7 +38,6 @@ public class BoardService implements BoardServiceImpl {
 	private final ResourceLoader resourceLoader;
 
 
-
 	public List<Board> findByCategory(String categoryMac){
 		return boardRepository.findByCategory(categoryMac);
 	}
