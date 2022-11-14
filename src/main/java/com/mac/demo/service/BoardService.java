@@ -35,6 +35,7 @@ public class BoardService implements BoardServiceImpl {
 	private final BoardRepository boardRepository;
 	private final CommentRepository commentRepository;
 	private final AttachRepository attachRepository;
+
 	private final ResourceLoader resourceLoader;
 
 
