@@ -32,8 +32,11 @@ public class UserController {
 //	아이디 체크후 추가폼
 	@PostMapping("/addForm/{idMac}")
 	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
-		User user = new User();
-		user.setIdmac(idMac);
+
+		User user = User.builder()
+				.user_id(idMac)
+				.build();
+
 		model.addAttribute("user", user);
 		return "thymeleaf/mac/User/addForm";
 	}
@@ -43,9 +46,12 @@ public class UserController {
 	public String addForm3(@PathVariable("idMac")String idMac, 
 			@PathVariable("emailMac")String emailMac, 
 			@RequestParam(name ="check", defaultValue="0")String check, Model model) {
-		User user = new User();
-		user.setIdmac(idMac);
-		user.setEmailmac(emailMac);
+
+		User user = User.builder()
+				.user_id(idMac)
+				.email(emailMac)
+				.build();
+
 		if(Integer.parseInt(check) == 1) {
 			model.addAttribute("user", user);
 			return "thymeleaf/mac/User/addForm";

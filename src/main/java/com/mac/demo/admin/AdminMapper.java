@@ -1,12 +1,12 @@
 package com.mac.demo.admin;
 
-import java.util.List;
-
+import com.mac.demo.dto.Attach;
+import com.mac.demo.dto.Board;
+import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.User;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.mac.demo.dto.Attach;
-import com.mac.demo.dto.Comment;
-import com.mac.demo.model.User;
+import java.util.List;
 
 @Mapper
 public interface AdminMapper {

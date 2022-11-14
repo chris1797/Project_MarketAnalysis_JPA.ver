@@ -22,15 +22,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
 
-	//유저 맵퍼
-	@Autowired
 	private UserMapper dao;
-
-	@Autowired
 	private final UserRepository userRepository;
-
-	@Autowired
-	private JavaMailSender sender;
+	private final JavaMailSender sender;
 	
 	//회원가입
 	public boolean add(User user) {

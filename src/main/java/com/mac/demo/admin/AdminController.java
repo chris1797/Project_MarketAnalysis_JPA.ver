@@ -6,6 +6,9 @@ import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.model.User;
+import com.mac.demo.service.BoardService;
+import com.mac.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -25,11 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class AdminController {
 	
+	private final AdminService adminSvc;
+	private final BoardService boardSvc;
+	private final UserService userSvc;
 
-	@Autowired
-	private AdminService svc;
 	@Autowired
 	ResourceLoader resourceLoader;
 	
@@ -64,29 +69,20 @@ public class AdminController {
 	public String allUser(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
 		
 	     PageHelper.startPage(page, 5);
-			PageInfo<User> pageInfo = new PageInfo<>(svc.findAllUser());
+//			PageInfo<User> pageInfo = new PageInfo<>(svc.findAllUser());
 			
-			 model.addAttribute("pageInfo", pageInfo);
+//			 model.addAttribute("pageInfo", pageInfo);
              return "thymeleaf/mac/admin/allUser";
 	}
 	
 	//모든 자유게시판
 	@GetMapping("/admin/allFreeBoard")
-	public String allFreeBord(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
+	public String allFreeBord(Model model, String categorymac, @RequestParam(name="page", required = false,defaultValue ="1") int page) {
 	     PageHelper.startPage(page, 5);
-			PageInfo<Board> pageInfo = new PageInfo<>(svc.findAllFreeBord());
-			 model.addAttribute("pageInfo", pageInfo);
+
+		 PageInfo<Board> pageInfo = new PageInfo<>(svc.findBoardByCategory(categorymac));
+		 model.addAttribute("pageInfo", pageInfo);
 		return "thymeleaf/mac/admin/allFreeBoard";
-	}
-	
-	//모든 광고게시판
-	@GetMapping("/admin/allAdsBoard")
-	public String allAdsBoard(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
-	     PageHelper.startPage(page, 5);
-			PageInfo<Board> pageInfo = new PageInfo<>(svc.findAllAdsBoard());
-			
-			 model.addAttribute("pageInfo", pageInfo);
-		return "thymeleaf/mac/admin/allAdsBoard";
 	}
 	
 	
@@ -153,10 +149,10 @@ public class AdminController {
 				
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setIdmac(board.getIdmac());
-					_att.setNicknamemac(board.getNicknamemac());
-					_att.setFilenamemac(fname_changed);
-					_att.setFilepathmac(savePath);
+					_att.setUser_id(board.getUser_id());
+					_att.setNickname(board.getNickname());
+					_att.setFilename(fname_changed);
+					_att.setFilepath(savePath);
 				
 				attList.add(_att);
 
@@ -311,7 +307,7 @@ public class AdminController {
 					
 					PageInfo<User> pageInfo = null;
 					if(category.equals("contents")) {
-						pageInfo = new PageInfo<>(svc.getUserListByKeyword(keyword));
+//						pageInfo = new PageInfo<>(svc.getUserListByKeyword(keyword));
 					};
 					
 					model.addAttribute("pageInfo",pageInfo);

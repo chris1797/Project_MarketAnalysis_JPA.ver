@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, String>{
 
-	User findByIdmac(String idmac);
+	User findByUser_id(String id);
 
 //	@Transactional
 //	@Modifying

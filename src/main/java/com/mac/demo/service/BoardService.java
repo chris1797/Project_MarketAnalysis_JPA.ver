@@ -9,6 +9,7 @@ import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.repository.CommentRepository;
 import com.mac.demo.repository.UserRepository;
+import com.mac.demo.serviceImpl.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -28,55 +30,42 @@ import java.util.List;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class BoardService {
+public class BoardService implements BoardServiceImpl {
 
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
 	private final CommentRepository commentRepository;
 	private final AttachRepository attachRepository;
 	
-	ResourceLoader resourceLoader;
-	
-/*
- * 
- * 생성자 주입, @RequiredArgsConstructor로 따로 생성자 안만들어도 됨
- *
- * public BoardService(BoardRepository boardRepository, 
- *						UserRepositroy userRepository,
- *						CommentRepository cmtRepository) {
- *		this.boardRepository = boardRepository;
- *		this.userRepository = userRepository;
- *		this.cmtRepository = cmtRepository;
- * }
- * 
-*/
-	
-//	------------------List-------------------
-	public List<Board> findByCategorymac(String categoryMac){
-		return boardRepository.findByCategorymac(categoryMac);
-	}
-	
+	private final ResourceLoader resourceLoader;
 
-//	------------------id로 유저정보 가져오기-------------------    
-	public User getOne(String idmac) {
-		return userRepository.findByIdmac(idmac);
+
+
+	public List<Board> findByCategory(String categoryMac){
+		return boardRepository.findByCategory(categoryMac);
+	}
+
+
+	public User getOne(String user_id) {
+		return userRepository.findByUser_id(user_id);
 	}
 	
-//	------------------ SAVE -------------------    
-	public Long save(Board board, MultipartFile[] mfiles, HttpServletRequest request){
+//	글 저장
+	public Long save(Board board, MultipartFile[] mfiles, String savePath){
 		Board _board = boardRepository.save(board);
-		List<Attach> attlist = getFileSet(_board, mfiles, request);
+		List<Attach> attlist = getFileSet(_board, mfiles, savePath);
 		if(attlist!=null) attachRepository.saveAll(attlist);
 		
-		return _board.getNummac();
+		return _board.getBoard_num();
 	}
 	
-//	------------------UPDATE-------------------
-	public Boolean update(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
+//	글 수정
+	public Boolean update(Board board, MultipartFile[] mfiles, String savePath) {
 		try {
 //			boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
-			List<Attach> attlist = getFileSet(board, mfiles, request);
+			List<Attach> attlist = getFileSet(board, mfiles, savePath);
 			if(attlist!=null) attachRepository.saveAll(attlist);
 			return true;
 		} catch (Exception e) {
@@ -85,22 +74,22 @@ public class BoardService {
 		}
 	}
 	
-//	------------------ Board Detail -------------------    
+//	글 상세보기
 	public Board getDetail(int nummac, String categorymac) {
 		return boardRepository.findByNummacAndCategorymac(nummac, categorymac);
 	}
 	
-//	------------------ DELETE -------------------    
+//	글 삭제
 	public boolean delete(int nummac) {
 		return 0 > boardRepository.deleteByNummac(nummac);
 	}
 	
 		
-//	-----------------------SEARCH-----------------------	
+//	글검색-제목&글내용
 	public List<Board> getListByKeyword(String keyword, String categorymac){
 		return boardRepository.getListByKeyword(keyword, categorymac);
 	}
-
+//	글검색-닉네임
 	public List<Board> getListByNickName(String nickname, String categorymac) {
 		return boardRepository.getListByNickname(nickname, categorymac);
 	}
@@ -126,7 +115,7 @@ public class BoardService {
 //	File Id로 파일이름 가져오기
 	public String getFname(int num) {
 		Attach attach = attachRepository.findById(num).get();
-		String filename = attach.getFilenamemac();
+		String filename = attach.getFilename();
 		return filename;
 	}
 	
@@ -142,32 +131,27 @@ public class BoardService {
 	}
 	
 //	파일 리스트 구성
-	public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		String savePath = context.getRealPath("/WEB-INF/files");
+	public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, String savePath) {
 		String fname_changed = null;
-		
-		// 파일 VO List
 		List<Attach> attList = new ArrayList<>();
 		
-		// 업로드
 		try {
 			for (int i = 0; i < mfiles.length; i++) {
-				// mfiles 파일명 수정
 				String[] token = mfiles[i].getOriginalFilename().split("\\.");
 				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
 				
-					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
-					_att.setPcodemac(board.getNummac());
-					_att.setIdmac(board.getIdmac());
-					_att.setNicknamemac(getOne(board.getIdmac()).getNicknamemac());
-					_att.setFilenamemac(fname_changed);
-					_att.setFilepathmac(savePath);
+					_att.setPcode(board.getBoard_num());
+					_att.setUser_id(board.getUser_id());
+					_att.setNickname(getOne(board.getUser_id()).getNickname());
+					_att.setFilename(fname_changed);
+					_att.setFilepath(savePath);
 				
 				attList.add(_att);
-
-//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
+				/**
+				 * 메모리에 있는 파일을 저장경로에 옮김, 로컬 경로에 있는 파일만 선택 가능
+				 * 추후 AWS S3로 전환
+				 */
 				mfiles[i].transferTo(
 						new File(savePath + "/" + fname_changed));
 			}
@@ -179,31 +163,19 @@ public class BoardService {
 	}
 	
 //	파일 다운로드
-	public ResponseEntity<Resource> download (HttpServletRequest request, int FileNum) throws Exception{
-	      String filename = getFname(FileNum);
-	      String originFilename = URLDecoder.decode(filename, "UTF-8");
-	      Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
-	      System.out.println("파일명:" + resource.getFilename());
-	      String contentType = null;
-	      try {
-	         contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-	      } catch (IOException e) {
-	         e.printStackTrace();
-	      }
+	public ResponseEntity<Resource> download (String contentType, int FileNum, Resource resource) throws Exception{
 
-	      if (contentType == null) {
-	         contentType = "application/octet-stream";
-	      }
-	      
+	      if (contentType == null) contentType = "application/octet-stream";
+
 	      ResponseEntity<Resource> file =  ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(resource.getFilename().getBytes("UTF-8"), "ISO-8859-1") + "\"")
 	                  
 	            // .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 	            // HttpHeaders.CONTENT_DISPOSITION는 http header를 조작하는 것, 화면에 띄우지 않고 첨부화면으로
-	            // 넘어가게끔한다ㄴ
+	            // 넘어가게끔한다
 	            // filename=\"" + resource.getFilename() + "\"" 는 http프로토콜의 문자열을 고대로 쓴 것
 	            .body(resource);
-	      
+
 	      return file;
 	   }
 	

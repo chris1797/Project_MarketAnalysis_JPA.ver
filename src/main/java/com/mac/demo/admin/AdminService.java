@@ -3,8 +3,10 @@ package com.mac.demo.admin;
 import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
-import com.mac.demo.model.User;
+import com.mac.demo.dto.User;
 import com.mac.demo.repository.AdminRepository;
+import com.mac.demo.repository.BoardRepository;
+import com.mac.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -25,6 +27,8 @@ import java.util.List;
 public class AdminService {
 
 	private final AdminRepository adminRepository;
+	private final BoardRepository boardRepository;
+	private final UserRepository userRepository;
 
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -33,22 +37,22 @@ public class AdminService {
 
     //모든 유저
 	public List<User> findAllUser() {
-		return dao.findAllUser();	
-	}
-	
-	//모든 자유게시물
-	public List<Board> findAllFreeBord() {
-		return dao.findAllFreeBoard();
+		return adminRepository.findAll();
 	}
 
-	//모든 광고게시물
-	public List<Board>findAllAdsBoard() {
-		return dao.findAllAdsBoard();
+	/**
+	 * 카테고리에 해당하는 글목록
+	 * @param category
+	 * @return
+	 */
+	public List<Board> findBoardByCategory(String category) {
+		return boardRepository.findByCategory(category);
 	}
+
 
 	//자유게시물 삭제
-	public boolean boardDeleted(int numMac) {
-		return dao.boardDeleted(numMac);
+	public boolean boardDeleted(int board_num) {
+		return boardRepository.deleteByboard_num(board_num) > 0;
 	}
 
 	

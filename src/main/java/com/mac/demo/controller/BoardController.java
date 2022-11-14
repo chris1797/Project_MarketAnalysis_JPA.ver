@@ -8,15 +8,18 @@ import com.mac.demo.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +30,8 @@ import java.util.Map;
 public class BoardController {
 
 	private final BoardService svc;
+
+	ResourceLoader resourceLoader;
 	
 //	생성자가 1개일 경우, @Autowired를 생략해도 주입가능
 
@@ -34,8 +39,7 @@ public class BoardController {
 //	커뮤니티메인화면
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
-		
-//		model.addAttribute((String)session.getAttribute("idMac"));
+		model.addAttribute((String)session.getAttribute("idMac"));
 		return "thymeleaf/mac/board/board_main";
 	}
 	
@@ -45,7 +49,6 @@ public class BoardController {
 	public String input(Model model,
 						HttpSession session,
 						@PathVariable("categoryMac") String categorymac) {
-
 		// login check
 		String id = null;
 		String idMac = null;
@@ -83,9 +86,12 @@ public class BoardController {
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
 		log.trace(board.toString());
+
+		ServletContext context = request.getServletContext();
+		String savePath = context.getRealPath("/WEB-INF/files");
 		
 		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
-		return String.format("{\"savednum\":\"%d\"}", svc.save(board, mfiles, request));
+		return String.format("{\"savednum\":\"%d\"}", svc.save(board, mfiles, savePath));
 	}
 	
 //	리스트
@@ -253,7 +259,15 @@ public class BoardController {
 	@GetMapping("/file/download/{filenum}")
 	@ResponseBody
 	public ResponseEntity<Resource> download(HttpServletRequest request,
-											 @PathVariable(name="filenum", required = false) int FileNum) throws Exception {
-		return svc.download(request, FileNum);
+											 @PathVariable(name="filenum", required = false) int fileNum) throws Exception {
+		/**
+		 * 파일명 디코딩 작업
+		 */
+		String fileName = svc.getFname(fileNum);
+		String originFilename = URLDecoder.decode(fileName, "UTF-8");
+
+		Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
+		String contextType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		return svc.download(contextType, fileNum, resource);
 	}
 }

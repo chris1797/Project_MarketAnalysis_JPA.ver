@@ -22,13 +22,13 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	 *
 	*/
 	
-	List<Board> findByCategorymac(String categorymac); //User테이블을 대상을 이름을 검색
+	List<Board> findByCategory(String categorymac); //User테이블을 대상을 이름을 검색
 	List<Board> findAllByTitlemacAndCategorymac(String titlemac, String categorymac);
 	
 	Board findByNummacAndCategorymac(int nummac, String categorymac);
 	Board findByNummac(int nummac);
 	
-	int deleteByNummac(int nummac);
+	int deleteByboard_num(int nummac);
 	
 //	@Transactional
 //	@Modifying

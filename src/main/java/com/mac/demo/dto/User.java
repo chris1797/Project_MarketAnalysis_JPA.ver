@@ -42,15 +42,21 @@ public class User {
     private String city;
     private String town;
     private String village;
-    private int manager_id;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean manager;
     private String user_name;
 
     @Temporal(TemporalType.DATE)
     private java.util.Date signup_date; // 회원가입일
 
+
     @Builder
-    public User(String user_pw, String email, Date birth, String phonenum,
-                String city, String town, String village) {
+    public User(String user_id, String nickname, String user_pw, String email, Date birth, String phonenum,
+                     String city, String town, String village) {
+        this.user_id = user_id;
+        this.nickname = nickname;
+        this.email = email;
         this.user_pw = user_pw;
         this.birth = birth;
         this.phonenum = phonenum;
@@ -69,5 +75,4 @@ public class User {
                 .village(village)
                 .build();
     }
-
 }
