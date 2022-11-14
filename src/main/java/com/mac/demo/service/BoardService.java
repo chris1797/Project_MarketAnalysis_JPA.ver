@@ -1,10 +1,10 @@
 package com.mac.demo.service;
 
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Board;
-import com.mac.demo.dto.User;
 import com.mac.demo.dto.Attach;
+import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.User;
 import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.repository.CommentRepository;
@@ -20,11 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
-import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +48,10 @@ public class BoardService implements BoardServiceImpl {
 	public User getOne(String user_id) {
 		return userRepository.findByUser_id(user_id);
 	}
-	
-//	글 저장
+
+	/*
+		게시글 저장
+	 */
 	public Long save(Board board, MultipartFile[] mfiles, String savePath){
 		Board _board = boardRepository.save(board);
 		List<Attach> attlist = getFileSet(_board, mfiles, savePath);
@@ -61,10 +60,12 @@ public class BoardService implements BoardServiceImpl {
 		return _board.getBoard_num();
 	}
 	
-//	글 수정
+	/*
+		게시글 수정
+	 */
 	public Boolean update(Board board, MultipartFile[] mfiles, String savePath) {
 		try {
-//			boardRepository.update(board.getTitlemac(), board.getContentsmac(), board.getNummac());
+			boardRepository.update(board.getTitle(), board.getContents(), board.getBoard_num());
 			List<Attach> attlist = getFileSet(board, mfiles, savePath);
 			if(attlist!=null) attachRepository.saveAll(attlist);
 			return true;
@@ -74,42 +75,44 @@ public class BoardService implements BoardServiceImpl {
 		}
 	}
 	
-//	글 상세보기
-	public Board getDetail(int nummac, String categorymac) {
-		return boardRepository.findByNummacAndCategorymac(nummac, categorymac);
+	/*
+		게시글 상세보기
+	 */
+	public Board getDetail(int board_num, String category) {
+		return boardRepository.findByNummacAndCategorymac(board_num, category);
 	}
 	
 //	글 삭제
-	public boolean delete(int nummac) {
-		return 0 > boardRepository.deleteByNummac(nummac);
+	public boolean delete(int board_num) {
+		return 0 > boardRepository.deleteByboard_num(board_num);
 	}
 	
 		
 //	글검색-제목&글내용
-	public List<Board> getListByKeyword(String keyword, String categorymac){
+	public List<Board> getListByKeyword(String keyword, String categorymac) {
 		return boardRepository.getListByKeyword(keyword, categorymac);
 	}
 //	글검색-닉네임
-	public List<Board> getListByNickName(String nickname, String categorymac) {
-		return boardRepository.getListByNickname(nickname, categorymac);
+	public List<Board> getListByNickName(String nickname, String category) {
+		return boardRepository.getListByNickname(nickname, category);
 	}
 
 //	----------------------- Comment -----------------------
-	public List<Comment> getCommentList(int boardnum) { // pcode
-		return commentRepository.findByPcodemac(boardnum);		
+	public List<Comment> getCommentList(int board_num) { // pcode
+		return commentRepository.findByPcodemac(board_num);
 	}
 	
 	public boolean commentsave(Comment comment) {
 		return commentRepository.save(comment) != null;	
 	}
 	
-	public boolean commentdelete(int numMac) {
-		return 0 < commentRepository.deleteByNummac(numMac);
+	public boolean commentdelete(int comment_num) {
+		return 0 < commentRepository.deleteByNummac(comment_num);
 	}
 	
 //	------------------------File------------------------
-	public List<Attach> getFileList(int pcodeMac){
-		return attachRepository.findAllByPcodemac(pcodeMac);
+	public List<Attach> getFileList(int pcode){
+		return attachRepository.findAllByPcodemac(pcode);
 	}
 
 //	File Id로 파일이름 가져오기
@@ -163,7 +166,7 @@ public class BoardService implements BoardServiceImpl {
 	}
 	
 //	파일 다운로드
-	public ResponseEntity<Resource> download (String contentType, int FileNum, Resource resource) throws Exception{
+	public ResponseEntity<Resource> download (String contentType, int FileNum, Resource resource) throws UnsupportedEncodingException {
 
 	      if (contentType == null) contentType = "application/octet-stream";
 
@@ -180,9 +183,8 @@ public class BoardService implements BoardServiceImpl {
 	   }
 	
 	
-//	------------------------PAGE------------------------
 	public PageInfo<Board> getPageInfo(String categoryMac) {
-		PageInfo<Board> pageInfo = new PageInfo<>(findByCategorymac(categoryMac));;
+		PageInfo<Board> pageInfo = new PageInfo<>(findByCategory(categoryMac));;
 		return pageInfo;
 	}
 	

@@ -2,10 +2,12 @@ package com.mac.demo.repository;
 
 import com.mac.demo.dto.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -30,10 +32,10 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	
 	int deleteByboard_num(int nummac);
 	
-//	@Transactional
-//	@Modifying
-//	@Query(value = "UPDATE Board b SET b.titlemac=?1, b.contentsmac=?2 WHERE b.nummac=?3", nativeQuery = true)
-//	int update(String titlemac, String contentsmac, long nummac);
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE Board b SET b.title=?1, b.contents=?2 WHERE b.board_num=?3", nativeQuery = true)
+	int update(String title, String contents, long board_num);
 	
 	
 	@Query(value = "SELECT b FROM Board b WHERE b.titlemac LIKE CONCAT('%', :keyword, '%') OR b.contentsmac LIKE CONCAT('%', :keyword, '%') AND b.categorymac = :categorymac", nativeQuery = true)
