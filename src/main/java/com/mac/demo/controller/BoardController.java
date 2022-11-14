@@ -239,7 +239,6 @@ public class BoardController {
 	@ResponseBody
 	public Map<String, Object> comment_delte(@PathVariable int numMac) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		System.out.println("삭제할 댓글 No. : " + numMac);
 		map.put("deleted", svc.commentdelete(numMac));
 		return map;
