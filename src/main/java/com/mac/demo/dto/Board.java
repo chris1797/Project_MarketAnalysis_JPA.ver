@@ -39,7 +39,7 @@ public class Board {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long board_num; // 번호
+	private Long board_num; // 번호
 	
 	private String user_id; // 유저 아이디
 	private String nickname;

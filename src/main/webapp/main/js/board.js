@@ -93,7 +93,7 @@ return false;
 			location.href='/board/'+categoryMac+'/detail/'+numMac;
 		} else {
 			$.ajax({
-				url:'/board/comment',
+				url:'/comment',
 				method:'post',
 				cache:false,
 				data:$('#comment_form').serialize(),
@@ -115,7 +115,7 @@ return false;
 		function commentdelete(num){
 		if(confirm("해당 댓글을 삭제하시겠습니까?")){
 			$.ajax({
-				url:'/board/comment/delete/'+num,
+				url:'/comment/delete/'+num,
 				method:'get',
 				cache:false,
 				dataType:'json',

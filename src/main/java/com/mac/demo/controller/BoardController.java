@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.service.BoardService;
+import com.mac.demo.service.CommentService;
+import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -29,7 +31,9 @@ import java.util.Map;
 @Controller
 public class BoardController {
 
-	private final BoardService svc;
+	private final BoardService boardSvc;
+	private final CommentService commentSvc;
+	private final UserService userSvc;
 
 	ResourceLoader resourceLoader;
 	
@@ -65,8 +69,8 @@ public class BoardController {
 
 			//닉네임 가져오기
 			Board board = new Board();
-			board.setNicknamemac(svc.getOne(idMac).getNicknamemac());
-			board.setCategorymac(categorymac);
+			board.setNickname(userSvc.getOne(idMac).getNickname());
+			board.setCategory(categorymac);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
@@ -91,7 +95,7 @@ public class BoardController {
 		String savePath = context.getRealPath("/WEB-INF/files");
 		
 		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
-		return String.format("{\"savednum\":\"%d\"}", svc.save(board, mfiles, savePath));
+		return String.format("{\"savednum\":\"%d\"}", boardSvc.save(board, mfiles, savePath));
 	}
 	
 //	리스트
@@ -106,7 +110,7 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		model.addAttribute("page", page);
-		model.addAttribute("pageInfo", svc.getPageInfo(categoryMac));
+		model.addAttribute("pageInfo", boardSvc.getPageInfo(categoryMac));
 		try {
 			model.addAttribute("idMac",(String)session.getAttribute("idMac"));
 		} catch (Exception e) {
@@ -119,40 +123,36 @@ public class BoardController {
 	
 //  게시글 보기
 	@GetMapping("/{categoryMac}/detail/{num}")
-	public String getDetail(@PathVariable("num") int boardnum,
+	public String getDetail(@PathVariable("num") int board_num,
 							@PathVariable("categoryMac") String categoryMac,
 							@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 							Model model,
 							HttpSession session) {
 		
-		//test용
 		Comment comment = new Comment();
 		if(session.getAttribute("idMac") != null) {
-			comment.setIdmac((String) session.getAttribute("idMac"));
-			comment.setNicknamemac(svc.getOne((String)session.getAttribute("idMac")).getNicknamemac());	
-			comment.setPcodemac(boardnum);
+			comment.setUser_id((String) session.getAttribute("idMac"));
+			comment.setNickname(userSvc.getOne((String)session.getAttribute("idMac")).getNickname());
+			comment.setPcode(board_num);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
 		
 //		게시판 분기
-		model.addAttribute("board", svc.getDetail(boardnum, categoryMac));
+		model.addAttribute("board", boardSvc.getDetail(board_num, categoryMac));
 		
 //		Pagenation
 		PageHelper.startPage(page, 7);
-		model.addAttribute("pageInfo", new PageInfo<>(svc.getCommentList(boardnum)));
+		model.addAttribute("pageInfo", new PageInfo<>(commentSvc.getCommentList(board_num)));
 		model.addAttribute("page", page);
 		
 //		Comment
 		model.addAttribute("comment", comment);
 		
 //		File
-		model.addAttribute("filelist", svc.getFileList(boardnum));
-		model.addAttribute("fileindex", svc.getFileList(boardnum).size());
-		
-		
-		// 댓글 삭제를 위한 idMac체크
+		model.addAttribute("filelist", boardSvc.getFileList(board_num));
+		model.addAttribute("fileindex", boardSvc.getFileList(board_num).size());
 		
 		return String.format("thymeleaf/mac/board/%s_board_detail", categoryMac);
 	}
@@ -163,7 +163,7 @@ public class BoardController {
 	@ResponseBody
 	public String delete(@PathVariable("num") int num,
 									  @PathVariable("categoryMac") String categoryMac) {
-		return String.format("{\"deleted\":\"%b\"}", svc.delete(num));
+		return String.format("{\"deleted\":\"%b\"}", boardSvc.delete(num));
 	}
 	
 //  게시글 업데이트폼
@@ -173,9 +173,9 @@ public class BoardController {
 						 Model model,
 						 @PathVariable("categoryMac") String categoryMac) {
 		model.addAttribute("idMac", (String)session.getAttribute("idMac"));
-		model.addAttribute("board", svc.getDetail(num, categoryMac));
-		model.addAttribute("filelist", svc.getFileList(num));
-		model.addAttribute("fileindex", svc.getFileList(num).size());
+		model.addAttribute("board", boardSvc.getDetail(num, categoryMac));
+		model.addAttribute("filelist", boardSvc.getFileList(num));
+		model.addAttribute("fileindex", boardSvc.getFileList(num).size());
 		
 		return String.format("thymeleaf/mac/board/%s_board_edit", categoryMac);
 	}
@@ -189,7 +189,10 @@ public class BoardController {
 						HttpServletRequest request) {
 		log.trace(newBoard.toString());
 
-		return String.format("{\"updated\":\"%b\"}", svc.update(newBoard, mfiles, request));
+		ServletContext context = request.getServletContext();
+		String savePath = context.getRealPath("/WEB-INF/files");
+
+		return String.format("{\"updated\":\"%b\"}", boardSvc.update(newBoard, mfiles, savePath));
 	}
 	
 	
@@ -206,9 +209,9 @@ public class BoardController {
 		
 //		검색옵션(글제목+내용 or 닉네임)에 따른 List 분류
 		if (category.equals("contents")) {
-			pageInfo = new PageInfo<>(svc.getListByKeyword(keyword, categoryMac));
+			pageInfo = new PageInfo<>(boardSvc.getListByKeyword(keyword, categoryMac));
 		} else {
-			pageInfo = new PageInfo<>(svc.getListByNickName(keyword, categoryMac));
+			pageInfo = new PageInfo<>(boardSvc.getListByNickName(keyword, categoryMac));
 		}
 
 		model.addAttribute("pageInfo", pageInfo);
@@ -217,44 +220,24 @@ public class BoardController {
 		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
 	}
 	
-//======================================== 댓글 ========================================
-	@PostMapping("/comment")
-	@ResponseBody
-	public Map<String, Object> comment(Comment comment, HttpSession session) {
-		log.trace(comment.toString());
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
-			map.put("msg", "로그인 후 사용 가능합니다.");
-		} else {
-			map.put("commented", svc.commentsave(comment));
-		}
-		
-		return map;
-	}
-	
-	
-	@DeleteMapping("/comment/delete/{numMac}")
-	@ResponseBody
-	public Map<String, Object> comment_delte(@PathVariable int numMac) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println("삭제할 댓글 No. : " + numMac);
-		map.put("deleted", svc.commentdelete(numMac));
-		return map;
-	}
 //======================================== 파일 ========================================
-	
+
+	/**
+	 *	파일 삭제
+	 */
 	@DeleteMapping("/file/delete/{numMac}")
 	@ResponseBody
 	public Map<String, Object> file_delte(@PathVariable("numMac") int file_Id, 
 										  HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("삭제할 파일 No. : " + file_Id);
-		map.put("filedeleted", svc.filedelete(file_Id));
+		map.put("filedeleted", boardSvc.filedelete(file_Id));
 		return map;
 	}
-	
+
+	/**
+	 *	파일 다운로드
+	 */
 	@GetMapping("/file/download/{filenum}")
 	@ResponseBody
 	public ResponseEntity<Resource> download(HttpServletRequest request,
@@ -262,11 +245,11 @@ public class BoardController {
 		/**
 		 * 파일명 디코딩 작업
 		 */
-		String fileName = svc.getFname(fileNum);
+		String fileName = boardSvc.getFname(fileNum);
 		String originFilename = URLDecoder.decode(fileName, "UTF-8");
 
 		Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
 		String contextType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-		return svc.download(contextType, fileNum, resource);
+		return boardSvc.download(contextType, fileNum, resource);
 	}
 }

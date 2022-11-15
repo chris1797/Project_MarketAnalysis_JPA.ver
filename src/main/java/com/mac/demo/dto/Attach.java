@@ -20,7 +20,6 @@ public class Attach {
 	private long att_num;  // index
 	private long pcode; // 부모코드(게시판 num)
 	private String user_id; // 유저 ID
-	private String nickname; // 유저 닉네임
 	private String filename; // 파일 이름
 	
 	@Column(length=500)

@@ -31,25 +31,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService implements BoardServiceImpl {
 
-	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
-	private final CommentRepository commentRepository;
 	private final AttachRepository attachRepository;
 
 	private final ResourceLoader resourceLoader;
 
 
-	public List<Board> findByCategory(String categoryMac){
+	public List<Board> findBoardByCategory(String categoryMac){
 		return boardRepository.findByCategory(categoryMac);
 	}
 
-
-	public User getOne(String user_id) {
-		return userRepository.findByUser_id(user_id);
-	}
-
-	/*
-		게시글 저장
+	/**
+	 *	게시글 저장
 	 */
 	public Long save(Board board, MultipartFile[] mfiles, String savePath){
 		Board _board = boardRepository.save(board);
@@ -59,8 +52,8 @@ public class BoardService implements BoardServiceImpl {
 		return _board.getBoard_num();
 	}
 	
-	/*
-		게시글 수정
+	/**
+	 *	게시글 수정
 	 */
 	public Boolean update(Board board, MultipartFile[] mfiles, String savePath) {
 		try {
@@ -74,41 +67,35 @@ public class BoardService implements BoardServiceImpl {
 		}
 	}
 	
-	/*
-		게시글 상세보기
+	/**
+	 *	게시글 상세보기
 	 */
-	public Board getDetail(int board_num, String category) {
+	public Board getDetail(Long board_num, String category) {
 		return boardRepository.findByNummacAndCategorymac(board_num, category);
 	}
-	
-//	글 삭제
-	public boolean delete(int board_num) {
+
+	/**
+	 * 게시글 삭제
+	 */
+	public boolean delete(Long board_num) {
 		return 0 > boardRepository.deleteByboard_num(board_num);
 	}
 	
-		
-//	글검색-제목&글내용
+	/**
+	 *	글검색 - 제목&글내용
+	 */
 	public List<Board> getListByKeyword(String keyword, String categorymac) {
 		return boardRepository.getListByKeyword(keyword, categorymac);
 	}
-//	글검색-닉네임
+
+	/**
+	 *	글검색 - 닉네임
+	 */
 	public List<Board> getListByNickName(String nickname, String category) {
 		return boardRepository.getListByNickname(nickname, category);
 	}
 
-//	----------------------- Comment -----------------------
-	public List<Comment> getCommentList(int board_num) { // pcode
-		return commentRepository.findByPcodemac(board_num);
-	}
-	
-	public boolean commentsave(Comment comment) {
-		return commentRepository.save(comment) != null;	
-	}
-	
-	public boolean commentdelete(int comment_num) {
-		return 0 < commentRepository.deleteByNummac(comment_num);
-	}
-	
+
 //	------------------------File------------------------
 	public List<Attach> getFileList(int pcode){
 		return attachRepository.findAllByPcodemac(pcode);
@@ -145,7 +132,6 @@ public class BoardService implements BoardServiceImpl {
 					Attach _att = new Attach();
 					_att.setPcode(board.getBoard_num());
 					_att.setUser_id(board.getUser_id());
-					_att.setNickname(getOne(board.getUser_id()).getNickname());
 					_att.setFilename(fname_changed);
 					_att.setFilepath(savePath);
 				
@@ -183,7 +169,7 @@ public class BoardService implements BoardServiceImpl {
 	
 	
 	public PageInfo<Board> getPageInfo(String categoryMac) {
-		PageInfo<Board> pageInfo = new PageInfo<>(findByCategory(categoryMac));;
+		PageInfo<Board> pageInfo = new PageInfo<>(findBoardByCategory(categoryMac));
 		return pageInfo;
 	}
 	

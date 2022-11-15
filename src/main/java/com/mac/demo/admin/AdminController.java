@@ -5,7 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
-import com.mac.demo.model.User;
+import com.mac.demo.dto.User;
+import com.mac.demo.service.AttachService;
 import com.mac.demo.service.BoardService;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class AdminController {
 	
 	private final AdminService adminSvc;
 	private final BoardService boardSvc;
+	private final AttachService attachSvc;
 	private final UserService userSvc;
 
 	@Autowired
@@ -48,17 +50,13 @@ public class AdminController {
      //관리자 로그인
 		@GetMapping("/admin/loginForm")
 		public String adminLogin() {
-		
-			
 			return "thymeleaf/mac/admin/adminLoginForm";
 		}
 	
 	//에러
 	@GetMapping("/err")
 	public String adminLogin(@RequestParam(value="error",required=false) String err,Model model) {
-		
 		model.addAttribute("msg", err);
-		
 		return "thymeleaf/mac/admin/adminLoginForm";
 	}
 	
@@ -66,44 +64,43 @@ public class AdminController {
 	
     //모든 유저 정보
 	@GetMapping("/admin/allUser")
-	public String allUser(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
-		
-	     PageHelper.startPage(page, 5);
-//			PageInfo<User> pageInfo = new PageInfo<>(svc.findAllUser());
-			
-//			 model.addAttribute("pageInfo", pageInfo);
-             return "thymeleaf/mac/admin/allUser";
-	}
-	
-	//모든 자유게시판
-	@GetMapping("/admin/allFreeBoard")
-	public String allFreeBord(Model model, String categorymac, @RequestParam(name="page", required = false,defaultValue ="1") int page) {
-	     PageHelper.startPage(page, 5);
+	public String allUser(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		PageHelper.startPage(page, 5);
+		PageInfo<User> pageInfo = userSvc.getList();
 
-		 PageInfo<Board> pageInfo = new PageInfo<>(svc.findBoardByCategory(categorymac));
-		 model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("pageInfo", pageInfo);
+		return "thymeleaf/mac/admin/allUser";
+	}
+
+	/**
+	 * 자유게시판 리스트
+	 */
+	@GetMapping("/admin/allFreeBoard")
+	public String allFreeBord(Model model, String categorymac, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		PageHelper.startPage(page, 5);
+		PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(categorymac));
+		model.addAttribute("pageInfo", pageInfo);
 		return "thymeleaf/mac/admin/allFreeBoard";
 	}
 	
 	
-	//유저 지우기
-	@GetMapping("/admin/userDeleted/{numMac}")
+	//유저 정보 삭제
+	@DeleteMapping("/admin/userDeleted/{numMac}")
 	@ResponseBody
-	public Map<String,Object> UserDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
+	public Map<String,Object> UserDeleted(@PathVariable("numMac")Long user_num, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		boolean result = svc.userDeleted(numMac);
+		boolean result = userSvc.delete(user_num);
 		map.put("result", result);
 		return map;
 	}
 	
 //	자유게시물 지우기
-	@GetMapping("/admin/freeBoardDeleted/{numMac}")
+	@DeleteMapping("/admin/freeBoardDeleted/{numMac}")
 	@ResponseBody
 	public Map<String,Object> freeBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println("1111");
-		
-		boolean result = svc.boardDeleted(numMac);
+
+		boolean result = boardSvc.delete(numMac);
 		map.put("result", result);
 		return map;
 	}
@@ -113,7 +110,7 @@ public class AdminController {
 	public Map<String,Object> adsBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		
-		boolean result = svc.boardDeleted(numMac);
+		boolean result = boardSvc.delete(numMac);
 		map.put("result", result);
 		return map;
 	}
@@ -131,10 +128,10 @@ public class AdminController {
 	@ResponseBody
 	public Map<String, Object> save(Board board, @RequestParam("files") MultipartFile[] mfiles, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("saved",svc.save(board)>0);
-		
+
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
+		map.put("saved",boardSvc.save(board, mfiles, savePath)>0);
 		String fname_changed = null;
 		
 		// 파일 VO List
@@ -150,7 +147,6 @@ public class AdminController {
 					// Attach 객체 만들어서 가공
 					Attach _att = new Attach();
 					_att.setUser_id(board.getUser_id());
-					_att.setNickname(board.getNickname());
 					_att.setFilename(fname_changed);
 					_att.setFilepath(savePath);
 				
@@ -174,7 +170,7 @@ public class AdminController {
 	@GetMapping("/admin/allNoticeBoard")
 	public String allNoticeBoard(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
 	     PageHelper.startPage(page, 5);
-			PageInfo<Board> pageInfo = new PageInfo<>(svc.findAllNoticeBoard());
+			PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory("notice"));
 		
 			 model.addAttribute("pageInfo", pageInfo);
 		return "thymeleaf/mac/admin/allNoticeBoard";
@@ -183,10 +179,10 @@ public class AdminController {
 //	공지사항 삭제
 	@GetMapping("/admin/noticeBoardDeleted/{numMac}")
 	@ResponseBody
-	public Map<String,Object> noticeBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
+	public Map<String,Object> noticeBoardDeleted(@PathVariable("numMac")Long numMac, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		
-		boolean result = svc.noticeBordDeleted(numMac);
+		boolean result = boardSvc.delete(numMac);
 		map.put("result", result);
 		return map;
 	}

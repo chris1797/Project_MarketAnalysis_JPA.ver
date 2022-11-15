@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Integer>{
+public interface BoardRepository extends JpaRepository<Board, Long>{
 
 	/*
 	 * Generic type은 관리하는 Entity와 그 Entity의 primary type (idmac)
@@ -27,10 +27,10 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 	List<Board> findByCategory(String categorymac); //User테이블을 대상을 이름을 검색
 	List<Board> findAllByTitlemacAndCategorymac(String titlemac, String categorymac);
 	
-	Board findByNummacAndCategorymac(int nummac, String categorymac);
+	Board findByNummacAndCategorymac(Long nummac, String categorymac);
 	Board findByNummac(int nummac);
 	
-	int deleteByboard_num(int nummac);
+	int deleteByboard_num(Long nummac);
 	
 	@Transactional
 	@Modifying

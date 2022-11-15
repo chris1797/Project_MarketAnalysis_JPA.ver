@@ -1,11 +1,11 @@
 package com.mac.demo.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
 import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,20 +32,20 @@ public class UserService {
 	}
 
 	//회원리스트
-	public List<User> getList() {
-		return userRepository.findAll();
+	public PageInfo<User> getList() {
+		PageInfo<User> pageInfo = new PageInfo<>(userRepository.findAll());
+		return pageInfo;
 	}
 
 	//회원정보
 	public User getOne(String idmac) {
-		User user = userRepository.findByIdmac(idmac);
-		return user;
+		return userRepository.findByUser_id(idmac);
 	}
 
 	//회원삭제
-	public boolean deleted(String idMac) {
+	public boolean delete(Long user_num) {
 		try {
-			userRepository.deleteById(idMac);
+			userRepository.deleteById(user_num);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,13 +107,6 @@ public class UserService {
 	}
 
 	public List<Board> findWrite(String idMac) {
-		System.out.println("111");
 		return dao.findWrite(idMac);
 	}
-	
-
-	
-	
-	
-	
 }
