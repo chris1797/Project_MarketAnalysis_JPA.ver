@@ -57,8 +57,6 @@ public class BoardController {
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
 			return "thymeleaf/mac/login/loginForm";
 		} else {
-
-			//닉네임 가져오기
 			String nickname = userSvc.getOne(user_id).getNickname();
 			Board board = boardSvc.getBoard(user_id, nickname, category);
 			model.addAttribute("board", board);
@@ -66,10 +64,9 @@ public class BoardController {
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
 			model.addAttribute("idMac", user_id);
 		}
-		
 		return String.format("thymeleaf/mac/board/%s_board_input", category);
 	}
-	
+
 
 //	게시글 저장
 	@PostMapping("/{categoryMac}/save")
