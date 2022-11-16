@@ -25,7 +25,6 @@ import java.util.Date;
 @Entity
 @Builder
 @Getter
-@Setter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor

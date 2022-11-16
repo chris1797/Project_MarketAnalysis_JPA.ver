@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface CommentServiceImpl {
 
-    List<Comment> getCommentList(int board_num);
+    List<Comment> getCommentList(Long board_num);
     boolean commentsave(Comment comment);
-    boolean commentdelete(int comment_num);
+    boolean commentdelete(Long comment_num);
 
 }

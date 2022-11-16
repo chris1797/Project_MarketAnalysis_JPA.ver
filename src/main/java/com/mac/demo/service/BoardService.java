@@ -37,6 +37,14 @@ public class BoardService implements BoardServiceImpl {
 	private final ResourceLoader resourceLoader;
 
 
+	public Board getBoard(String user_id, String nickname, String category) {
+		Board board = Board.builder()
+				.user_id(user_id)
+				.nickname(nickname)
+				.category(category).build();
+		return board;
+	}
+
 	public List<Board> findBoardByCategory(String categoryMac){
 		return boardRepository.findByCategory(categoryMac);
 	}
@@ -97,19 +105,19 @@ public class BoardService implements BoardServiceImpl {
 
 
 //	------------------------File------------------------
-	public List<Attach> getFileList(int pcode){
+	public List<Attach> getFileList(Long pcode){
 		return attachRepository.findAllByPcodemac(pcode);
 	}
 
 //	File Id로 파일이름 가져오기
-	public String getFname(int num) {
-		Attach attach = attachRepository.findById(num).get();
+	public String getFname(Long file_id) {
+		Attach attach = attachRepository.findById(file_id).get();
 		String filename = attach.getFilename();
 		return filename;
 	}
 	
 //	파일 지우기 Ajax
-	public boolean filedelete(int file_Id) {
+	public boolean filedelete(Long file_Id) {
 		try {
 			attachRepository.deleteById(file_Id);
 			return true;
@@ -149,9 +157,9 @@ public class BoardService implements BoardServiceImpl {
 		
 		return attList;
 	}
-	
+
 //	파일 다운로드
-	public ResponseEntity<Resource> download (String contentType, int FileNum, Resource resource) throws UnsupportedEncodingException {
+	public ResponseEntity<Resource> download (String contentType, Resource resource) throws UnsupportedEncodingException {
 
 	      if (contentType == null) contentType = "application/octet-stream";
 

@@ -37,9 +37,6 @@ public class BoardController {
 
 	ResourceLoader resourceLoader;
 	
-//	생성자가 1개일 경우, @Autowired를 생략해도 주입가능
-
-	
 //	커뮤니티메인화면
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
@@ -52,32 +49,25 @@ public class BoardController {
 	@GetMapping("/{categoryMac}/input")
 	public String input(Model model,
 						HttpSession session,
-						@PathVariable("categoryMac") String categorymac) {
+						@PathVariable("categoryMac") String category) {
 		// login check
-		String id = null;
-		String idMac = null;
-		try {
-			idMac = (String)session.getAttribute("idMac");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if(idMac == null){
+		String user_id = (String)session.getAttribute("idMac");
+
+		if(user_id == null){
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
-			model.addAttribute("board", new Board());
 			return "thymeleaf/mac/login/loginForm";
 		} else {
 
 			//닉네임 가져오기
-			Board board = new Board();
-			board.setNickname(userSvc.getOne(idMac).getNickname());
-			board.setCategory(categorymac);
+			String nickname = userSvc.getOne(user_id).getNickname();
+			Board board = boardSvc.getBoard(user_id, nickname, category);
 			model.addAttribute("board", board);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
-			model.addAttribute("idMac", idMac);
+			model.addAttribute("idMac", user_id);
 		}
 		
-		return String.format("thymeleaf/mac/board/%s_board_input", categorymac);
+		return String.format("thymeleaf/mac/board/%s_board_input", category);
 	}
 	
 
@@ -104,17 +94,13 @@ public class BoardController {
 								@PathVariable("categoryMac") String categoryMac,
 								Model model,
 								HttpSession session) {
-		try {
-			PageHelper.startPage(page, 10);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		PageHelper.startPage(page, 10);
+
 		model.addAttribute("page", page);
 		model.addAttribute("pageInfo", boardSvc.getPageInfo(categoryMac));
-		try {
+		if((String)session.getAttribute("idMac") != null ) {
 			model.addAttribute("idMac",(String)session.getAttribute("idMac"));
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
@@ -123,18 +109,18 @@ public class BoardController {
 	
 //  게시글 보기
 	@GetMapping("/{categoryMac}/detail/{num}")
-	public String getDetail(@PathVariable("num") int board_num,
+	public String getDetail(@PathVariable("num") Long board_num,
 							@PathVariable("categoryMac") String categoryMac,
 							@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 							Model model,
 							HttpSession session) {
-		
-		Comment comment = new Comment();
+
 		if(session.getAttribute("idMac") != null) {
-			comment.setUser_id((String) session.getAttribute("idMac"));
-			comment.setNickname(userSvc.getOne((String)session.getAttribute("idMac")).getNickname());
-			comment.setPcode(board_num);
+			String user_id = (String) session.getAttribute("idMac");
+			String nickname = userSvc.getOne(user_id).getNickname();
+			Comment comment = commentSvc.getComment(board_num, user_id, nickname);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
+			model.addAttribute("comment", comment);
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
@@ -147,9 +133,7 @@ public class BoardController {
 		model.addAttribute("pageInfo", new PageInfo<>(commentSvc.getCommentList(board_num)));
 		model.addAttribute("page", page);
 		
-//		Comment
-		model.addAttribute("comment", comment);
-		
+
 //		File
 		model.addAttribute("filelist", boardSvc.getFileList(board_num));
 		model.addAttribute("fileindex", boardSvc.getFileList(board_num).size());
@@ -161,21 +145,21 @@ public class BoardController {
 //	PostMapping 방식으로 form 밖에 있는 데이터를 넘기지 못해 get으로 우선 구현
 	@DeleteMapping("/{categoryMac}/delete/{num}")
 	@ResponseBody
-	public String delete(@PathVariable("num") int num,
+	public String delete(@PathVariable("num") Long board_num,
 									  @PathVariable("categoryMac") String categoryMac) {
-		return String.format("{\"deleted\":\"%b\"}", boardSvc.delete(num));
+		return String.format("{\"deleted\":\"%b\"}", boardSvc.delete(board_num));
 	}
 	
 //  게시글 업데이트폼
 	@PutMapping("/{categoryMac}/update/{num}")
-	public String update(@PathVariable("num") int num, 
+	public String update(@PathVariable("num") Long board_num,
 						 HttpSession session,
 						 Model model,
 						 @PathVariable("categoryMac") String categoryMac) {
 		model.addAttribute("idMac", (String)session.getAttribute("idMac"));
-		model.addAttribute("board", boardSvc.getDetail(num, categoryMac));
-		model.addAttribute("filelist", boardSvc.getFileList(num));
-		model.addAttribute("fileindex", boardSvc.getFileList(num).size());
+		model.addAttribute("board", boardSvc.getDetail(board_num, categoryMac));
+		model.addAttribute("filelist", boardSvc.getFileList(board_num));
+		model.addAttribute("fileindex", boardSvc.getFileList(board_num).size());
 		
 		return String.format("thymeleaf/mac/board/%s_board_edit", categoryMac);
 	}
@@ -227,7 +211,7 @@ public class BoardController {
 	 */
 	@DeleteMapping("/file/delete/{numMac}")
 	@ResponseBody
-	public Map<String, Object> file_delte(@PathVariable("numMac") int file_Id, 
+	public Map<String, Object> file_delte(@PathVariable("numMac") Long file_Id,
 										  HttpSession session) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("삭제할 파일 No. : " + file_Id);
@@ -241,15 +225,15 @@ public class BoardController {
 	@GetMapping("/file/download/{filenum}")
 	@ResponseBody
 	public ResponseEntity<Resource> download(HttpServletRequest request,
-											 @PathVariable(name="filenum", required = false) int fileNum) throws Exception {
+											 @PathVariable(name="filenum", required = false) Long file_num) throws Exception {
 		/**
 		 * 파일명 디코딩 작업
 		 */
-		String fileName = boardSvc.getFname(fileNum);
+		String fileName = boardSvc.getFname(file_num);
 		String originFilename = URLDecoder.decode(fileName, "UTF-8");
 
 		Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
 		String contextType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-		return boardSvc.download(contextType, fileNum, resource);
+		return boardSvc.download(contextType, resource);
 	}
 }
