@@ -8,6 +8,7 @@ import com.mac.demo.dto.Comment;
 import com.mac.demo.dto.User;
 import com.mac.demo.service.AttachService;
 import com.mac.demo.service.BoardService;
+import com.mac.demo.service.CommentService;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AdminController {
 	private final BoardService boardSvc;
 	private final AttachService attachSvc;
 	private final UserService userSvc;
+	private final CommentService commentSvc;
 
 	ResourceLoader resourceLoader;
 	
@@ -131,36 +133,7 @@ public class AdminController {
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
 		map.put("saved",boardSvc.save(board, mfiles, savePath)>0);
-		String fname_changed = null;
-		
-		// 파일 VO List
-		List<Attach> attList = new ArrayList<>();
-		
-		// 업로드
-		try {
-			for (int i = 0; i < mfiles.length; i++) {
-				// mfiles 파일명 수정
-				String[] token = mfiles[i].getOriginalFilename().split("\\.");
-				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
-				
-					// Attach 객체 만들어서 가공
-					Attach _att = new Attach();
-					_att.setUser_id(board.getUser_id());
-					_att.setFilename(fname_changed);
-					_att.setFilepath(savePath);
-				
-				attList.add(_att);
 
-//				메모리에 있는 파일을 저장경로에 옮기는 method, local 디렉토리에 있는 그 파일만 셀렉가능
-				mfiles[i].transferTo(
-						new File(savePath + "/" + fname_changed));
-			}
-			boardSvc.attachinsert(attList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
 		return map;
 	}
 
@@ -193,7 +166,7 @@ public class AdminController {
 			//페이지를 설정하면 처음으로 뜰 화면을 기본1로 설정하여 startPage에 넣어준다
 				PageHelper.startPage(page, 5);
 				//startPage시작하는 페이지 넘버와 그 페이지에 얼마의 글이 들어갈지를 정한다.
-				PageInfo<Comment> pageInfo = new PageInfo<>(svc.findAllCommentBoard());
+				PageInfo<Comment> pageInfo = new PageInfo<>(comme.findAllCommentBoard());
 				 model.addAttribute("pageInfo", pageInfo);
 			return "thymeleaf/mac/admin/allComment";
 		}
