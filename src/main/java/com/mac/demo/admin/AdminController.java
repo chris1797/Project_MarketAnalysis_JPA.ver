@@ -37,7 +37,6 @@ public class AdminController {
 	private final AttachService attachSvc;
 	private final UserService userSvc;
 
-	@Autowired
 	ResourceLoader resourceLoader;
 	
 
@@ -97,7 +96,7 @@ public class AdminController {
 //	자유게시물 지우기
 	@DeleteMapping("/admin/freeBoardDeleted/{numMac}")
 	@ResponseBody
-	public Map<String,Object> freeBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
+	public Map<String,Object> freeBoardDeleted(@PathVariable("numMac")Long numMac, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 
 		boolean result = boardSvc.delete(numMac);
@@ -107,7 +106,7 @@ public class AdminController {
 //	광고게시물 지우기
 	@GetMapping("/admin/adsBoardDeleted/{numMac}")
 	@ResponseBody
-	public Map<String,Object> adsBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
+	public Map<String,Object> adsBoardDeleted(@PathVariable("numMac")Long numMac, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		
 		boolean result = boardSvc.delete(numMac);
@@ -156,7 +155,7 @@ public class AdminController {
 				mfiles[i].transferTo(
 						new File(savePath + "/" + fname_changed));
 			}
-			svc.attachinsert(attList);
+			boardSvc.attachinsert(attList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
