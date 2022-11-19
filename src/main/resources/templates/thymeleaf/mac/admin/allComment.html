@@ -118,12 +118,12 @@
                                 </thead>
 <tbody>
     <tr th:each="comment : ${pageInfo.list}">
-	<td th:text="${comment.numMac}" id="numMac"></td>
-	<td th:text="${comment.idMac}"></td>
-	<td th:text="${comment.pcodeMac}"></td>
-	<td th:text="${comment.commentMac}"></td>
-	<td th:text="${comment.wdateMac}"></td>
-	<td><button th:onclick="javascript:commentDelete([[${comment.numMac}]]);" class="btn btn-primary">삭제</button></td>
+	<td th:text="${comment.comment_num}" id="numMac"></td>
+	<td th:text="${comment.user_id}"></td>
+	<td th:text="${comment.pcode}"></td>
+	<td th:text="${comment.comment}"></td>
+	<td th:text="${comment.wdate}"></td>
+	<td><button th:onclick="javascript:commentDelete([[${comment.comment_num}]]);" class="btn btn-primary">삭제</button></td>
     </tr>
 
 </table>
@@ -135,12 +135,13 @@
  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 			<div>
 				&nbsp;&nbsp;
-				<label for="category">검색항목</label> 
+				<label>검색항목</label>
 				<select name="category">
-					<option value="contents">댓글 내용</option>
-					<option value="idMac">작성자</option>
+					<option value="content">댓글 내용</option>
+					<option value="user_id">작성자</option>
 				</select> 
-				<label for="keyword">검색어</label> <input type="text" name="keyword">
+				<label>검색어</label>
+                <input type="text" name="keyword">
 				<button type="submit" class="btn btn-primary py-1 px-3 ms-1"><i class="bi bi-search"></i></button>		
 			</div>
 			&nbsp;&nbsp;
@@ -159,6 +160,7 @@
 		 </div>                    
      </div>
      </div>
+    </div>
            
             <!-- Table End -->
 

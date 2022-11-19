@@ -163,10 +163,10 @@ public class AdminController {
 	//모든 댓글
 		@GetMapping("/admin/allComment")
 		public String allCommentBoard(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
-			//페이지를 설정하면 처음으로 뜰 화면을 기본1로 설정하여 startPage에 넣어준다
+			// 페이지를 설정하면 처음으로 뜰 화면을 기본1로 설정하여 startPage에 넣어준다
 				PageHelper.startPage(page, 5);
-				//startPage시작하는 페이지 넘버와 그 페이지에 얼마의 글이 들어갈지를 정한다.
-				PageInfo<Comment> pageInfo = new PageInfo<>(comme.findAllCommentBoard());
+				// startPage시작하는 페이지 넘버와 그 페이지에 얼마의 글이 들어갈지를 정한다.
+				PageInfo<Comment> pageInfo = new PageInfo<>(commentSvc.getCommentList());
 				 model.addAttribute("pageInfo", pageInfo);
 			return "thymeleaf/mac/admin/allComment";
 		}
