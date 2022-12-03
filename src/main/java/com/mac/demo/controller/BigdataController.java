@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mac.demo.model.XY;
-import com.mac.demo.service.BigdataService;
+import com.mac.demo.serviceImpl.BigdataServiceImpl;
 
 @Controller
 @RequestMapping("/big")
 public class BigdataController {
 
 	@Autowired
-	private BigdataService svc;
+	private BigdataServiceImpl svc;
 	
 	@GetMapping("/location")
 	public String location() {

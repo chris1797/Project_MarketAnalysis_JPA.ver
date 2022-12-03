@@ -4,9 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
-import com.mac.demo.service.BoardService;
-import com.mac.demo.service.CommentService;
-import com.mac.demo.service.UserService;
+import com.mac.demo.serviceImpl.BoardServiceImpl;
+import com.mac.demo.serviceImpl.CommentService;
+import com.mac.demo.serviceImpl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -31,9 +31,9 @@ import java.util.Map;
 @Controller
 public class BoardController {
 
-	private final BoardService boardSvc;
+	private final BoardServiceImpl boardSvc;
 	private final CommentService commentSvc;
-	private final UserService userSvc;
+	private final UserServiceImpl userSvc;
 
 	ResourceLoader resourceLoader;
 	
@@ -221,8 +221,7 @@ public class BoardController {
 	 */
 	@GetMapping("/file/download/{filenum}")
 	@ResponseBody
-	public ResponseEntity<Resource> download(HttpServletRequest request,
-											 @PathVariable(name="filenum", required = false) Long file_num) throws Exception {
+	public ResponseEntity<Resource> download(HttpServletRequest request, @PathVariable(name="filenum", required = false) Long file_num) throws Exception {
 		/**
 		 * 파일명 디코딩 작업
 		 */

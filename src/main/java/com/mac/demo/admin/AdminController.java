@@ -2,16 +2,14 @@ package com.mac.demo.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.dto.User;
-import com.mac.demo.service.AttachService;
-import com.mac.demo.service.BoardService;
-import com.mac.demo.service.CommentService;
-import com.mac.demo.service.UserService;
+import com.mac.demo.serviceImpl.AttachServiceImpl;
+import com.mac.demo.serviceImpl.BoardServiceImpl;
+import com.mac.demo.serviceImpl.CommentService;
+import com.mac.demo.serviceImpl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -34,29 +29,29 @@ import java.util.Map;
 public class AdminController {
 	
 	private final AdminService adminSvc;
-	private final BoardService boardSvc;
-	private final AttachService attachSvc;
-	private final UserService userSvc;
+	private final BoardServiceImpl boardSvc;
+	private final AttachServiceImpl attachSvc;
+	private final UserServiceImpl userSvc;
 	private final CommentService commentSvc;
 
 	ResourceLoader resourceLoader;
 	
 
 	//관리자 페이지 메인
-		@GetMapping("/admin")
-		public String adminMain() {
-			return "thymeleaf/mac/admin/adminMain";
-		}
-		
-     //관리자 로그인
-		@GetMapping("/admin/loginForm")
-		public String adminLogin() {
-			return "thymeleaf/mac/admin/adminLoginForm";
+	@GetMapping("/admin")
+	public String adminMain() {
+		return "thymeleaf/mac/admin/adminMain";
+	}
+
+	//관리자 로그인
+	@GetMapping("/admin/loginForm")
+	public String adminLogin() {
+		return "thymeleaf/mac/admin/adminLoginForm";
 		}
 	
 	//에러
 	@GetMapping("/err")
-	public String adminLogin(@RequestParam(value="error",required=false) String err,Model model) {
+	public String adminLogin(@RequestParam(value = "error", required = false) String err, Model model) {
 		model.addAttribute("msg", err);
 		return "thymeleaf/mac/admin/adminLoginForm";
 	}
@@ -162,7 +157,8 @@ public class AdminController {
 	
 	//모든 댓글
 		@GetMapping("/admin/allComment")
-		public String allCommentBoard(Model model,@RequestParam(name="page", required = false,defaultValue ="1") int page) {
+		public String allCommentBoard(Model model,
+									  @RequestParam(name="page", required = false,defaultValue ="1") int page) {
 			// 페이지를 설정하면 처음으로 뜰 화면을 기본1로 설정하여 startPage에 넣어준다
 				PageHelper.startPage(page, 5);
 				// startPage시작하는 페이지 넘버와 그 페이지에 얼마의 글이 들어갈지를 정한다.

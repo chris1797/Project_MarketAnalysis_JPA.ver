@@ -1,4 +1,4 @@
-package com.mac.demo.service;
+package com.mac.demo.serviceImpl;
 
 import com.mac.demo.dto.Board;
 import com.mac.demo.mappers.BoardMapper;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class HomeService {
+public class HomeServiceImpl {
 
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;

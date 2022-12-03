@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
-import com.mac.demo.service.UserService;
+import com.mac.demo.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ public class UserController {
 	
 	//유저 맵퍼
 	@Autowired
-	private UserService svc;
+	private UserServiceImpl svc;
 
 //	계정추가폼
 	@GetMapping("/addForm")

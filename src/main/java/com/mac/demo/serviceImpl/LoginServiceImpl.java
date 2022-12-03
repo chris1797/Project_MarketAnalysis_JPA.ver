@@ -1,4 +1,4 @@
-package com.mac.demo.service;
+package com.mac.demo.serviceImpl;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -12,7 +12,7 @@ import com.mac.demo.mappers.LoginMapper;
 
 
 @Service
-public class LoginService {
+public class LoginServiceImpl {
 
 	@Autowired
 	private LoginMapper dao;

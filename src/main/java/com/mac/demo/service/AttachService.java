@@ -1,4 +1,4 @@
 package com.mac.demo.service;
 
-public interface UserService {
+public interface AttachService {
 }

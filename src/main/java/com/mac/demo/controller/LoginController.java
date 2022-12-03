@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mac.demo.model.User;
-import com.mac.demo.service.LoginService;
+import com.mac.demo.serviceImpl.LoginServiceImpl;
 
 
 @RequestMapping("/login")
@@ -24,7 +24,7 @@ import com.mac.demo.service.LoginService;
 public class LoginController {
 	
 	@Autowired
-	private LoginService svc;
+	private LoginServiceImpl svc;
 	
 //	로그인폼
 	@GetMapping("/loginForm")
