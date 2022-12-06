@@ -5,10 +5,11 @@ import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.dto.User;
+import com.mac.demo.service.CommentService;
 import com.mac.demo.serviceImpl.AttachServiceImpl;
 import com.mac.demo.serviceImpl.BoardServiceImpl;
-import com.mac.demo.serviceImpl.CommentService;
 import com.mac.demo.serviceImpl.UserServiceImpl;
+import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -170,10 +172,10 @@ public class AdminController {
 //		댓글 지우기
 		@GetMapping("/admin/commentDeleted/{numMac}")
 		@ResponseBody
-		public Map<String,Object> commentBoardDeleted(@PathVariable("numMac")int numMac, HttpSession session) {
+		public Map<String,Object> commentBoardDeleted(@PathVariable("numMac")long numMac, HttpSession session) {
 			Map<String, Object> map = new HashMap<>();
 			
-			boolean result = svc.commentBordDeleted(numMac);
+			boolean result = commentSvc.commentDelete(numMac);
 			map.put("result", result);
 			return map;
 		}
@@ -189,9 +191,9 @@ public class AdminController {
 			
 			PageInfo<Board> pageInfo = null;
 			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getFreeListByKeyword(keyword));
+				pageInfo = new PageInfo<>(boardSvc.getListByKeyword(keyword, category));
 			} else {
-				pageInfo = new PageInfo<>(svc.getFreeListByNickName(keyword));
+				pageInfo = new PageInfo<>(boardSvc.getListByNickName(keyword, category));
 			}
 			
 			model.addAttribute("pageInfo",pageInfo);
@@ -201,37 +203,43 @@ public class AdminController {
 		
 		//광고게시판 검색
 		@PostMapping("/admin/adsSearch")
-		public String searchAds(@RequestParam(name="page", required = false,defaultValue = "1") int page,
-									@RequestParam(name="category", required = false) String category,
-									@RequestParam(name="keyword", required = false) String keyword,
-									Model model) {
+		public ModelAndView searchAds(@RequestParam(name="page", required = false,defaultValue = "1") int page,
+									  @RequestParam(name="category", required = false) String category,
+									  @RequestParam(name="keyword", required = false) String keyword) {
 			
 			PageHelper.startPage(page, 5);
+
+			ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allAdsBoard");
 			
 			PageInfo<Board> pageInfo = null;
-			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getAdsListByKeyword(keyword));
-			} else {
-				pageInfo = new PageInfo<>(svc.getAdsListByNickName(keyword));
+			try {
+				if(category.equals("contents")) {
+					pageInfo = new PageInfo<>(boardSvc.getListByKeyword(keyword, category));
+				} else {
+					pageInfo = new PageInfo<>(boardSvc.getListByNickName(keyword, category));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage().toString());
 			}
+
+			mav.addObject("pageinfo", pageInfo);
 			
-			model.addAttribute("pageInfo",pageInfo);
-			
-			return "thymeleaf/mac/admin/allAdsBoard";
+			return mav;
 		}
 		
 		//공지사항 검색
 		@PostMapping("/admin/NoticeSearch")
 		public String searchNotice(@RequestParam(name="page", required = false,defaultValue = "1") int page,
-									
-									@RequestParam(name="keyword", required = false) String keyword,
-									Model model) {
+								   @RequestParam(name="category", required = false) String category,
+								   @RequestParam(name="keyword", required = false) String keyword,
+								   Model model) {
 			
 			PageHelper.startPage(page, 5);
 			
 			PageInfo<Board> pageInfo = null;
 			
-			pageInfo = new PageInfo<>(svc.getNoticeListByKeyword(keyword));
+			pageInfo = new PageInfo<>(boardSvc.getListByKeyword(keyword, category));
 			
 			
 			model.addAttribute("pageInfo",pageInfo);
@@ -250,9 +258,9 @@ public class AdminController {
 			
 			PageInfo<Comment> pageInfo = null;
 			if(category.equals("contents")) {
-				pageInfo = new PageInfo<>(svc.getCommentListByKeyword(keyword));
+				pageInfo = new PageInfo<>(commentSvc.getCommentListByComment(keyword));
 			} else {
-				pageInfo = new PageInfo<>(svc.getCommentListByNickName(keyword));
+				pageInfo = new PageInfo<>(commentSvc.getCommentListByNickName(keyword));
 			}
 			
 			model.addAttribute("pageInfo",pageInfo);
