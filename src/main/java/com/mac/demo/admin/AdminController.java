@@ -292,12 +292,14 @@ public class AdminController {
 				//공지사항 보드쪽 서비스
 				
 				@GetMapping("/board/notice/list")
-				public String getListByPage_notice(@RequestParam(name="page", required = false,defaultValue = "1") int page, 
-													Model model,
-													HttpSession session) {
+				public String getListByPage_notice(@RequestParam(name="page", required = false,defaultValue = "1") int page,
+												   @RequestParam(name="category", required = false) String category,
+												   Model model,
+												   HttpSession session
+												   ) {
 					
 					PageHelper.startPage(page, 10);
-					PageInfo<Board> pageInfo = new PageInfo<>(svc.findAllNoticeBoard());
+					PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(category));
 					
 					model.addAttribute("pageInfo", pageInfo);
 					model.addAttribute("page", page);
@@ -309,8 +311,8 @@ public class AdminController {
 				
 			//  게시글 보기
 				@GetMapping("/board/notice/detail/{num}")
-				public String getDetail(@PathVariable("num") int num,
-										
+				public String getDetail(@PathVariable("num") Long num,
+										@RequestParam(name="category", required = false) String category,
 										@RequestParam(name="page", required = false,defaultValue = "1") int page, 
 										Model model,
 										HttpSession session) {
@@ -318,7 +320,7 @@ public class AdminController {
 					String idMac = null;
 					idMac = (String)session.getAttribute("idMac");
 					model.addAttribute("idMac", idMac);
-					model.addAttribute("board", svc.getNoticeDetail(num));
+					model.addAttribute("board", boardSvc.getDetail(num, category));
 					model.addAttribute("filelist", svc.getNoticeFileList(num));
 					model.addAttribute("fileindex", svc.getNoticeFileList(num).size());
 					
