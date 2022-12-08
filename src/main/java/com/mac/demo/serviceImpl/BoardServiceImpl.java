@@ -101,7 +101,7 @@ public class BoardServiceImpl implements com.mac.demo.service.BoardService {
 
 //	------------------------File------------------------
 	public List<Attach> getFileList(Long pcode){
-		return attachRepository.findAllByPcodemac(pcode);
+		return attachRepository.findAllByPcode(pcode);
 	}
 
 //	File Id로 파일이름 가져오기

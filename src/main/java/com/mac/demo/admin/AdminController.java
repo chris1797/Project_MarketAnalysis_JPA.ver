@@ -2,6 +2,7 @@ package com.mac.demo.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.dto.User;
@@ -9,7 +10,6 @@ import com.mac.demo.service.CommentService;
 import com.mac.demo.serviceImpl.AttachServiceImpl;
 import com.mac.demo.serviceImpl.BoardServiceImpl;
 import com.mac.demo.serviceImpl.UserServiceImpl;
-import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -23,7 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -317,30 +319,38 @@ public class AdminController {
 										Model model,
 										HttpSession session) {
 					
-					String idMac = null;
-					idMac = (String)session.getAttribute("idMac");
+					String idMac = (String)session.getAttribute("idMac");
+
+					Board board = boardSvc.getDetail(num, category);
+					List<Attach> fileList = attachSvc.getFileList(num);
+
 					model.addAttribute("idMac", idMac);
 					model.addAttribute("board", boardSvc.getDetail(num, category));
-					model.addAttribute("filelist", svc.getNoticeFileList(num));
-					model.addAttribute("fileindex", svc.getNoticeFileList(num).size());
-					
-					
+					model.addAttribute("filelist", attachSvc.getFileList(num));
+					model.addAttribute("fileindex", fileList.size());
+
 					// 댓글 삭제를 위한 idMac체크
 					
 					return "thymeleaf/mac/board/notice_board_detail";
 				}
 				
-				@GetMapping("board/noticeFile/download/{filenum}")
+				@GetMapping("/board/noticeFile/download/{filenum}")
 				@ResponseBody
-				public ResponseEntity<Resource> noticeDownload(HttpServletRequest request,
-														 @PathVariable(name="filenum", required = false) int FileNum) throws Exception {
-					
-					return svc.noticeDownload(request, FileNum);
+				public ResponseEntity<Resource> Download(HttpServletRequest request,
+														 @PathVariable(name="filenum", required = false) Long fileNum) throws Exception {
+					String fileName = attachSvc.getFileName(fileNum);
+					String originFilename = URLDecoder.decode(fileName, "UTF-8");
+
+					Resource resource = resourceLoader.getResource("WEB-INF/files/" + originFilename);
+					String contextType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+					return attachSvc.download(contextType, fileNum, resource);
+
 				}
 				
 				@GetMapping("/board/notice/search")
 				public String getListByTitle_Notice(@RequestParam(name="page", required = false,defaultValue = "1") int page,
 											@RequestParam(name="keyword", required = false) String keyword,
+													@RequestParam(name="category", required = false) String category,
 											Model model) {
 					
 					PageHelper.startPage(page, 10);
@@ -348,7 +358,7 @@ public class AdminController {
 					
 					PageInfo<Board> pageInfo = null;
 					
-						pageInfo = new PageInfo<>(svc.getNoticeListByKeyword(keyword));
+						pageInfo = new PageInfo<>(boardSvc.getListByKeyword(category, keyword));
 				
 					
 					model.addAttribute("pageInfo",pageInfo);

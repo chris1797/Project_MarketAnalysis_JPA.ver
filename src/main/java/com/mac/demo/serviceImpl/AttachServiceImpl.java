@@ -2,7 +2,9 @@ package com.mac.demo.serviceImpl;
 
 import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
+import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.service.AttachService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,7 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AttachServiceImpl implements AttachService {
+
+
+    private final AttachRepository attachRepository;
+
+
+    @Override
+    public String getFileName(Long fileIdx) {
+        return attachRepository.findFilenameByAtt_num(fileIdx);
+    }
+
+    @Override
+    public List<Attach> getFileList(Long pcode) {
+        return attachRepository.findAllByPcode(pcode);
+    }
 
     public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, String savePath) {
         String fname_changed = null;
@@ -49,7 +66,7 @@ public class AttachServiceImpl implements AttachService {
     }
 
     //	파일 다운로드
-    public ResponseEntity<Resource> download (String contentType, int FileNum, Resource resource) throws UnsupportedEncodingException {
+    public ResponseEntity<Resource> download (String contentType, Long FileNum, Resource resource) throws UnsupportedEncodingException {
 
         if (contentType == null) contentType = "application/octet-stream";
 
