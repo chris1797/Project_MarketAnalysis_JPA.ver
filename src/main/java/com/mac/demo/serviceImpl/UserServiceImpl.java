@@ -5,6 +5,7 @@ import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
 import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.repository.UserRepository;
+import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
 	private UserMapper dao;
 	private final UserRepository userRepository;
@@ -28,7 +29,8 @@ public class UserServiceImpl {
 	
 	//회원가입
 	public boolean add(User user) {
-		return userRepository.save(user) != null;
+		userRepository.save(user);
+		return true;
 	}
 
 	//회원리스트
@@ -43,6 +45,7 @@ public class UserServiceImpl {
 	}
 
 	//회원삭제
+	@Override
 	public boolean delete(Long user_num) {
 		try {
 			userRepository.deleteById(user_num);
@@ -109,4 +112,9 @@ public class UserServiceImpl {
 	public List<Board> findWrite(String idMac) {
 		return dao.findWrite(idMac);
 	}
+
+	@Override
+    public List<User> findByUsernameContaining(String userName) {
+		return userRepository.findByUsernameContaining(userName);
+    }
 }

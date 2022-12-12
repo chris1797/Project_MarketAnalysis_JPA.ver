@@ -45,7 +45,7 @@ public class User {
 
     @Column(columnDefinition = "boolean default false")
     private boolean manager;
-    private String user_name;
+    private String username;
 
     @Temporal(TemporalType.DATE)
     private java.util.Date signup_date; // 회원가입일
