@@ -4,11 +4,12 @@ import com.mac.demo.dto.Attach;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface AttachService {
     String getFileName(Long num);
     List<Attach> getFileList(Long pcode);
 
-    ResponseEntity<Resource> download(String contextType, Long fileNum, Resource resource);
+    ResponseEntity<Resource> download(String contextType, Long fileNum, Resource resource) throws UnsupportedEncodingException;
 }

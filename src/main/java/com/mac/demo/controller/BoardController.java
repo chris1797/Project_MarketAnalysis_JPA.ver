@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
 import com.mac.demo.serviceImpl.BoardServiceImpl;
-import com.mac.demo.serviceImpl.CommentService;
+import com.mac.demo.serviceImpl.CommentServiceImpl;
 import com.mac.demo.serviceImpl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class BoardController {
 
 	private final BoardServiceImpl boardSvc;
-	private final CommentService commentSvc;
+	private final CommentServiceImpl commentSvc;
 	private final UserServiceImpl userSvc;
 
 	ResourceLoader resourceLoader;

@@ -32,6 +32,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> getCommentListByComment(String comment) {
+        return commentRepository.findByComment(comment);
+    }
+
+    @Override
+    public List<Comment> getCommentListByNickName(String nickName) {
+        return commentRepository.findByNickname(nickName);
+    }
+
+    @Override
     public List<Comment> getCommentList() {
         return commentRepository.findAll();
     }

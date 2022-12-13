@@ -21,6 +21,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 	List<Comment> findByPcode(Long pcode);
 	
 	int deleteByComment_num(Long comment_num);
+	List<Comment> findByComment(String comment);
+	List<Comment> findByNickname(String nickName);
 	
 
 }
