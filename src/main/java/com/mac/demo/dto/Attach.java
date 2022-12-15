@@ -1,7 +1,9 @@
 package com.mac.demo.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,10 +12,11 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="ATTACH_TB")
 public class Attach {
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +33,25 @@ public class Attach {
 	
 	@Transient
 	private List<Attach> attList; // 첨부파일명 리스트
+
+	@Builder
+	public Attach(Long pcode, String user_id, String filename, String filepath, Date wdate, List<Attach> attList) {
+		this.pcode = pcode;
+		this.user_id = user_id;
+		this.filename = filename;
+		this.filepath = filepath;
+		this.wdate = wdate;
+		this.attList = attList;
+	}
+
+	public Attach toEntity() {
+		return Attach.builder()
+				.pcode(pcode)
+				.user_id(user_id)
+				.filename(filename)
+				.filepath(filepath)
+				.wdate(wdate)
+				.attList(attList)
+				.build();
+	}
 }

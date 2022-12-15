@@ -53,7 +53,6 @@ public class BigdataController {
     //년도 선택
 
     @PostMapping("/svc")
-    @ResponseBody
     public Map<String, Object> svc(@RequestParam("thissvc") String thissvc, @RequestParam("thisgil") String thisgil, @RequestParam("kind") String kind) {
         Map<String, Object> map = new HashMap<>();
         String selectyear = "<option>년도</option>";
@@ -70,7 +69,6 @@ public class BigdataController {
     }
 
     @PostMapping("/year")
-    @ResponseBody
     public Map<String, Object> year(@RequestParam("year") String year, @RequestParam("thissvc") String thissvc, @RequestParam("thisgil") String thisgil, @RequestParam("kind") String kind) {
         Map<String, Object> map = new HashMap<>();
         String selectquarter = "<option>분기</option>";
