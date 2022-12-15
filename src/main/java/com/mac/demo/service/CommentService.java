@@ -4,7 +4,6 @@ import com.mac.demo.dto.Comment;
 
 import java.util.List;
 
-
 public interface CommentService {
 
     Comment getComment(Long board_num, String user_id, String nickname);

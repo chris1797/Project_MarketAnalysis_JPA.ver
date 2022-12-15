@@ -28,6 +28,7 @@ public class Comment {
 	@Temporal(TemporalType.DATE)
 	private Date wdate;
 
+
 	@Builder
 	public Comment(String user_id, Long pcode, String nickname, String comment) {
 		this.user_id = user_id;
