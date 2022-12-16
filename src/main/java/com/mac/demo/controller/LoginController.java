@@ -3,6 +3,7 @@ package com.mac.demo.controller;
 import com.mac.demo.model.User;
 import com.mac.demo.serviceImpl.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.ui.Model;
@@ -10,10 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 
+@Slf4j
 @RequestMapping("/login")
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +21,8 @@ public class LoginController {
 	
 	@Autowired
 	private final LoginServiceImpl loginSvc;
+
 	
-//	로그인폼
 	@GetMapping("/loginForm")
 	public String login() {
 		return "thymeleaf/mac/login/loginForm";
@@ -33,97 +33,93 @@ public class LoginController {
 	public ModelAndView login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, User user, HttpSession session, Model model){
 
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/loginForm");
-		//db에 사용자가 입력한 id와 pw가 있는지 확인
+//		db에 사용자가 입력한 id와 pw가 있는지 확인
 		String checked_Id= loginSvc.loginUser(idMac, pwMac);
 		
 //		checked Id에 데이터가 있을시 세션에 id저장
 		if(idMac.equals(checked_Id)) {
+			mav.setViewName("redirect:/home");
 			session.setAttribute("idMac", idMac);
-			model.addAttribute("idMac",session.getAttribute("idMac").toString());
+			mav.addObject("idMac",session.getAttribute("idMac").toString());
 		
-			return "redirect:/home";
-		}else if(checked_Id==null) {
-			mav.addObject("msg","잘못된 아이디나 비밀번호 입니다");
 			return mav;
+		} else {
+			mav.addObject("msg","잘못된 아이디나 비밀번호 입니다");
 		}
 		return mav;
 	}
 	
 //	로그아웃메소드
 	@GetMapping("/logout")
-	@ResponseBody
-	public Map<String,Object> logout(HttpSession session, Model model) 
-	{	
-		System.out.println(session.getAttribute("idMac"));
-		
-//		session.invalidate();
+	public Boolean logout(HttpSession session) {
+		log.info("로그아웃");
 		session.removeAttribute("idMac");
-		
-		Map<String,Object> map = new HashMap<>();
-		map.put("logout", true);
-		return map;
+		return true;
 	}
 	
 //	로그인 확인
 	@GetMapping("/loginCheck")
-	public boolean loginCheck(HttpSession session, Model model) 
+	public ModelAndView loginCheck(HttpSession session, Model model)
 	{
-		String userId=(String) session.getAttribute("idMac");
-		if(userId==null) {
-			model.addAttribute("msg", "로그인 후 이용가능합니다");
+		ModelAndView mav = new ModelAndView();
 
-			return false;
+		String userId=(String) session.getAttribute("idMac");
+
+		if(userId==null) {
+			mav.addObject("msg", "로그인 후 이용가능합니다");
+			mav.addObject(false);
+			return mav;
+		} else {
+			mav.addObject(true);
 		}
 
-		return true;
+		return mav;
 	}
 	
 //	아이디 찾기 폼(폼에서 이름,전화번호 기입후 alert창으로 아이디띄움)
 	@GetMapping("/findId")
 	public String findIdForm() {
-		
 		return "thymeleaf/mac/login/findId";
 	}
 	
 //	아이디 찾기 메소드
 	@PostMapping("/findId")
-	public String findId(@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac, User user, HttpSession session,Model model){
-		
+	public ModelAndView findId(@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac){
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/findId");
 		
 		String foundId= loginSvc.findId(nameMac,emailMac);
 		
-		if(foundId!=null){
-		model.addAttribute("foundId",foundId);
-		
-		return "thymeleaf/mac/login/findId";
-		}else{
-			model.addAttribute("msg","이름이나 이메일이 잘못 입력되었습니다");
-			
-			return "thymeleaf/mac/login/findId";
+		if(foundId!=null) {
+			mav.addObject("foundId",foundId);
+		} else {
+			mav.addObject("msg","이름이나 이메일이 잘못 입력되었습니다");
 		}
+		return mav;
 	}
 	
 //	비밀번호 찾기 폼(폼에서 아이디,이름,전화번호 기입후 alert창으로 비밀번호띄움)
 	@GetMapping("/findPassword")
 	public String findPasswordForm() {
-		
 		return "thymeleaf/mac/login/findPassword";
 	}
 	
 //	비밀번호 찾기 메소드
 	@PostMapping("/findPassword")
-	public String findPassword(@RequestParam("idMac")String idMac,@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac, User user, HttpSession session,Model model){
-		
+	public ModelAndView findPassword(@RequestParam("idMac")String idMac,@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac, User user, HttpSession session,Model model){
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/findPassword");
 		String msg = null;
+
 		try {
 			msg = loginSvc.findPassword(idMac,nameMac,emailMac) ? "인증메일 전송 성공" : "인증메일 전송 실패";
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("msg",msg);
+		mav.addObject("msg",msg);
 		
-		return "thymeleaf/mac/login/findPassword";
+		return mav;
 	}
 
 }

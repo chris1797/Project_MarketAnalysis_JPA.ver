@@ -40,13 +40,17 @@
 	        return false;
 	    }
 		
-	    //비밀번화 확인 유효성검사
+	    //비밀번호 확인 유효성검사
 	    if(document.getElementById('pwMac2').value==''){
-	    	alert('비밀번호 확인을 하세요.');
+	    	alert('비밀번호를 확인하세요.');
 	    	return false;
 	    }
+
+			/**
+			 * 비밀번호, 비밀번호 확인란 검사
+			 */
 	    if(document.getElementById('pwMac').value !='' && document.getElementById('pwMac2').value!=''){
-	        if(document.getElementById('pwMac').value!=document.getElementById('pwMac2').value){
+	        if(document.getElementById('pwMac').value != document.getElementById('pwMac2').value){
 	            document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
 	            document.getElementById('check').style.color='red';
 	            alert('비밀번호가 일치하지 않습니다.');
@@ -112,10 +116,9 @@
 		return false;
 	}(jQuery);
 
+
 	//========================================인증 구간==========================================
 		
-		
-
 	
 
 	function idcheck() {
