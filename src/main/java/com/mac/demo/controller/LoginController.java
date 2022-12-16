@@ -1,58 +1,52 @@
 package com.mac.demo.controller;
 
+import com.mac.demo.model.User;
+import com.mac.demo.serviceImpl.LoginServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessagingException;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessagingException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.mac.demo.model.User;
-import com.mac.demo.serviceImpl.LoginServiceImpl;
-
 
 @RequestMapping("/login")
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class LoginController {
 	
 	@Autowired
-	private LoginServiceImpl svc;
+	private final LoginServiceImpl loginSvc;
 	
 //	로그인폼
 	@GetMapping("/loginForm")
 	public String login() {
-		
 		return "thymeleaf/mac/login/loginForm";
 	}
 	
 //	세션에 id저장
 	@PostMapping("/loginForm")
-	public String login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, User user, HttpSession session,Model model){
-		
+	public ModelAndView login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, User user, HttpSession session, Model model){
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/loginForm");
 		//db에 사용자가 입력한 id와 pw가 있는지 확인
-		String checkedId= svc.loginUser(idMac,pwMac);
+		String checked_Id= loginSvc.loginUser(idMac, pwMac);
 		
-//		checkdeId에 데이터가 있을시 세션에 id저장
-		if(idMac.equals(checkedId)) {
-		session.setAttribute("idMac", idMac);
-		System.out.println(session.getAttribute("idMac").toString());
-		model.addAttribute("idMac",session.getAttribute("idMac").toString());
+//		checked Id에 데이터가 있을시 세션에 id저장
+		if(idMac.equals(checked_Id)) {
+			session.setAttribute("idMac", idMac);
+			model.addAttribute("idMac",session.getAttribute("idMac").toString());
 		
-		return "redirect:/home";
-		}else if(checkedId==null) {
-			model.addAttribute("msg","잘못된 아이디나 비밀번호 입니다");
-			
-			return "thymeleaf/mac/login/loginForm";
+			return "redirect:/home";
+		}else if(checked_Id==null) {
+			mav.addObject("msg","잘못된 아이디나 비밀번호 입니다");
+			return mav;
 		}
-		return "thymeleaf/mac/login/loginForm";	
+		return mav;
 	}
 	
 //	로그아웃메소드
@@ -96,7 +90,7 @@ public class LoginController {
 	public String findId(@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac, User user, HttpSession session,Model model){
 		
 		
-		String foundId= svc.findId(nameMac,emailMac);
+		String foundId= loginSvc.findId(nameMac,emailMac);
 		
 		if(foundId!=null){
 		model.addAttribute("foundId",foundId);
@@ -122,7 +116,7 @@ public class LoginController {
 		
 		String msg = null;
 		try {
-			msg = svc.findPassword(idMac,nameMac,emailMac) ? "인증메일 전송 성공" : "인증메일 전송 실패";
+			msg = loginSvc.findPassword(idMac,nameMac,emailMac) ? "인증메일 전송 성공" : "인증메일 전송 실패";
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}

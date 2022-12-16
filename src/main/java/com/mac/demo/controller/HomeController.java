@@ -1,12 +1,12 @@
 package com.mac.demo.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 
 
 @RequestMapping("/home")
@@ -15,38 +15,43 @@ public class HomeController {
 	
 //	홈화면
 	@GetMapping("")
-	public String home(Model model,HttpSession session) {
-		
+	public ModelAndView home(HttpSession session) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/home");
+
 		if(session.getAttribute("idMac")!=null) {
-			String uid = session.getAttribute("idMac").toString();
-			model.addAttribute("idMac",uid);
-			return "thymeleaf/mac/home/home";
+			String user_id = session.getAttribute("idMac").toString();
+			mav.addObject("idMac", user_id);
 		}
 		
-		return "thymeleaf/mac/home/home";
+		return mav;
 	}
 	
 //	데이터 출처
 	@GetMapping("/dataSource")
-	public String dataSorce(Model model,HttpSession session) {
+	public ModelAndView dataSorce(Model model,HttpSession session) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/dataSource");
+
 		if(session.getAttribute("idMac")!=null) {
-			String uid = session.getAttribute("idMac").toString();
-			model.addAttribute("idMac",uid);
-			return "thymeleaf/mac/home/dataSource";
+			String user_id = session.getAttribute("idMac").toString();
+			mav.addObject("idMac",user_id);
 		}
 		
-		return "thymeleaf/mac/home/dataSource";
+		return mav;
 	}
 	
 //	사이트소개
 	@GetMapping("/siteIntroduction")
-	public String siteIntroduction(Model model,HttpSession session) {
+	public ModelAndView siteIntroduction(Model model,HttpSession session) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/siteIntroduction");
+
 		if(session.getAttribute("idMac")!=null) {
 			String uid = session.getAttribute("idMac").toString();
-			model.addAttribute("idMac",uid);
-			return "thymeleaf/mac/home/siteIntroduction";
+			mav.addObject("idMac",uid);
 		}
-		return "thymeleaf/mac/home/siteIntroduction";
+		return mav;
 	}
 	
 
