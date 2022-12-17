@@ -25,15 +25,43 @@ public class AttachServiceImpl implements AttachService {
     private final AttachRepository attachRepository;
 
 
+
+    @Override
+    public List<Attach> findAllByPcode(Long pcode) {
+        return attachRepository.findAllByPcode(pcode);
+    }
+
+    @Override
+    public String findFilenameById(Long file_id) {
+        return attachRepository.findFilenameByAtt_num(file_id);
+    }
+
+    @Override
+    public void deleteById(Long file_id) {
+
+    }
+
+    @Override
+    public void saveAll(List<Attach> list) {
+
+        try {
+            attachRepository.saveAll(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String getFileName(Long fileIdx) {
         return attachRepository.findFilenameByAtt_num(fileIdx);
     }
 
+
     @Override
     public List<Attach> getFileList(Long pcode) {
         return attachRepository.findAllByPcode(pcode);
     }
+
 
     public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, String savePath) {
         String fname_changed = null;
@@ -44,11 +72,12 @@ public class AttachServiceImpl implements AttachService {
                 String[] token = mfiles[i].getOriginalFilename().split("\\.");
                 fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
 
-                Attach _att = new Attach();
-                _att.setPcode(board.getBoard_num());
-                _att.setUser_id(board.getUser_id());
-                _att.setFilename(fname_changed);
-                _att.setFilepath(savePath);
+                Attach _att = Attach.builder()
+                                    .pcode(board.getBoard_num())
+                                    .user_id(board.getUser_id())
+                                    .filename(fname_changed)
+                                    .filepath(savePath)
+                                    .build();
 
                 attList.add(_att);
                 /**
@@ -81,4 +110,6 @@ public class AttachServiceImpl implements AttachService {
 
         return file;
     }
+
+
 }

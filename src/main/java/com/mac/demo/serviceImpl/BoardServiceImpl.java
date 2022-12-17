@@ -5,6 +5,8 @@ import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
 import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.repository.BoardRepository;
+import com.mac.demo.service.AttachService;
+import com.mac.demo.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,19 +26,20 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BoardServiceImpl implements com.mac.demo.service.BoardService {
+public class BoardServiceImpl implements BoardService {
 
 	private final BoardRepository boardRepository;
-	private final AttachRepository attachRepository;
-
 	private final ResourceLoader resourceLoader;
+	private final AttachService attachSvc;
 
 
 	public Board getBoard(String user_id, String nickname, String category) {
+
 		Board board = Board.builder()
-				.user_id(user_id)
-				.nickname(nickname)
-				.category(category).build();
+						   .user_id(user_id)
+						   .nickname(nickname)
+						   .category(category)
+						   .build();
 		return board;
 	}
 
@@ -50,7 +53,7 @@ public class BoardServiceImpl implements com.mac.demo.service.BoardService {
 	public Long save(Board board, MultipartFile[] mfiles, String savePath){
 		Board _board = boardRepository.save(board);
 		List<Attach> attlist = getFileSet(_board, mfiles, savePath);
-		if(attlist!=null) attachRepository.saveAll(attlist);
+		if(attlist!=null) attachSvc.saveAll(attlist);
 		
 		return _board.getBoard_num();
 	}
@@ -62,7 +65,7 @@ public class BoardServiceImpl implements com.mac.demo.service.BoardService {
 		try {
 			boardRepository.update(board.getTitle(), board.getContents(), board.getBoard_num());
 			List<Attach> attlist = getFileSet(board, mfiles, savePath);
-			if(attlist!=null) attachRepository.saveAll(attlist);
+			if(attlist!=null) attachSvc.saveAll(attlist);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,20 +104,19 @@ public class BoardServiceImpl implements com.mac.demo.service.BoardService {
 
 //	------------------------File------------------------
 	public List<Attach> getFileList(Long pcode){
-		return attachRepository.findAllByPcode(pcode);
+		return attachSvc.findAllByPcode(pcode);
 	}
 
 //	File Id로 파일이름 가져오기
 	public String getFname(Long file_id) {
-		Attach attach = attachRepository.findById(file_id).get();
-		String filename = attach.getFilename();
+		String filename = attachSvc.findFilenameById(file_id);
 		return filename;
 	}
 	
 //	파일 지우기 Ajax
 	public boolean filedelete(Long file_Id) {
 		try {
-			attachRepository.deleteById(file_Id);
+			attachSvc.deleteById(file_Id);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,20 +133,20 @@ public class BoardServiceImpl implements com.mac.demo.service.BoardService {
 			for (int i = 0; i < mfiles.length; i++) {
 				String[] token = mfiles[i].getOriginalFilename().split("\\.");
 				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
-				
-					Attach _att = new Attach();
-					_att.setPcode(board.getBoard_num());
-					_att.setUser_id(board.getUser_id());
-					_att.setFilename(fname_changed);
-					_att.setFilepath(savePath);
-				
+
+				Attach _att = Attach.builder()
+						.pcode(board.getBoard_num())
+						.user_id(board.getUser_id())
+						.filename(fname_changed)
+						.filepath(savePath)
+						.build();
+
 				attList.add(_att);
 				/**
 				 * 메모리에 있는 파일을 저장경로에 옮김, 로컬 경로에 있는 파일만 선택 가능
 				 * 추후 AWS S3로 전환
 				 */
-				mfiles[i].transferTo(
-						new File(savePath + "/" + fname_changed));
+				mfiles[i].transferTo(new File(savePath + "/" + fname_changed));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

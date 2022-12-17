@@ -16,6 +16,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
+
     @Override
     public Comment getComment(Long board_num, String user_id, String nickname) {
         Comment comment = Comment.builder()

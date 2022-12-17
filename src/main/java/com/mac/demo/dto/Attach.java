@@ -29,6 +29,7 @@ public class Attach {
 	private Date wdate; // 파일 저장 날짜
 	
 	@Transient
+	@Singular("attList") // 빌더패턴에서 모든 원소를 한번에 넘기지 않고 하나씩 추가 가능
 	private List<Attach> attList; // 첨부파일명 리스트
 
 	@Builder
