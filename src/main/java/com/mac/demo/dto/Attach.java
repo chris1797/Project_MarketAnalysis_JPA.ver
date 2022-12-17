@@ -1,9 +1,6 @@
 package com.mac.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,15 +10,15 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="ATTACH_TB")
 public class Attach {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long att_num;  // index
-	private long pcode; // 부모코드(게시판 num)
+	private Long att_num;  // index
+	private Long pcode; // 부모코드(게시판 num)
 	private String user_id; // 유저 ID
 	private String filename; // 파일 이름
 	
