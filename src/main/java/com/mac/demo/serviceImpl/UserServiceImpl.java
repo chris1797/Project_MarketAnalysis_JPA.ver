@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//회원정보
-	public User getOne(String idmac) {
-		return userRepository.findByUser_id(idmac);
+	public User getOne(String user_id) {
+		return userRepository.findByUser_id(user_id);
 	}
 
 	//회원삭제
@@ -75,7 +75,9 @@ public class UserServiceImpl implements UserService {
 	//아이디 체크
 	public boolean idcheck(String idMac) {
 		com.mac.demo.model.User user = dao.getOne(idMac);
-		return user == null;
+
+		if(user == null) return false;
+		return true;
 	}
 
 	//이메일 인증
@@ -100,13 +102,16 @@ public class UserServiceImpl implements UserService {
 	      } catch (MessagingException e) {
 			  e.printStackTrace();
 	      }
+
 		return null;
 	}
 
 	//닉네임 중복 체크
 	public boolean nickCheck(String nick) {
 		com.mac.demo.model.User user = dao.getOneNick(nick);
-		return user == null;
+
+		if(user != null) return true;
+		return false;
 	}
 
 	public List<Board> findWrite(String idMac) {

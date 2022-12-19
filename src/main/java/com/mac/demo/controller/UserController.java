@@ -4,74 +4,83 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
-import com.mac.demo.serviceImpl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import com.mac.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 	
-	//유저 맵퍼
-	@Autowired
-	private UserServiceImpl svc;
+	private final UserService userSvc;
 
 //	계정추가폼
 	@GetMapping("/addForm")
-	public String addForm(Model model) {
-		model.addAttribute("user", new User());
-		return "thymeleaf/mac/User/addForm";
+	public ModelAndView addForm() {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/addForm");
+
+		mav.addObject("user", new User());
+
+		return mav;
 	}
 	
 //	아이디 체크후 추가폼
 	@PostMapping("/addForm/{idMac}")
-	public String addForm2(@PathVariable("idMac")String idMac, Model model) {
+	public ModelAndView addForm2(@PathVariable("idMac")String idMac) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/addForm");
 
 		User user = User.builder()
 				.user_id(idMac)
 				.build();
 
-		model.addAttribute("user", user);
-		return "thymeleaf/mac/User/addForm";
+		mav.addObject("user", user);
+
+		return mav;
 	}
 	
 //	아이디 체크, 이메일 인증후 추가폼
 	@PostMapping("/addForm/{idMac}/{emailMac}")
-	public String addForm3(@PathVariable("idMac")String idMac, 
-			@PathVariable("emailMac")String emailMac, 
-			@RequestParam(name ="check", defaultValue="0")String check, Model model) {
+	public ModelAndView addForm3(@PathVariable("idMac")String idMac,
+								 @PathVariable("emailMac")String emailMac,
+								 @RequestParam(name ="check", defaultValue="0")int check, Model model) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/home");
 
 		User user = User.builder()
 				.user_id(idMac)
 				.email(emailMac)
 				.build();
 
-		if(Integer.parseInt(check) == 1) {
-			model.addAttribute("user", user);
-			return "thymeleaf/mac/User/addForm";
+		if (check == 1) {
+			mav.setViewName("thymeleaf/mac/User/addForm");
+			mav.addObject("user", user);
+			return mav;
 		}
-		return "thymeleaf/mac/home/home";
+
+		return mav;
 	}
 	
 //	계정추가
 	@PostMapping("/add")
-	@ResponseBody
 	public Map<String,Object> add(User user) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("result", svc.add(user));
+		map.put("result", userSvc.add(user));
 		return map;
 	}
 	
 //	계정리스트
 	@GetMapping("/list")
 	public String list(Model model) {
-		model.addAttribute("list", svc.getList());
+		model.addAttribute("list", userSvc.getList());
 		return "thymeleaf/mac/User/userlist";
 	}
 	
@@ -81,7 +90,7 @@ public class UserController {
 						 Model model,
 						 HttpSession session,
 						 @RequestParam(name="page", required = false,defaultValue = "1") int page) {
-		User user = svc.getOne(idMac);
+		User user = userSvc.getOne(idMac);
 		if(idMac.equals((String)session.getAttribute("idMac"))==false) return "redirect:/home";
 
 		if((String)session.getAttribute("idMac") == null) return "thymeleaf/mac/home/home";
@@ -89,7 +98,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		
 		PageHelper.startPage(page, 5);
-		PageInfo<Board> pageInfo = new PageInfo<>(svc.findWrite(idMac));
+		PageInfo<Board> pageInfo = new PageInfo<>(userSvc.findWrite(idMac));
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("page", page);
 		
@@ -99,11 +108,10 @@ public class UserController {
 	
 //	계정 삭제
 	@DeleteMapping("/deleted")
-	@ResponseBody
 	public Map<String,Object> deleted(com.mac.demo.model.User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		String idMac = user.getIdmac();
-		boolean result = svc.deleted(idMac);
+		Long user_idx = user.getNummac();
+		boolean result = userSvc.delete(user_idx);
 		map.put("result", result);
 		
 		if((String)session.getAttribute("idMac") == null){ //세션을 가져옴
@@ -121,7 +129,7 @@ public class UserController {
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
 	public String update(com.mac.demo.model.User user, Model model) {
-		User user2 = svc.getOne(user.getIdmac());
+		User user2 = userSvc.getOne(user.getIdmac());
 		model.addAttribute("user", user2);
 		return "thymeleaf/mac/User/updateForm";
 	}
@@ -131,7 +139,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> edit(User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		boolean result = svc.updated(user);
+		boolean result = userSvc.updated(user);
 		map.put("result", result);
 		return map;
 	}
@@ -141,7 +149,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> idcheck(@RequestParam("idMac")String idMac) {
 		Map<String, Object> map = new HashMap<>();
-		boolean result = svc.idcheck(idMac);
+		boolean result = userSvc.idcheck(idMac);
 		map.put("result", result);
 		map.put("id" , idMac);
 		return map;
@@ -152,7 +160,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> emailcheck(@RequestParam("emailMac")String emailMac) {
 		Map<String, Object> map = new HashMap<>();
-		String random = svc.checkmail(emailMac);
+		String random = userSvc.checkmail(emailMac);
 		if(random!=null) {
 			map.put("result", true);
 		} else {
@@ -177,7 +185,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> nickCheck(@RequestParam("nick")String nick) {
 		Map<String, Object> map = new HashMap<>();
-		boolean result = svc.nickCheck(nick);
+		boolean result = userSvc.nickCheck(nick);
 		map.put("result", result);
 		return map;
 	}
