@@ -79,30 +79,45 @@ public class UserController {
 	
 //	계정리스트
 	@GetMapping("/list")
-	public String list(Model model) {
-		model.addAttribute("list", userSvc.getList());
-		return "thymeleaf/mac/User/userlist";
+	public ModelAndView list() {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/userlist");
+
+		mav.addObject("list", userSvc.getList());
+
+		return mav;
 	}
 	
 //	마이페이지
 	@GetMapping("/detail/{idMac}")
-	public String mypage(@PathVariable("idMac")String idMac,
+	public ModelAndView mypage(@PathVariable("idMac")String idMac,
 						 Model model,
 						 HttpSession session,
 						 @RequestParam(name="page", required = false,defaultValue = "1") int page) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/myPage");
+
 		User user = userSvc.getOne(idMac);
-		if(idMac.equals((String)session.getAttribute("idMac"))==false) return "redirect:/home";
 
-		if((String)session.getAttribute("idMac") == null) return "thymeleaf/mac/home/home";
+		if(!idMac.equals((String)session.getAttribute("idMac"))) {
+			mav.setViewName("redirect:/home");
+			return mav;
+		}
 
-		model.addAttribute("user", user);
+		if((String)session.getAttribute("idMac") == null) {
+			mav.setViewName("thymeleaf/mac/home/home");
+			return mav;
+		}
+
+		mav.addObject("user", user);
 		
 		PageHelper.startPage(page, 5);
 		PageInfo<Board> pageInfo = new PageInfo<>(userSvc.findWrite(idMac));
-		model.addAttribute("pageInfo", pageInfo);
-		model.addAttribute("page", page);
+
+		mav.addObject("pageInfo", pageInfo);
+		mav.addObject("page", page);
 		
-		return "thymeleaf/mac/User/myPage";
+		return mav;
 
 	}
 	
@@ -128,39 +143,48 @@ public class UserController {
 	
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
-	public String update(com.mac.demo.model.User user, Model model) {
-		User user2 = userSvc.getOne(user.getIdmac());
-		model.addAttribute("user", user2);
-		return "thymeleaf/mac/User/updateForm";
+	public ModelAndView update(User user) {
+
+		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/updateForm");
+
+		User user2 = userSvc.getOne(user.getUser_id());
+		mav.addObject("user", user2);
+
+		return mav;
 	}
 	
 //  유저 정보 수정
 	@PutMapping("/updated")
-	@ResponseBody
 	public Map<String, Object> edit(User user, HttpSession session) {
+
 		Map<String, Object> map = new HashMap<>();
+
 		boolean result = userSvc.updated(user);
 		map.put("result", result);
+
 		return map;
 	}
 	
 //	ID 중복체크
 	@PostMapping("/idcheck")
-	@ResponseBody
 	public Map<String, Object> idcheck(@RequestParam("idMac")String idMac) {
+
 		Map<String, Object> map = new HashMap<>();
+
 		boolean result = userSvc.idcheck(idMac);
 		map.put("result", result);
 		map.put("id" , idMac);
+
 		return map;
 	}
 	
 //	email 인증 보내기
 	@PostMapping("/checkmail")
-	@ResponseBody
 	public Map<String, Object> emailcheck(@RequestParam("emailMac")String emailMac) {
+
 		Map<String, Object> map = new HashMap<>();
 		String random = userSvc.checkmail(emailMac);
+
 		if(random!=null) {
 			map.put("result", true);
 		} else {
@@ -168,25 +192,29 @@ public class UserController {
 		}
 		map.put("code", random);
 		map.put("emailMac", emailMac);
+
 		return map;
 	}
 	
 //	이메일 인증코드
 	@PostMapping("/checkcode")
-	@ResponseBody
 	public Map<String, Object> checkcode(@RequestParam("code")String code) {
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("code", code);
+
 		return map;
 	}
 	
 //	닉네임
 	@PostMapping("/nickCheck")
-	@ResponseBody
 	public Map<String, Object> nickCheck(@RequestParam("nick")String nick) {
+
 		Map<String, Object> map = new HashMap<>();
+
 		boolean result = userSvc.nickCheck(nick);
 		map.put("result", result);
+
 		return map;
 	}
 	
