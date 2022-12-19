@@ -8,31 +8,38 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RequestMapping
 public class CustomErrorController implements ErrorController {
 
 	@RequestMapping("/error")
-	public String error(HttpServletRequest request, Model model) {
+	public ModelAndView error(HttpServletRequest request, Model model) {
+		ModelAndView mav = new ModelAndView();
+
 		Object status =request.getAttribute("javax.servlet.error.status_code");
 		
-		model.addAttribute("status", "상태:" +status);
-		model.addAttribute("path", request.getAttribute("javax.servlet.error.request_uri"));
-		model.addAttribute("timestamp", new Date());
+		mav.addObject("status", "상태:" +status);
+		mav.addObject("path", request.getAttribute("javax.servlet.error.request_uri"));
+		mav.addObject("timestamp", new Date());
 		
 		Object exceptionObj =request.getAttribute("javax.servlet.error.exception");
-		if(exceptionObj !=null) {
+
+		if(exceptionObj != null) {
 			Throwable e =((Exception)exceptionObj).getCause();
-			model.addAttribute("exception",e.getClass().getName());
-			model.addAttribute("message", e.getMessage());
+			mav.addObject("exception",e.getClass().getName());
+			mav.addObject("message", e.getMessage());
 		}
 		
 		if(status.equals(HttpStatus.NOT_FOUND.value())) {
-			return "thymeleaf/mac/error/404error";
+			mav.setViewName("thymeleaf/mac/error/404error");
+			return mav;
 		}else if(status.equals(405)) {
-			return "thymeleaf/mac/error/405error";
+			mav.setViewName("thymeleaf/mac/error/405error");
+			return mav;
 		}else {
-			return "thymeleaf/mac/error/500error";
+			mav.setViewName("thymeleaf/mac/error/500error");
+			return mav;
 		}
 	}
 }
