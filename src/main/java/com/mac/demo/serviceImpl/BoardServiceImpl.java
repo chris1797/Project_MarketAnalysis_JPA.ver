@@ -3,13 +3,13 @@ package com.mac.demo.serviceImpl;
 import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Attach;
 import com.mac.demo.dto.Board;
-import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.service.AttachService;
 import com.mac.demo.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
 	private final BoardRepository boardRepository;
-	private final ResourceLoader resourceLoader;
 	private final AttachService attachSvc;
+	ResourceLoader resourceLoader;
 
 
 	public Board getBoard(String user_id, String nickname, String category) {
@@ -177,5 +178,10 @@ public class BoardServiceImpl implements BoardService {
 		PageInfo<Board> pageInfo = new PageInfo<>(findBoardByCategory(categoryMac));
 		return pageInfo;
 	}
-	
+
+	@Override
+	public Page<Board> findByUser_id(Pageable pageable) {
+		return null;
+	}
+
 }

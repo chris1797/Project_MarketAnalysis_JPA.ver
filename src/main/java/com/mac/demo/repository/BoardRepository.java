@@ -1,6 +1,8 @@
 package com.mac.demo.repository;
 
 import com.mac.demo.dto.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -44,6 +46,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	
 	@Query(value = "SELECT b FROM Board b WHERE b.nicknamemac LIKE CONCAT('%', :nickname, '%') AND b.categorymac = :categorymac", nativeQuery = true)
 	List<Board> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
+
+    Page<Board> findByUser_id(Pageable pageable);
 	
 	/*
 	num값이 5~10 사이에 있는 행을 추출

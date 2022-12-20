@@ -15,7 +15,7 @@ public interface UserService {
     boolean add(User user);
 
     // Impl 수정 필요
-    List<Board> findWrite(String user_id);
+    List<Board> findContents(String user_id);
 
     User getOne(String user_id);
 

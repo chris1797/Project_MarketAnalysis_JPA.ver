@@ -1,16 +1,19 @@
 package com.mac.demo.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
+import com.mac.demo.service.BoardService;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.awt.print.Pageable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ import java.util.Map;
 public class UserController {
 	
 	private final UserService userSvc;
+	private final BoardService boardSvc;
 
 //	계정추가폼
 	@GetMapping("/addForm")
@@ -39,8 +43,8 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/addForm");
 
 		User user = User.builder()
-				.user_id(idMac)
-				.build();
+						.user_id(idMac)
+						.build();
 
 		mav.addObject("user", user);
 
@@ -56,9 +60,9 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/home");
 
 		User user = User.builder()
-				.user_id(idMac)
-				.email(emailMac)
-				.build();
+						.user_id(idMac)
+						.email(emailMac)
+						.build();
 
 		if (check == 1) {
 			mav.setViewName("thymeleaf/mac/User/addForm");
@@ -90,16 +94,16 @@ public class UserController {
 	
 //	마이페이지
 	@GetMapping("/detail/{idMac}")
-	public ModelAndView mypage(@PathVariable("idMac")String idMac,
-						 Model model,
-						 HttpSession session,
-						 @RequestParam(name="page", required = false,defaultValue = "1") int page) {
+	public ModelAndView getMyPage(@PathVariable("idMac")String user_id,
+							   HttpSession session,
+							   @PageableDefault(sort = "wdate", direction = Sort.Direction.DESC) Pageable pageable,
+							   @RequestParam(name="page", required = false,defaultValue = "1") int page) {
 
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/myPage");
 
-		User user = userSvc.getOne(idMac);
+		User user = userSvc.getOne(user_id);
 
-		if(!idMac.equals((String)session.getAttribute("idMac"))) {
+		if(!user_id.equals((String)session.getAttribute("idMac"))) {
 			mav.setViewName("redirect:/home");
 			return mav;
 		}
@@ -111,12 +115,10 @@ public class UserController {
 
 		mav.addObject("user", user);
 		
-		PageHelper.startPage(page, 5);
-		PageInfo<Board> pageInfo = new PageInfo<>(userSvc.findWrite(idMac));
+		Page<Board> boardPage = boardSvc.findByUser_id(pageable);
 
-		mav.addObject("pageInfo", pageInfo);
-		mav.addObject("page", page);
-		
+		mav.addObject("pageInfo", boardPage);
+
 		return mav;
 
 	}

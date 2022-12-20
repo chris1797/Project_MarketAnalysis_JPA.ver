@@ -114,8 +114,8 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
-	public List<Board> findWrite(String idMac) {
-		return dao.findWrite(idMac);
+	public List<Board> findContents(String user_id) {
+		return board.findWrite(user_id);
 	}
 
 	@Override
