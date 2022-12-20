@@ -2,7 +2,6 @@ package com.mac.demo.serviceImpl;
 
 import com.mac.demo.dto.Board;
 import com.mac.demo.mappers.BoardMapper;
-import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.model.User;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.repository.UserRepository;

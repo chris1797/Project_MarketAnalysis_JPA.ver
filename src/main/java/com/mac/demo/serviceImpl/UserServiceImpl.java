@@ -1,9 +1,7 @@
 package com.mac.demo.serviceImpl;
 
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Board;
 import com.mac.demo.dto.User;
-import com.mac.demo.mappers.UserMapper;
 import com.mac.demo.repository.UserRepository;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +21,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	private UserMapper dao;
 	private final UserRepository userRepository;
 	private final JavaMailSender sender;
-	
+
+
 	//회원가입
 	public boolean add(User user) {
 		userRepository.save(user);
@@ -73,11 +71,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//아이디 체크
-	public boolean idcheck(String idMac) {
-		com.mac.demo.model.User user = dao.getOne(idMac);
+	public boolean idcheck(String user_id) {
+		try {
+			User user = userRepository.findByUser_id(user_id);
+			if(user == null) return false;
+			return true;
 
-		if(user == null) return false;
-		return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	//이메일 인증
@@ -106,16 +109,24 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	//닉네임 중복 체크
-	public boolean nickCheck(String nick) {
-		com.mac.demo.model.User user = dao.getOneNick(nick);
+	/**
+	 * 해당 닉네임에 해당하는 유저 존재 여부 체크
+	 * @param nickName
+	 * @return boolean
+	 */
+	public boolean nickCheck(String nickName) {
 
-		if(user != null) return true;
-		return false;
-	}
-
-	public List<Board> findContents(String user_id) {
-		return board.findWrite(user_id);
+		try {
+			User user = userRepository.findByNickname(nickName);
+			if (user != null) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

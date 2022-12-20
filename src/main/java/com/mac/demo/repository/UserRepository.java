@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	User findByUser_id(String id);
 	List<User>findByUsernameContaining(String user_name);
 
+    User findByNickname(String nickName);
+
 //	@Transactional
 //	@Modifying
 //	@Query(value = "UPDATE USER_TB u SET u.titlemac=?1, b.contentsmac=?2 WHERE u.idmac=?3", nativeQuery = true)
