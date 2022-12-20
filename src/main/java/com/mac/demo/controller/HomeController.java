@@ -1,6 +1,5 @@
 package com.mac.demo.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ public class HomeController {
 	
 //	데이터 출처
 	@GetMapping("/dataSource")
-	public ModelAndView dataSorce(Model model,HttpSession session) {
+	public ModelAndView dataSource(HttpSession session) {
 
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/dataSource");
 
