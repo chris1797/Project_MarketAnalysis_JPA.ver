@@ -1,6 +1,6 @@
 package com.mac.demo.controller;
 
-import com.mac.demo.model.User;
+import com.mac.demo.dto.User;
 import com.mac.demo.serviceImpl.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,7 +106,11 @@ public class LoginController {
 	
 //	비밀번호 찾기 메소드
 	@PostMapping("/findPassword")
-	public ModelAndView findPassword(@RequestParam("idMac")String idMac,@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac, User user, HttpSession session,Model model){
+	public ModelAndView findPassword( @RequestParam("idMac")String idMac,
+									 @RequestParam("nameMac")String nameMac,
+									 @RequestParam("emailMac")String emailMac,
+									 User user,
+									 HttpSession session) {
 
 		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/findPassword");
 		String msg = null;

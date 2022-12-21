@@ -30,7 +30,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
 	
-	private final AdminService adminSvc;
 	private final BoardService boardSvc;
 	private final AttachService attachSvc;
 	private final UserService userSvc;
@@ -60,10 +59,13 @@ public class AdminController {
 
 		return mav;
 	}
-	
-	
-	
-    //모든 유저 정보
+
+
+	/**
+	 * 모든 유저리스트
+	 * @param page
+	 * @return
+	 */
 	@GetMapping("/admin/allUser")
 	public ModelAndView allUser(@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
 
@@ -307,7 +309,12 @@ public class AdminController {
 		return mav;
 	}
 
-	//유저 검색
+	/**
+	 * keyword로 유저 검색
+	 * @param page
+	 * @param keyword
+	 * @return
+	 */
 	@PostMapping("/admin/userSearch")
 	public ModelAndView searchUser(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 								   @RequestParam(name = "keyword", required = false) String keyword) {

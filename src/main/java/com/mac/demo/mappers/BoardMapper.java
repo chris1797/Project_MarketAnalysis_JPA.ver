@@ -2,7 +2,7 @@ package com.mac.demo.mappers;
 
 import com.mac.demo.dto.Board;
 import com.mac.demo.dto.Comment;
-import com.mac.demo.model.User;
+import com.mac.demo.dto.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Page;
 

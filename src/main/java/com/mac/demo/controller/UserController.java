@@ -125,9 +125,9 @@ public class UserController {
 	
 //	계정 삭제
 	@DeleteMapping("/deleted")
-	public Map<String,Object> deleted(com.mac.demo.model.User user, HttpSession session) {
+	public Map<String,Object> deleted(com.mac.demo.dto.User user, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		Long user_idx = user.getNummac();
+		Long user_idx = user.getUser_num();
 		boolean result = userSvc.delete(user_idx);
 		map.put("result", result);
 		
