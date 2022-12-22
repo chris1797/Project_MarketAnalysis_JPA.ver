@@ -3,9 +3,8 @@
 - 공공기관 빅데이터와 kakao map OPEN API를 활용한 골목상권 분석 & 커뮤니티 웹 프로젝트
   ( 유동인구, 매출, 점포 데이터 )
   
-- Stack
+- Stack 
   Java, Python
-  
   Flask, Pandas, Spring-Boot, Spring MVC
   JPA (migration complete from Mybatis)
   Spring Security
