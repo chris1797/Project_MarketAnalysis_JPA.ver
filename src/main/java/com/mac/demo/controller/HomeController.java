@@ -17,7 +17,7 @@ public class HomeController {
 	@GetMapping("")
 	public ModelAndView home(HttpSession session) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/home");
+		ModelAndView mav = new ModelAndView("/home/home");
 
 		if(session.getAttribute("idMac")!=null) {
 			String user_id = session.getAttribute("idMac").toString();
@@ -31,7 +31,7 @@ public class HomeController {
 	@GetMapping("/dataSource")
 	public ModelAndView dataSource(HttpSession session) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/dataSource");
+		ModelAndView mav = new ModelAndView("/home/dataSource");
 
 		if(session.getAttribute("idMac")!=null) {
 			String user_id = session.getAttribute("idMac").toString();
@@ -45,7 +45,7 @@ public class HomeController {
 	@GetMapping("/siteIntroduction")
 	public ModelAndView siteIntroduction(Model model,HttpSession session) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/siteIntroduction");
+		ModelAndView mav = new ModelAndView("/home/siteIntroduction");
 
 		if(session.getAttribute("idMac")!=null) {
 			String uid = session.getAttribute("idMac").toString();

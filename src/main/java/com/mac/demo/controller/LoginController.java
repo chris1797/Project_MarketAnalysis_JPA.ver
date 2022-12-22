@@ -25,14 +25,14 @@ public class LoginController {
 	
 	@GetMapping("/loginForm")
 	public String login() {
-		return "thymeleaf/mac/login/loginForm";
+		return "/login/loginForm";
 	}
 	
 //	세션에 id저장
 	@PostMapping("/loginForm")
 	public ModelAndView login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, User user, HttpSession session, Model model){
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/loginForm");
+		ModelAndView mav = new ModelAndView("/login/loginForm");
 //		db에 사용자가 입력한 id와 pw가 있는지 확인
 		String checked_Id= loginSvc.loginUser(idMac, pwMac);
 		
@@ -79,14 +79,14 @@ public class LoginController {
 //	아이디 찾기 폼(폼에서 이름,전화번호 기입후 alert창으로 아이디띄움)
 	@GetMapping("/findId")
 	public String findIdForm() {
-		return "thymeleaf/mac/login/findId";
+		return "/login/findId";
 	}
 	
 //	아이디 찾기 메소드
 	@PostMapping("/findId")
 	public ModelAndView findId(@RequestParam("nameMac")String nameMac, @RequestParam("emailMac")String emailMac){
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/findId");
+		ModelAndView mav = new ModelAndView("/login/findId");
 		
 		String foundId= loginSvc.findId(nameMac,emailMac);
 		
@@ -101,7 +101,7 @@ public class LoginController {
 //	비밀번호 찾기 폼(폼에서 아이디,이름,전화번호 기입후 alert창으로 비밀번호띄움)
 	@GetMapping("/findPassword")
 	public String findPasswordForm() {
-		return "thymeleaf/mac/login/findPassword";
+		return "/login/findPassword";
 	}
 	
 //	비밀번호 찾기 메소드
@@ -112,7 +112,7 @@ public class LoginController {
 									 User user,
 									 HttpSession session) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/login/findPassword");
+		ModelAndView mav = new ModelAndView("/login/findPassword");
 		String msg = null;
 
 		try {

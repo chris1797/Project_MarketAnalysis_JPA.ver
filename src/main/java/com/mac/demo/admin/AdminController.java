@@ -41,20 +41,20 @@ public class AdminController {
 	//관리자 페이지 메인
 	@GetMapping("/admin")
 	public String adminMain() {
-		return "thymeleaf/mac/admin/adminMain";
+		return "/admin/adminMain";
 	}
 
 	//관리자 로그인
 	@GetMapping("/admin/loginForm")
 	public String adminLogin() {
-		return "thymeleaf/mac/admin/adminLoginForm";
+		return "/admin/adminLoginForm";
 		}
 	
 	//에러
 	@GetMapping("/err")
 	public ModelAndView adminLogin(@RequestParam(value = "error", required = false) String err) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/adminLoginForm");
+		ModelAndView mav = new ModelAndView("/admin/adminLoginForm");
 		mav.addObject("msg", err);
 
 		return mav;
@@ -69,7 +69,7 @@ public class AdminController {
 	@GetMapping("/admin/allUser")
 	public ModelAndView allUser(@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allUser");
+		ModelAndView mav = new ModelAndView("/admin/allUser");
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -88,7 +88,7 @@ public class AdminController {
 	@GetMapping("/admin/allFreeBoard")
 	public ModelAndView allFreeBord(String categorymac, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allFreeBoard");
+		ModelAndView mav = new ModelAndView("/admin/allFreeBoard");
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -136,7 +136,7 @@ public class AdminController {
 	public String writeNotice() {
 	
 		
-		return "thymeleaf/mac/admin/writeNotice";
+		return "/admin/writeNotice";
 	}
 	
 	//공지사항 저장
@@ -156,7 +156,7 @@ public class AdminController {
 	@GetMapping("/admin/allNoticeBoard")
 	public ModelAndView allNoticeBoard(@RequestParam(name="page", required = false,defaultValue ="1") int page) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allNoticeBoard");
+		ModelAndView mav = new ModelAndView("/admin/allNoticeBoard");
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -185,7 +185,7 @@ public class AdminController {
 	@GetMapping("/admin/allComment")
 	public ModelAndView allCommentBoard(@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allComment");
+		ModelAndView mav = new ModelAndView("/admin/allComment");
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -214,7 +214,7 @@ public class AdminController {
 								   @RequestParam(name = "category", required = false) String category,
 								   @RequestParam(name = "keyword", required = false) String keyword) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allFreeBoard");
+		ModelAndView mav = new ModelAndView("/admin/allFreeBoard");
 
 		PageInfo<Board> pageInfo = null;
 
@@ -242,7 +242,7 @@ public class AdminController {
 
 		PageHelper.startPage(page, 5);
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allAdsBoard");
+		ModelAndView mav = new ModelAndView("/admin/allAdsBoard");
 
 		PageInfo<Board> pageInfo = null;
 		try {
@@ -267,7 +267,7 @@ public class AdminController {
 									 @RequestParam(name = "category", required = false) String category,
 									 @RequestParam(name = "keyword", required = false) String keyword) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allNoticeBoard");
+		ModelAndView mav = new ModelAndView("/admin/allNoticeBoard");
 		PageInfo<Board> pageInfo = null;
 
 		try {
@@ -289,7 +289,7 @@ public class AdminController {
 									  @RequestParam(name = "category", required = false) String category,
 									  @RequestParam(name = "keyword", required = false) String keyword) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allComment");
+		ModelAndView mav = new ModelAndView("/admin/allComment");
 
 		PageInfo<Comment> pageInfo = null;
 
@@ -319,7 +319,7 @@ public class AdminController {
 	public ModelAndView searchUser(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 								   @RequestParam(name = "keyword", required = false) String keyword) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/admin/allUser");
+		ModelAndView mav = new ModelAndView("/admin/allUser");
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -337,7 +337,7 @@ public class AdminController {
 	public ModelAndView getListByPage_notice(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 											 @RequestParam(name = "category", required = false) String category,
 											 HttpSession session) {
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/board/notice_boardList");
+		ModelAndView mav = new ModelAndView("/board/notice_boardList");
 
 		try {
 			PageHelper.startPage(page, 10);
@@ -361,7 +361,7 @@ public class AdminController {
 							@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 							HttpSession session) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/board/notice_board_detail");
+		ModelAndView mav = new ModelAndView("/board/notice_board_detail");
 
 		String idMac = (String) session.getAttribute("idMac");
 		mav.addObject("idMac", idMac);
@@ -393,7 +393,7 @@ public class AdminController {
 											  @RequestParam(name = "keyword", required = false) String keyword,
 											  @RequestParam(name = "category", required = false) String category) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/board/notice_boardList");
+		ModelAndView mav = new ModelAndView("/board/notice_boardList");
 
 		PageHelper.startPage(page, 10);
 		PageInfo<Board> pageInfo = null;

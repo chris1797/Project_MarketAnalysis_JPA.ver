@@ -32,13 +32,13 @@ public class CustomErrorController implements ErrorController {
 		}
 		
 		if(status.equals(HttpStatus.NOT_FOUND.value())) {
-			mav.setViewName("thymeleaf/mac/error/404error");
+			mav.setViewName("/error/404error");
 			return mav;
 		}else if(status.equals(405)) {
-			mav.setViewName("thymeleaf/mac/error/405error");
+			mav.setViewName("/error/405error");
 			return mav;
 		}else {
-			mav.setViewName("thymeleaf/mac/error/500error");
+			mav.setViewName("/error/500error");
 			return mav;
 		}
 	}

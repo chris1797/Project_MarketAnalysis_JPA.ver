@@ -22,7 +22,7 @@ public class BigdataController {
 
     @GetMapping("/location")
     public String location() {
-        return "thymeleaf/mac/bigdata/bigdate";
+        return "/bigdata/bigdate";
     }
 
     //해당 데이터 테이블의 구 데이터 가져오기

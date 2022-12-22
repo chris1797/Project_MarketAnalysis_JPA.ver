@@ -29,7 +29,7 @@ public class UserController {
 	@GetMapping("/addForm")
 	public ModelAndView addForm() {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/addForm");
+		ModelAndView mav = new ModelAndView("/User/addForm");
 
 		mav.addObject("user", new User());
 
@@ -40,7 +40,7 @@ public class UserController {
 	@PostMapping("/addForm/{idMac}")
 	public ModelAndView addForm2(@PathVariable("idMac")String idMac) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/addForm");
+		ModelAndView mav = new ModelAndView("/User/addForm");
 
 		User user = User.builder()
 						.user_id(idMac)
@@ -57,7 +57,7 @@ public class UserController {
 								 @PathVariable("emailMac")String emailMac,
 								 @RequestParam(name ="check", defaultValue="0")int check, Model model) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/home/home");
+		ModelAndView mav = new ModelAndView("/home/home");
 
 		User user = User.builder()
 						.user_id(idMac)
@@ -65,7 +65,7 @@ public class UserController {
 						.build();
 
 		if (check == 1) {
-			mav.setViewName("thymeleaf/mac/User/addForm");
+			mav.setViewName("/User/addForm");
 			mav.addObject("user", user);
 			return mav;
 		}
@@ -85,7 +85,7 @@ public class UserController {
 	@GetMapping("/list")
 	public ModelAndView list() {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/userlist");
+		ModelAndView mav = new ModelAndView("/User/userlist");
 
 		mav.addObject("list", userSvc.getList());
 
@@ -99,7 +99,7 @@ public class UserController {
 							   @PageableDefault(sort = "wdate", direction = Sort.Direction.DESC) Pageable pageable,
 							   @RequestParam(name="page", required = false,defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/myPage");
+		ModelAndView mav = new ModelAndView("/User/myPage");
 
 		User user = userSvc.getOne(user_id);
 
@@ -109,7 +109,7 @@ public class UserController {
 		}
 
 		if((String)session.getAttribute("idMac") == null) {
-			mav.setViewName("thymeleaf/mac/home/home");
+			mav.setViewName("/home/home");
 			return mav;
 		}
 
@@ -147,7 +147,7 @@ public class UserController {
 	@GetMapping("/updateForm")
 	public ModelAndView update(User user) {
 
-		ModelAndView mav = new ModelAndView("thymeleaf/mac/User/updateForm");
+		ModelAndView mav = new ModelAndView("/User/updateForm");
 
 		User user2 = userSvc.getOne(user.getUser_id());
 		mav.addObject("user", user2);

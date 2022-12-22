@@ -41,7 +41,7 @@ public class BoardController {
 	@GetMapping("/main")
 	public String main(Model model, HttpSession session) {
 		model.addAttribute((String)session.getAttribute("idMac"));
-		return "thymeleaf/mac/board/board_main";
+		return "/board/board_main";
 	}
 	
 //======================================== 자유게시판 ========================================
@@ -55,7 +55,7 @@ public class BoardController {
 
 		if(user_id == null){
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
-			return "thymeleaf/mac/login/loginForm";
+			return "/login/loginForm";
 		} else {
 			String nickname = userSvc.getOne(user_id).getNickname();
 			Board board = boardSvc.getBoard(user_id, nickname, category);
@@ -64,7 +64,7 @@ public class BoardController {
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
 			model.addAttribute("idMac", user_id);
 		}
-		return String.format("thymeleaf/mac/board/%s_board_input", category);
+		return String.format("/board/%s_board_input", category);
 	}
 
 
@@ -100,7 +100,7 @@ public class BoardController {
 			model.addAttribute("idMac",(String)session.getAttribute("idMac"));
 		}
 
-		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
+		return String.format("/board/%s_board_list", categoryMac);
 	}
 	
 	
@@ -135,7 +135,7 @@ public class BoardController {
 		model.addAttribute("filelist", boardSvc.getFileList(board_num));
 		model.addAttribute("fileindex", boardSvc.getFileList(board_num).size());
 		
-		return String.format("thymeleaf/mac/board/%s_board_detail", categoryMac);
+		return String.format("/board/%s_board_detail", categoryMac);
 	}
 	
 //  게시글 삭제
@@ -158,7 +158,7 @@ public class BoardController {
 		model.addAttribute("filelist", boardSvc.getFileList(board_num));
 		model.addAttribute("fileindex", boardSvc.getFileList(board_num).size());
 		
-		return String.format("thymeleaf/mac/board/%s_board_edit", categoryMac);
+		return String.format("/board/%s_board_edit", categoryMac);
 	}
 	
 //  게시글 수정
@@ -198,7 +198,7 @@ public class BoardController {
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("page", page);
 
-		return String.format("thymeleaf/mac/board/%s_board_list", categoryMac);
+		return String.format("/board/%s_board_list", categoryMac);
 	}
 	
 //======================================== 파일 ========================================
