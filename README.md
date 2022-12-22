@@ -4,7 +4,7 @@
   ( 유동인구, 매출, 점포 데이터 )
   
 - Stack
-  Java, Python
+  Java, Python 
   Flask, Pandas, Spring-Boot, Spring MVC
   JPA (migration complete from Mybatis)
   Spring Security
