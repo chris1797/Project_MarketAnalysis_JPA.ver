@@ -4,12 +4,12 @@
   ( 유동인구, 매출, 점포 데이터 )
   
 - Stack  
-Java, Python  
-Flask, Pandas, Spring-Boot, Spring MVC  
-JPA (migration complete from Mybatis)  
-Spring Security  
-Gradle (migration complete from Maven)  
-HTML&CSS, JQuery, Ajax, Thymeleaf  
+ㄴJava, Python  
+ㄴFlask, Pandas, Spring-Boot, Spring MVC  
+ㄴJPA (migration complete from Mybatis)  
+ㄴSpring Security  
+ㄴGradle (migration complete from Maven)  
+ㄴHTML&CSS, JQuery, Ajax, Thymeleaf  
   
 - 기존 '우리마을가게 상권분석 서비스' 사이트를 레퍼런스 삼아 프로젝트 진행
   링크 : https://golmok.seoul.go.kr/main.do
