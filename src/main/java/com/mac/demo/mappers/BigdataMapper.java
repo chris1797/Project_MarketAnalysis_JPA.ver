@@ -1,10 +1,9 @@
 package com.mac.demo.mappers;
 
-import java.util.List;
-
+import com.mac.demo.model.Coordinates;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.mac.demo.model.XY;
+import java.util.List;
 
 @Mapper
 public interface BigdataMapper {
@@ -15,7 +14,7 @@ public interface BigdataMapper {
 
 	List<String> getgil(String dong, String kind);
 
-	XY getxy(String gil);
+	Coordinates getxy(String gil);
 
 	List<String> getsvc(String gil, String kind);
 

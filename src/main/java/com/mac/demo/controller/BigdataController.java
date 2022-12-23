@@ -1,6 +1,6 @@
 package com.mac.demo.controller;
 
-import com.mac.demo.model.XY;
+import com.mac.demo.model.Coordinates;
 import com.mac.demo.service.BigdataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +160,7 @@ public class BigdataController {
         }
 
         //x,y 좌표값 가져오는 곳
-        XY xy = bigdataSvc.getxy(gil);
+        Coordinates xy = bigdataSvc.getxy(gil);
         int x = xy.getX();
         int y = xy.getY();
         map.put("x", x);

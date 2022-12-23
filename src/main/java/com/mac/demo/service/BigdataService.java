@@ -1,6 +1,6 @@
 package com.mac.demo.service;
 
-import com.mac.demo.model.XY;
+import com.mac.demo.model.Coordinates;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface BigdataService {
 
     List<String> getgil(String dong, String kind);
 
-    XY getxy(String gil);
+    Coordinates getxy(String gil);
 
     List<String> getsvc(String gil, String kind);
 

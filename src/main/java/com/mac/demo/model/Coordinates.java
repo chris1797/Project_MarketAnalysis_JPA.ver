@@ -1,6 +1,6 @@
 package com.mac.demo.model;
 
-public class XY {
+public class Coordinates {
 
 	private int x;
 	private int y;
