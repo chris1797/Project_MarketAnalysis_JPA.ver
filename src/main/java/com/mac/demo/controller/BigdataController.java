@@ -157,6 +157,7 @@ public class BigdataController {
             }
             yearlist2.add(0, selectyear);
             map.put("yearlist", yearlist2);
+
         }
 
         //x,y 좌표값 가져오는 곳
