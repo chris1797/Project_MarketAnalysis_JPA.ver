@@ -117,30 +117,41 @@ public class BigdataController {
 
     //해당 데이터 테이블의 골목길 데이터 가져오기
     @PostMapping("/gil")
-    public Map<String, Object> gil(@RequestParam("dong") String dong, @RequestParam("kind") String kind) {
+    public Map<String, Object> gil(@RequestParam("dong") String dong,
+                                   @RequestParam("kind") String kind) {
+
         Map<String, Object> map = new HashMap<>();
+
         String selectgill = "<option>-- 길을 선택하세요 --</option>";
+
         List<String> gillist = bigdataSvc.getgil(dong, kind);
         List<String> gillist2 = new ArrayList<>();
+
         for (int i = 0; i < gillist.size(); i++) {
             String dong2 = "<option>" + gillist.get(i) + "</option>";
             gillist2.add(dong2);
         }
         gillist2.add(0, selectgill);
+
         map.put("gillist", gillist2);
         map.put("kind", kind);
+
         return map;
     }
 
     //골목길 좌표 가져오기
     @PostMapping("/xy")
     public Map<String, Object> xy(@RequestParam("gil") String gil, @RequestParam("kind") String kind) {
+
         Map<String, Object> map = new HashMap<>();
         String selectsvc = "<option>서비스명</option>";
         String selectyear = "<option>년도</option>";
+
         List<String> svclist2 = new ArrayList<>();
         List<String> yearlist2 = new ArrayList<>();
+
         if (kind.equals("sales") || kind.equals("store")) {
+
             List<String> svclist = bigdataSvc.getsvc(gil, kind);
             for (int i = 0; i < svclist.size(); i++) {
                 String svc2 = "<option>" + svclist.get(i) + "</option>";
