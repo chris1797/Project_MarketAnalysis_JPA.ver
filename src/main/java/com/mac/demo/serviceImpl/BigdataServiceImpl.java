@@ -1,6 +1,5 @@
 package com.mac.demo.serviceImpl;
 
-import com.mac.demo.mappers.BigdataMapper;
 import com.mac.demo.model.XY;
 import com.mac.demo.service.BigdataService;
 import lombok.RequiredArgsConstructor;
