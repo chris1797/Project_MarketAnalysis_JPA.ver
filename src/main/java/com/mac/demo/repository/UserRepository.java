@@ -1,18 +1,18 @@
 package com.mac.demo.repository;
 
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.MemberDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<MemberDTO, Long>{
 
-	User findByUser_id(String id);
-	List<User>findByUsernameContaining(String user_name);
+	MemberDTO findByUser_id(String id);
+	List<MemberDTO>findByUsernameContaining(String user_name);
 
-    User findByNickname(String nickName);
+    MemberDTO findByNickname(String nickName);
 
 //	@Transactional
 //	@Modifying

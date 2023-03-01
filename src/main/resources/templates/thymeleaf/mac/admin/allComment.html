@@ -51,7 +51,7 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="/manager/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="/manager/img/memberDTO.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -89,7 +89,7 @@
                        &nbsp;&nbsp;
                     </div>
                     <div class="nav-item dropdown">
-                            <img class="rounded-circle me-lg-2" src="/manager/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="/manager/img/memberDTO.jpg" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">admin</span>
                      
                     </div>
@@ -117,13 +117,13 @@
                                     </tr>
                                 </thead>
 <tbody>
-    <tr th:each="comment : ${pageInfo.list}">
-	<td th:text="${comment.comment_num}" id="numMac"></td>
-	<td th:text="${comment.user_id}"></td>
-	<td th:text="${comment.pcode}"></td>
-	<td th:text="${comment.comment}"></td>
-	<td th:text="${comment.wdate}"></td>
-	<td><button th:onclick="javascript:commentDelete([[${comment.comment_num}]]);" class="btn btn-primary">삭제</button></td>
+    <tr th:each="commentDTO : ${pageInfo.list}">
+	<td th:text="${commentDTO.comment_num}" id="numMac"></td>
+	<td th:text="${commentDTO.user_id}"></td>
+	<td th:text="${commentDTO.pcode}"></td>
+	<td th:text="${commentDTO.commentDTO}"></td>
+	<td th:text="${commentDTO.wdate}"></td>
+	<td><button th:onclick="javascript:commentDelete([[${commentDTO.comment_num}]]);" class="btn btn-primary">삭제</button></td>
     </tr>
 
 </table>

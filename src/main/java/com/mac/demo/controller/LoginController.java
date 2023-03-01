@@ -1,6 +1,6 @@
 package com.mac.demo.controller;
 
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.MemberDTO;
 import com.mac.demo.serviceImpl.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class LoginController {
 	
 //	세션에 id저장
 	@PostMapping("/loginForm")
-	public ModelAndView login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, User user, HttpSession session, Model model){
+	public ModelAndView login(@RequestParam("idMac")String idMac, @RequestParam("pwMac")String pwMac, MemberDTO memberDTO, HttpSession session, Model model){
 
 		ModelAndView mav = new ModelAndView("/login/loginForm");
 //		db에 사용자가 입력한 id와 pw가 있는지 확인
@@ -109,7 +109,7 @@ public class LoginController {
 	public ModelAndView findPassword( @RequestParam("idMac")String idMac,
 									 @RequestParam("nameMac")String nameMac,
 									 @RequestParam("emailMac")String emailMac,
-									 User user,
+									 MemberDTO memberDTO,
 									 HttpSession session) {
 
 		ModelAndView mav = new ModelAndView("/login/findPassword");

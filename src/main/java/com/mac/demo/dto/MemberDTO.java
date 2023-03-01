@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="USER_TB")
-public class User {
+public class MemberDTO {
 
 
     @Id
@@ -51,7 +51,7 @@ public class User {
 
 
     @Builder
-    public User(String user_id, String nickname, String user_pw, String email, Date birth, String phonenum,
+    public MemberDTO(String user_id, String nickname, String user_pw, String email, Date birth, String phonenum,
                      String city, String town, String village) {
         this.user_id = user_id;
         this.nickname = nickname;
@@ -64,8 +64,8 @@ public class User {
         this.village = village;
     }
 
-    public com.mac.demo.dto.User toEntity() {
-        return com.mac.demo.dto.User.builder()
+    public MemberDTO toEntity() {
+        return MemberDTO.builder()
                 .user_pw(user_pw)
                 .birth((java.sql.Date) birth)
                 .phonenum(phonenum)

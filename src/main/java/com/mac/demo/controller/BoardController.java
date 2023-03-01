@@ -2,8 +2,8 @@ package com.mac.demo.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Board;
-import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.BoardDTO;
+import com.mac.demo.dto.CommentDTO;
 import com.mac.demo.serviceImpl.BoardServiceImpl;
 import com.mac.demo.serviceImpl.CommentServiceImpl;
 import com.mac.demo.serviceImpl.UserServiceImpl;
@@ -58,8 +58,8 @@ public class BoardController {
 			return "/login/loginForm";
 		} else {
 			String nickname = userSvc.getOne(user_id).getNickname();
-			Board board = boardSvc.getBoard(user_id, nickname, category);
-			model.addAttribute("board", board);
+			BoardDTO boardDTO = boardSvc.getBoard(user_id, nickname, category);
+			model.addAttribute("board", boardDTO);
 			
 			// 현재 세션의 ID를 넘겨주고 inputform에서는 hidden으로 다시 넘겨받아서 save	 
 			model.addAttribute("idMac", user_id);
@@ -71,18 +71,18 @@ public class BoardController {
 //	게시글 저장
 	@PostMapping("/{categoryMac}/save")
 	@ResponseBody
-	public String save(@Valid Board board,
+	public String save(@Valid BoardDTO boardDTO,
 									@PathVariable("categoryMac") String categoryMac,
 									@RequestParam("files") MultipartFile[] mfiles,
 									@SessionAttribute(name = "idMac", required = false) String idMac,
 									HttpServletRequest request) {
-		log.trace(board.toString());
+		log.trace(boardDTO.toString());
 
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
 		
 		//insert 후 해당 글의 num을 다시 폼으로 보내서, 글쓰기 완료 후 해당 글의 상세페이지로 이동되도록 구현
-		return String.format("{\"savednum\":\"%d\"}", boardSvc.save(board, mfiles, savePath));
+		return String.format("{\"savednum\":\"%d\"}", boardSvc.save(boardDTO, mfiles, savePath));
 	}
 	
 //	리스트
@@ -115,9 +115,9 @@ public class BoardController {
 		if(session.getAttribute("idMac") != null) {
 			String user_id = (String) session.getAttribute("idMac");
 			String nickname = userSvc.getOne(user_id).getNickname();
-			Comment comment = commentSvc.getComment(board_num, user_id, nickname);
+			CommentDTO commentDTO = commentSvc.getComment(board_num, user_id, nickname);
 			model.addAttribute("idMac", (String)session.getAttribute("idMac"));
-			model.addAttribute("comment", comment);
+			model.addAttribute("comment", commentDTO);
 		} else {
 			model.addAttribute("msg", "로그인 후 작성 가능합니다.");
 		}
@@ -164,16 +164,16 @@ public class BoardController {
 //  게시글 수정
 	@PutMapping("/{categoryMac}/edit")
 	@ResponseBody
-	public String edit(@Valid Board newBoard,
+	public String edit(@Valid BoardDTO newBoardDTO,
 						@RequestParam("files") MultipartFile[] mfiles,
 						@PathVariable("categoryMac") String categoryMac,
 						HttpServletRequest request) {
-		log.trace(newBoard.toString());
+		log.trace(newBoardDTO.toString());
 
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
 
-		return String.format("{\"updated\":\"%b\"}", boardSvc.update(newBoard, mfiles, savePath));
+		return String.format("{\"updated\":\"%b\"}", boardSvc.update(newBoardDTO, mfiles, savePath));
 	}
 	
 	
@@ -186,7 +186,7 @@ public class BoardController {
 								 Model model) {
 		
 		PageHelper.startPage(page, 10);
-		PageInfo<Board> pageInfo = null;
+		PageInfo<BoardDTO> pageInfo = null;
 		
 //		검색옵션(글제목+내용 or 닉네임)에 따른 List 분류
 		if (category.equals("contents")) {

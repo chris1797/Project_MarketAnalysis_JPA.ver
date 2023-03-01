@@ -1,6 +1,6 @@
 package com.mac.demo.serviceImpl;
 
-import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.CommentDTO;
 import com.mac.demo.repository.CommentRepository;
 import com.mac.demo.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -18,40 +18,40 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public Comment getComment(Long board_num, String user_id, String nickname) {
-        Comment comment = Comment.builder()
+    public CommentDTO getComment(Long board_num, String user_id, String nickname) {
+        CommentDTO commentDTO = CommentDTO.builder()
                 .user_id(user_id)
                 .pcode(board_num)
                 .nickname(nickname)
                 .build();
-        return comment;
+        return commentDTO;
     }
 
     @Override
-    public List<Comment> getCommentList(Long board_num) {
+    public List<CommentDTO> getCommentList(Long board_num) {
         return commentRepository.findByPcode(board_num);
     }
 
     @Override
-    public List<Comment> getCommentListByComment(String comment) {
+    public List<CommentDTO> getCommentListByComment(String comment) {
         return commentRepository.findByComment(comment);
     }
 
     @Override
-    public List<Comment> getCommentListByNickName(String nickName) {
+    public List<CommentDTO> getCommentListByNickName(String nickName) {
         return commentRepository.findByNickname(nickName);
     }
 
     @Override
-    public List<Comment> getCommentList() {
+    public List<CommentDTO> getCommentList() {
         return commentRepository.findAll();
     }
 
     @Override
-    public boolean commentSave(Comment comment) {
-        Comment _comment = comment.toEntity();
+    public boolean commentSave(CommentDTO commentDTO) {
+        CommentDTO _commentDTO = commentDTO.toEntity();
         try {
-            commentRepository.save(_comment);
+            commentRepository.save(_commentDTO);
             return true;
         } catch(Exception e) {
             e.printStackTrace();

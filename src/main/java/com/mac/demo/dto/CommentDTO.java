@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="COMMENT_TB")
-public class Comment {
+public class CommentDTO {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,15 @@ public class Comment {
 
 
 	@Builder
-	public Comment(String user_id, Long pcode, String nickname, String comment) {
+	public CommentDTO(String user_id, Long pcode, String nickname, String comment) {
 		this.user_id = user_id;
 		this.pcode = pcode;
 		this.nickname = nickname;
 		this.comment = comment;
 	}
 
-	public Comment toEntity() {
-		return Comment.builder()
+	public CommentDTO toEntity() {
+		return CommentDTO.builder()
 				.user_id(user_id)
 				.pcode(pcode)
 				.nickname(nickname)

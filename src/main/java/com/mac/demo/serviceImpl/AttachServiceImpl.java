@@ -1,7 +1,7 @@
 package com.mac.demo.serviceImpl;
 
-import com.mac.demo.dto.Attach;
-import com.mac.demo.dto.Board;
+import com.mac.demo.dto.AttachDTO;
+import com.mac.demo.dto.BoardDTO;
 import com.mac.demo.repository.AttachRepository;
 import com.mac.demo.service.AttachService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class AttachServiceImpl implements AttachService {
 
 
     @Override
-    public List<Attach> findAllByPcode(Long pcode) {
+    public List<AttachDTO> findAllByPcode(Long pcode) {
         return attachRepository.findAllByPcode(pcode);
     }
 
@@ -40,7 +40,7 @@ public class AttachServiceImpl implements AttachService {
     }
 
     @Override
-    public void saveAll(List<Attach> list) {
+    public void saveAll(List<AttachDTO> list) {
 
         try {
             attachRepository.saveAll(list);
@@ -56,23 +56,23 @@ public class AttachServiceImpl implements AttachService {
 
 
     @Override
-    public List<Attach> getFileList(Long pcode) {
+    public List<AttachDTO> getFileList(Long pcode) {
         return attachRepository.findAllByPcode(pcode);
     }
 
 
-    public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, String savePath) {
+    public List<AttachDTO> getFileSet(BoardDTO boardDTO, MultipartFile[] mfiles, String savePath) {
         String fname_changed = null;
-        List<Attach> attList = new ArrayList<>();
+        List<AttachDTO> attList = new ArrayList<>();
 
         try {
             for (int i = 0; i < mfiles.length; i++) {
                 String[] token = mfiles[i].getOriginalFilename().split("\\.");
                 fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
 
-                Attach _att = Attach.builder()
-                                    .pcode(board.getBoard_num())
-                                    .user_id(board.getUser_id())
+                AttachDTO _att = AttachDTO.builder()
+                                    .pcode(boardDTO.getBoard_num())
+                                    .user_id(boardDTO.getUser_id())
                                     .filename(fname_changed)
                                     .filepath(savePath)
                                     .build();

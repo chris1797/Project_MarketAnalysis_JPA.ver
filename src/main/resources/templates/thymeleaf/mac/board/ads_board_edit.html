@@ -9,8 +9,8 @@
 <script type="text/javascript">
 var msg = '[[${msg}]]';
 var idMac = '[[${idMac}]]';
-var numMac='[[${board.numMac}]]';
-var categoryMac='[[${board.categoryMac}]]';
+var numMac='[[${boardDTO.numMac}]]';
+var categoryMac='[[${boardDTO.categoryMac}]]';
 
 </script>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -60,11 +60,11 @@ var categoryMac='[[${board.categoryMac}]]';
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <div class="nav-item dropdown">
-                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <a href="/boardDTO/main" class="nav-link dropdown-toggle">커뮤니티</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
-                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
-                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                            <a href="/boardDTO/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/boardDTO/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/boardDTO/notice/list" class="dropdown-item">공지사항</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -86,13 +86,13 @@ var categoryMac='[[${board.categoryMac}]]';
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div th:if="${idMac==null}">
 	                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-	                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+	                <a href="/memberDTO/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
          		</div>
          	</div>
 	         <div th:if="${idMac !=null}">
 		         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
 		          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-		          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+		          <a th:href="'/memberDTO/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
 	         </div>
 		</nav>
 	</div>
@@ -108,26 +108,26 @@ var categoryMac='[[${board.categoryMac}]]';
 					<div class="col-lg-8 col-md-8" style="margin-left: 8px;">
 						<h1 class="fw-light">자유게시판 수정</h1>
 					</div>
-			<form id="edit_form" onsubmit="return edit();" class="board">
-				<div class="board-header">
-					<input type="hidden" id="idMac" name="idMac" th:value="${board.idMac}">
-					<input type="hidden" id="numMac" name="numMac" th:value="${board.numMac}">
-					<input type="hidden" id="categoryMac" name="categoryMac" th:value="${board.categoryMac}">
+			<form id="edit_form" onsubmit="return edit();" class="boardDTO">
+				<div class="boardDTO-header">
+					<input type="hidden" id="idMac" name="idMac" th:value="${boardDTO.idMac}">
+					<input type="hidden" id="numMac" name="numMac" th:value="${boardDTO.numMac}">
+					<input type="hidden" id="categoryMac" name="categoryMac" th:value="${boardDTO.categoryMac}">
 			
-				<span th:text="'No. '+${board.numMac}" th:name="numMac"></span>
+				<span th:text="'No. '+${boardDTO.numMac}" th:name="numMac"></span>
 				
 				<div>
-					<input type="text" name="titleMac" th:value='${board.titleMac}'>
+					<input type="text" name="titleMac" th:value='${boardDTO.titleMac}'>
 			  	</div>
 					
-				<span th:text='${board.nickNameMac}'></span>
+				<span th:text='${boardDTO.nickNameMac}'></span>
 				&nbsp;&nbsp;
-				<span th:text='${board.wdateMac}' th:name='wdateMac'></span>
+				<span th:text='${boardDTO.wdateMac}' th:name='wdateMac'></span>
 				
 				</div>
 
-				<div class="board-body">
-						<span><textarea  cols="110" rows="11" th:name="contentsMac" th:text='${board.contentsMac}'></textarea></span>
+				<div class="boardDTO-body">
+						<span><textarea  cols="110" rows="11" th:name="contentsMac" th:text='${boardDTO.contentsMac}'></textarea></span>
 				</div>
 				<div>
 					파일첨부 : <input type="file" name="files" id="files" multiple="multiple">
@@ -136,13 +136,13 @@ var categoryMac='[[${board.categoryMac}]]';
 						<tr th:each="file : ${filelist}">
 							<div>
 								<span th:text="${file.fileNameMac}"></span>
-								<button th:if="${board.idMac}==${file.idMac}" type="button" th:onclick="javascript:filedelete([[${file.numMac}]]);">X</button>
+								<button th:if="${boardDTO.idMac}==${file.idMac}" type="button" th:onclick="javascript:filedelete([[${file.numMac}]]);">X</button>
 							</div>
 						</tr>
 					</span>
 				<br>
 				<span style="float: right;">
-					<a href="/board/ade/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
+					<a href="/boardDTO/ade/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
 					<input type="submit" value="저장" class="btn btn-primary py-2 px-4 ms-3">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;
@@ -162,6 +162,6 @@ var categoryMac='[[${board.categoryMac}]]';
 
     <!-- Template Javascript -->
     <script src="/main/js/main.js"></script>
-    <script src="/main/js/board.js"></script>
+    <script src="/main/js/boardDTO.js"></script>
 </body>
 </html>

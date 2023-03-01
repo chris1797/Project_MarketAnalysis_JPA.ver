@@ -30,7 +30,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="BOARD_TB")
-public class Board {
+public class BoardDTO {
 	
 //	Entity 클래스로 등록한 클래스지만, DB 테이블과는 별도로 기능이(추가 필드나 메소드) 필요한 경우
 //	@Transient
@@ -58,16 +58,16 @@ public class Board {
 	// Fetch 타입 LAZY 설정
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_num")
-	private User user;
+	private MemberDTO memberDTO;
 
 	@Builder
-	public Board(String title, String contents) {
+	public BoardDTO(String title, String contents) {
 		this.title = title;
 		this.contents = contents;
 	}
 
-	public Board toEntity() {
-		return Board.builder()
+	public BoardDTO toEntity() {
+		return BoardDTO.builder()
 				.title(title)
 				.contents(contents)
 				.build();

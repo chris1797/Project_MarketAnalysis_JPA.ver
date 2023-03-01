@@ -7,7 +7,7 @@
         <properties>
             <!-- 필수 속성 -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.user" value="admin"/>
+            <property name="javax.persistence.jdbc.memberDTO" value="admin"/>
             <property name="javax.persistence.jdbc.password" value="skblue1797!"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/market_db?characterEncoding=UTF-8&amp;serverTimezone=Asia/Seoul"/>
 

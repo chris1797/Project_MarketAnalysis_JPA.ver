@@ -1,7 +1,7 @@
 package com.mac.demo.serviceImpl;
 
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.MemberDTO;
 import com.mac.demo.repository.UserRepository;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +26,19 @@ public class UserServiceImpl implements UserService {
 
 
 	//회원가입
-	public boolean add(User user) {
-		userRepository.save(user);
+	public boolean add(MemberDTO memberDTO) {
+		userRepository.save(memberDTO);
 		return true;
 	}
 
 	//회원리스트
-	public PageInfo<User> getList() {
-		PageInfo<User> pageInfo = new PageInfo<>(userRepository.findAll());
+	public PageInfo<MemberDTO> getList() {
+		PageInfo<MemberDTO> pageInfo = new PageInfo<>(userRepository.findAll());
 		return pageInfo;
 	}
 
 	//회원정보
-	public User getOne(String user_id) {
+	public MemberDTO getOne(String user_id) {
 		return userRepository.findByUser_id(user_id);
 	}
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//회원정보 수정
-	public boolean updated(User user) {
+	public boolean updated(MemberDTO memberDTO) {
 		try {
 //			userRepository.update(user.getPwmac(), user.getEmailmac());
 			return true;
@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
 	//아이디 체크
 	public boolean idcheck(String user_id) {
 		try {
-			User user = userRepository.findByUser_id(user_id);
-			if(user == null) return false;
+			MemberDTO memberDTO = userRepository.findByUser_id(user_id);
+			if(memberDTO == null) return false;
 			return true;
 
 		} catch (Exception e) {
@@ -117,8 +117,8 @@ public class UserServiceImpl implements UserService {
 	public boolean nickCheck(String nickName) {
 
 		try {
-			User user = userRepository.findByNickname(nickName);
-			if (user != null) {
+			MemberDTO memberDTO = userRepository.findByNickname(nickName);
+			if (memberDTO != null) {
 				return true;
 			} else {
 				return false;
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-    public List<User> findByUsernameContaining(String userName) {
+    public List<MemberDTO> findByUsernameContaining(String userName) {
 		return userRepository.findByUsernameContaining(userName);
     }
 }

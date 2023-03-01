@@ -1,8 +1,8 @@
 package com.mac.demo.serviceImpl;
 
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Attach;
-import com.mac.demo.dto.Board;
+import com.mac.demo.dto.AttachDTO;
+import com.mac.demo.dto.BoardDTO;
 import com.mac.demo.repository.BoardRepository;
 import com.mac.demo.service.AttachService;
 import com.mac.demo.service.BoardService;
@@ -34,38 +34,38 @@ public class BoardServiceImpl implements BoardService {
 	ResourceLoader resourceLoader;
 
 
-	public Board getBoard(String user_id, String nickname, String category) {
+	public BoardDTO getBoard(String user_id, String nickname, String category) {
 
-		Board board = Board.builder()
+		BoardDTO boardDTO = BoardDTO.builder()
 						   .user_id(user_id)
 						   .nickname(nickname)
 						   .category(category)
 						   .build();
-		return board;
+		return boardDTO;
 	}
 
-	public List<Board> findBoardByCategory(String categoryMac){
+	public List<BoardDTO> findBoardByCategory(String categoryMac){
 		return boardRepository.findByCategory(categoryMac);
 	}
 
 	/**
 	 *	게시글 저장
 	 */
-	public Long save(Board board, MultipartFile[] mfiles, String savePath){
-		Board _board = boardRepository.save(board);
-		List<Attach> attlist = getFileSet(_board, mfiles, savePath);
+	public Long save(BoardDTO boardDTO, MultipartFile[] mfiles, String savePath){
+		BoardDTO _boardDTO = boardRepository.save(boardDTO);
+		List<AttachDTO> attlist = getFileSet(_boardDTO, mfiles, savePath);
 		if(attlist!=null) attachSvc.saveAll(attlist);
 		
-		return _board.getBoard_num();
+		return _boardDTO.getBoard_num();
 	}
 	
 	/**
 	 *	게시글 수정
 	 */
-	public Boolean update(Board board, MultipartFile[] mfiles, String savePath) {
+	public Boolean update(BoardDTO boardDTO, MultipartFile[] mfiles, String savePath) {
 		try {
-			boardRepository.update(board.getTitle(), board.getContents(), board.getBoard_num());
-			List<Attach> attlist = getFileSet(board, mfiles, savePath);
+			boardRepository.update(boardDTO.getTitle(), boardDTO.getContents(), boardDTO.getBoard_num());
+			List<AttachDTO> attlist = getFileSet(boardDTO, mfiles, savePath);
 			if(attlist!=null) attachSvc.saveAll(attlist);
 			return true;
 		} catch (Exception e) {
@@ -77,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
 	/**
 	 *	게시글 상세보기
 	 */
-	public Board getDetail(Long board_num, String category) {
+	public BoardDTO getDetail(Long board_num, String category) {
 		return boardRepository.findByNummacAndCategorymac(board_num, category);
 	}
 
@@ -91,20 +91,20 @@ public class BoardServiceImpl implements BoardService {
 	/**
 	 *	글검색 - 제목&글내용
 	 */
-	public List<Board> getListByKeyword(String keyword, String categorymac) {
+	public List<BoardDTO> getListByKeyword(String keyword, String categorymac) {
 		return boardRepository.getListByKeyword(keyword, categorymac);
 	}
 
 	/**
 	 *	글검색 - 닉네임
 	 */
-	public List<Board> getListByNickName(String nickname, String category) {
+	public List<BoardDTO> getListByNickName(String nickname, String category) {
 		return boardRepository.getListByNickname(nickname, category);
 	}
 
 
 //	------------------------File------------------------
-	public List<Attach> getFileList(Long pcode){
+	public List<AttachDTO> getFileList(Long pcode){
 		return attachSvc.findAllByPcode(pcode);
 	}
 
@@ -126,18 +126,18 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 //	파일 리스트 구성
-	public List<Attach> getFileSet(Board board, MultipartFile[] mfiles, String savePath) {
+	public List<AttachDTO> getFileSet(BoardDTO boardDTO, MultipartFile[] mfiles, String savePath) {
 		String fname_changed = null;
-		List<Attach> attList = new ArrayList<>();
+		List<AttachDTO> attList = new ArrayList<>();
 		
 		try {
 			for (int i = 0; i < mfiles.length; i++) {
 				String[] token = mfiles[i].getOriginalFilename().split("\\.");
 				fname_changed = token[0] + "_" + System.nanoTime() + "." + token[1];
 
-				Attach _att = Attach.builder()
-						.pcode(board.getBoard_num())
-						.user_id(board.getUser_id())
+				AttachDTO _att = AttachDTO.builder()
+						.pcode(boardDTO.getBoard_num())
+						.user_id(boardDTO.getUser_id())
 						.filename(fname_changed)
 						.filepath(savePath)
 						.build();
@@ -174,13 +174,13 @@ public class BoardServiceImpl implements BoardService {
 	   }
 	
 	
-	public PageInfo<Board> getPageInfo(String categoryMac) {
-		PageInfo<Board> pageInfo = new PageInfo<>(findBoardByCategory(categoryMac));
+	public PageInfo<BoardDTO> getPageInfo(String categoryMac) {
+		PageInfo<BoardDTO> pageInfo = new PageInfo<>(findBoardByCategory(categoryMac));
 		return pageInfo;
 	}
 
 	@Override
-	public Page<Board> findByUser_id(Pageable pageable) {
+	public Page<BoardDTO> findByUser_id(Pageable pageable) {
 		return null;
 	}
 

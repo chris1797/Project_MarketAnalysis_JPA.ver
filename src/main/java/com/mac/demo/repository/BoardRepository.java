@@ -1,6 +1,6 @@
 package com.mac.demo.repository;
 
-import com.mac.demo.dto.Board;
+import com.mac.demo.dto.BoardDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long>{
+public interface BoardRepository extends JpaRepository<BoardDTO, Long>{
 
 	/*
 	 * Generic type은 관리하는 Entity와 그 Entity의 primary type (idmac)
@@ -26,11 +26,11 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	 *
 	*/
 	
-	List<Board> findByCategory(String categorymac); //User테이블을 대상을 이름을 검색
-	List<Board> findAllByTitlemacAndCategorymac(String titlemac, String categorymac);
+	List<BoardDTO> findByCategory(String categorymac); //User테이블을 대상을 이름을 검색
+	List<BoardDTO> findAllByTitlemacAndCategorymac(String titlemac, String categorymac);
 	
-	Board findByNummacAndCategorymac(Long nummac, String categorymac);
-	Board findByNummac(int nummac);
+	BoardDTO findByNummacAndCategorymac(Long nummac, String categorymac);
+	BoardDTO findByNummac(int nummac);
 	
 	int deleteByboard_num(Long nummac);
 	
@@ -41,13 +41,13 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	
 	
 	@Query(value = "SELECT b FROM Board b WHERE b.titlemac LIKE CONCAT('%', :keyword, '%') OR b.contentsmac LIKE CONCAT('%', :keyword, '%') AND b.categorymac = :categorymac", nativeQuery = true)
-	List<Board> getListByKeyword(@Param("keyword")String keyword, @Param("categorymac")String categorymac);
+	List<BoardDTO> getListByKeyword(@Param("keyword")String keyword, @Param("categorymac")String categorymac);
 	
 	
 	@Query(value = "SELECT b FROM Board b WHERE b.nicknamemac LIKE CONCAT('%', :nickname, '%') AND b.categorymac = :categorymac", nativeQuery = true)
-	List<Board> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
+	List<BoardDTO> getListByNickname(@Param("nickname") String nickname, @Param("categorymac") String categorymac);
 
-    Page<Board> findByUser_id(Pageable pageable);
+    Page<BoardDTO> findByUser_id(Pageable pageable);
 	
 	/*
 	num값이 5~10 사이에 있는 행을 추출

@@ -74,13 +74,13 @@ function deleted(numMac) {
 	
 	
 </tr>
-<tr th:each="comment : ${pageInfo.list}">
-	<td th:text="${comment.numMac}"></td>
-	<td th:text="${comment.idMac}"></td>
-	<td th:text="${comment.pcodeMac}"></td>
-	<td th:text="${comment.commentMac}"></td>
-	<td th:text="${comment.wdateMac}"></td>
-<td> <button th:onclick="javascript:deleted([[${comment.numMac}]])">삭제</button></td>
+<tr th:each="commentDTO : ${pageInfo.list}">
+	<td th:text="${commentDTO.numMac}"></td>
+	<td th:text="${commentDTO.idMac}"></td>
+	<td th:text="${commentDTO.pcodeMac}"></td>
+	<td th:text="${commentDTO.commentMac}"></td>
+	<td th:text="${commentDTO.wdateMac}"></td>
+<td> <button th:onclick="javascript:deleted([[${commentDTO.numMac}]])">삭제</button></td>
 </tr>
 </table>
 

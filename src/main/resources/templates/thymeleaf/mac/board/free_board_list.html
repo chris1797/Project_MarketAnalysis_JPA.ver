@@ -57,11 +57,11 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <div class="nav-item dropdown">
-                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <a href="/boardDTO/main" class="nav-link dropdown-toggle">커뮤니티</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
-                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
-                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                            <a href="/boardDTO/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/boardDTO/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/boardDTO/notice/list" class="dropdown-item">공지사항</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -84,13 +84,13 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div th:if="${idMac==null}">
                    <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-                   <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+                   <a href="/memberDTO/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
                </div>
             </div>
             <div th:if="${idMac !=null}">
                <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
                 <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-                <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+                <a th:href="'/memberDTO/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
             </div>
       </nav>
    </div>
@@ -120,19 +120,19 @@
                            </tr>
                         </thead>
                         <tbody>
-                           <tr th:each="board : ${pageInfo.list}">
-                              <td th:text="${board.nummac}"></td>
-                              <td><a th:text="${board.titlemac}"
-                                 th:href="@{'/board/free/detail/'+ ${board.nummac}}"></a> 
-                                 <span th:text="'   ['+${board.comment_cntmac}+']'"></span>
+                           <tr th:each="boardDTO : ${pageInfo.list}">
+                              <td th:text="${boardDTO.nummac}"></td>
+                              <td><a th:text="${boardDTO.titlemac}"
+                                 th:href="@{'/boardDTO/free/detail/'+ ${boardDTO.nummac}}"></a>
+                                 <span th:text="'   ['+${boardDTO.comment_cntmac}+']'"></span>
                               </td>
-                              <td th:text="${board.nicknamemac}"></td>
-                              <td th:text="${board.wdatemac}">
+                              <td th:text="${boardDTO.nicknamemac}"></td>
+                              <td th:text="${boardDTO.wdatemac}">
                               <td></td>
                            </tr>
                         </tbody>
                      </table>
-                        <form id="search_form" method="get" action="/board/free/search?category=+${category}">
+                        <form id="search_form" method="get" action="/boardDTO/free/search?category=+${category}">
          <div>
             &nbsp;&nbsp; 
             <div id="search">
@@ -151,11 +151,11 @@
       <div class="pt-3" align="center">
                      <ul class="pagination justify-content-center mb-0">
                         <span th:if="${page!=1}"> <a class="page-link"
-                           th:href="@{'/board/free/list?page='+${page-1}}">Previous</a>
+                           th:href="@{'/boardDTO/free/list?page='+${page-1}}">Previous</a>
                         </span>
                         <span th:unless="${page!=1}">
                            <li class="page-item disabled"><a class="page-link"
-                              th:href="@{'/board/free/list?page='+${page-1}}">Previous</a></li>
+                              th:href="@{'/boardDTO/free/list?page='+${page-1}}">Previous</a></li>
                         </span>
                         <span th:each="i :${pageInfo.navigatepageNums}"> <span
                            th:if="${i==pageInfo.pageNum}">
@@ -163,21 +163,21 @@
                                  th:text="${i}"></span></li>
                         </span> <span th:if="${i!=pageInfo.pageNum}"> <a
                               class="page-link" th:text='${i}'
-                              th:href="'/board/free/list?page='+(${i})"></a>
+                              th:href="'/boardDTO/free/list?page='+(${i})"></a>
                         </span>
                         </span>
                         <span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
                            class="page-link"
-                           th:href="@{'/board/free/list?page='+${page+1}}">Next</a>
+                           th:href="@{'/boardDTO/free/list?page='+${page+1}}">Next</a>
                         </span>
                         <span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
                            <li class="page-item disabled"><a class="page-link"
-                              th:href="@{'/board/free/list?page='+${page+1}}">Next</a></li>
+                              th:href="@{'/boardDTO/free/list?page='+${page+1}}">Next</a></li>
                         </span>
                      </ul>
                   </div>
                
-                  <a href="/board/free/input" class="btn btn-primary py-2 px-4 ms-3" id="write">글쓰기</a>
+                  <a href="/boardDTO/free/input" class="btn btn-primary py-2 px-4 ms-3" id="write">글쓰기</a>
          &nbsp;&nbsp;
                   </div>
                   

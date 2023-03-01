@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="ATTACH_TB")
-public class Attach {
+public class AttachDTO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,10 @@ public class Attach {
 	
 	@Transient
 	@Singular("attList") // 빌더패턴에서 모든 원소를 한번에 넘기지 않고 하나씩 추가 가능
-	private List<Attach> attList; // 첨부파일명 리스트
+	private List<AttachDTO> attList; // 첨부파일명 리스트
 
 	@Builder
-	public Attach(Long pcode, String user_id, String filename, String filepath, Date wdate, List<Attach> attList) {
+	public AttachDTO(Long pcode, String user_id, String filename, String filepath, Date wdate, List<AttachDTO> attList) {
 		this.pcode = pcode;
 		this.user_id = user_id;
 		this.filename = filename;
@@ -42,8 +42,8 @@ public class Attach {
 		this.attList = attList;
 	}
 
-	public Attach toEntity() {
-		return Attach.builder()
+	public AttachDTO toEntity() {
+		return AttachDTO.builder()
 				.pcode(pcode)
 				.user_id(user_id)
 				.filename(filename)

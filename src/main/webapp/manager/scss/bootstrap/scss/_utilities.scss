@@ -534,8 +534,8 @@ $utilities: map-merge(
       values: (gradient: var(--#{$variable-prefix}gradient))
     ),
     // scss-docs-start utils-interaction
-    "user-select": (
-      property: user-select,
+    "memberDTO-select": (
+      property: memberDTO-select,
       values: all auto none
     ),
     "pointer-events": (

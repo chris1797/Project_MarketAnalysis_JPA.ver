@@ -42,8 +42,8 @@
 <script type="text/javascript">
 var msg = '[[${msg}]]';
 var idMac = '[[${idMac}]]';
-var numMac='[[${board.numMac}]]';
-var categoryMac='[[${board.categoryMac}]]';
+var numMac='[[${boardDTO.numMac}]]';
+var categoryMac='[[${boardDTO.categoryMac}]]';
 </script>
 </head>
 <body>
@@ -61,11 +61,11 @@ var categoryMac='[[${board.categoryMac}]]';
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <div class="nav-item dropdown">
-                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <a href="/boardDTO/main" class="nav-link dropdown-toggle">커뮤니티</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
-                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
-                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                            <a href="/boardDTO/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/boardDTO/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/boardDTO/notice/list" class="dropdown-item">공지사항</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -88,13 +88,13 @@ var categoryMac='[[${board.categoryMac}]]';
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div th:if="${idMac==null}">
 	                <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-	                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+	                <a href="/memberDTO/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
          		</div>
          	</div>
 	         <div th:if="${idMac !=null}">
 		         <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
 		          <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-		          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+		          <a th:href="'/memberDTO/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
 	         </div>
 		</nav>
 	</div>
@@ -111,15 +111,15 @@ var categoryMac='[[${board.categoryMac}]]';
 				<div class="col-lg-8 col-md-8" style="margin-left: 8px;">
 					<h1 class="fw-light">광고게시판</h1>
 				</div>
-				<div class="board">
-					<div class="board-header">
-						<span th:text="'No. '+${board.numMac}"></span>
-						<h3 th:text="${board.titleMac}"></h3>
-						<span th:text="${board.nickNameMac}"></span> |
-						<span th:text="${board.wdateMac}"></span>
+				<div class="boardDTO">
+					<div class="boardDTO-header">
+						<span th:text="'No. '+${boardDTO.numMac}"></span>
+						<h3 th:text="${boardDTO.titleMac}"></h3>
+						<span th:text="${boardDTO.nickNameMac}"></span> |
+						<span th:text="${boardDTO.wdateMac}"></span>
 				</div>
-				<div class="board-body">
-					<span th:text="${board.contentsMac}"></span>
+				<div class="boardDTO-body">
+					<span th:text="${boardDTO.contentsMac}"></span>
 					<div style="border-top: solid; margin-top: 22%">
 						<span th:if="${fileindex!=0}">
 							<tr th:each="file : ${filelist}">
@@ -127,7 +127,7 @@ var categoryMac='[[${board.categoryMac}]]';
 									<span th:text="${file.fileNameMac}"></span>
 									<button type="button" th:onclick="javascript:filedownload([[${file.numMac}]]);">↓</button>
 								</div>	
-									<!-- th:onclick="|location.href='@{/board/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p> -->
+									<!-- th:onclick="|location.href='@{/boardDTO/download(filenum=${file.numMac})}'|" id="cmt_del">↓</button></p> -->
 									<!-- <p><button th:onclick="javascript:filedownload([[${file.numMac}]]);" id="cmt_del">↓</button></p> -->
 							</tr>
 						</span>
@@ -137,33 +137,33 @@ var categoryMac='[[${board.categoryMac}]]';
 					<br>
 				<table>
 					<tr>
-						<div class="board-comment-li">
-						<th><h5 class="board-comment-header">댓글</h5></th>
+						<div class="boardDTO-commentDTO-li">
+						<th><h5 class="boardDTO-commentDTO-header">댓글</h5></th>
 							<table class="table project-table table-centered table-nowrap">
-									<tr th:each="comment : ${pageInfo.list}">
-										<td th:text="${comment.nickNameMac}"></td>
-										<td th:text="${comment.commentMac}" style="width: 500px;"></td>
-										<td th:text="${comment.wdateMac}"></td>
-										<td th:if="${idMac}!=${comment.idMac}">
+									<tr th:each="commentDTO : ${pageInfo.list}">
+										<td th:text="${commentDTO.nickNameMac}"></td>
+										<td th:text="${commentDTO.commentMac}" style="width: 500px;"></td>
+										<td th:text="${commentDTO.wdateMac}"></td>
+										<td th:if="${idMac}!=${commentDTO.idMac}">
 										</td>
-									    <td th:if="${idMac}==${comment.idMac}">
-											<button th:onclick="javascript:commentdelete([[${comment.numMac}]]);">삭제</button>
+									    <td th:if="${idMac}==${commentDTO.idMac}">
+											<button th:onclick="javascript:commentdelete([[${commentDTO.numMac}]]);">삭제</button>
 										</td>
 									</tr>
 									
 									
 								
 							</table>
-								<form id="comment_form" onsubmit="return comment();">
+								<form id="comment_form" onsubmit="return commentDTO();">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-							<input type="hidden" th:name="nickNameMac" th:value="${comment.nickNameMac}">
-							<input type="hidden" th:name="pcodeMac" th:value="${comment.pcodeMac}">
-							<input type="hidden" th:name="idMac" th:value="${comment.idMac}">
+							<input type="hidden" th:name="nickNameMac" th:value="${commentDTO.nickNameMac}">
+							<input type="hidden" th:name="pcodeMac" th:value="${commentDTO.pcodeMac}">
+							<input type="hidden" th:name="idMac" th:value="${commentDTO.idMac}">
 							<tr>
 								<label for="commentMac">댓글작성</label> &nbsp;&nbsp;
 									<input type="text" th:name="commentMac">
 								<button type="submit" class="btn btn-primary py-2 px-4 ms-3">작성</button>
-								<a href="/board/ads/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
+								<a href="/boardDTO/ads/list" class="btn btn-primary py-2 px-4 ms-3">글목록</a> &nbsp;&nbsp;
 								
 							</tr>
 							<tr>
@@ -173,11 +173,11 @@ var categoryMac='[[${board.categoryMac}]]';
 							   <div class="pt-3" align="center" >
 							<ul class="pagination justify-content-center mb-0">
 								<span th:if="${page!=1}"> <a class="page-link"
-									th:href="@{'/board/ads/detail/'+ ${board.numMac}+'?page='+${page-1}}">Previous</a>
+									th:href="@{'/boardDTO/ads/detail/'+ ${boardDTO.numMac}+'?page='+${page-1}}">Previous</a>
 								</span>
 								<span th:unless="${page!=1}">
 									<li class="page-item disabled"><a class="page-link"
-										th:href="@{'/board/ads/detail/'+ ${board.numMac}+'?page='+${page-1}}">Previous</a></li>
+										th:href="@{'/boardDTO/ads/detail/'+ ${boardDTO.numMac}+'?page='+${page-1}}">Previous</a></li>
 								</span>
 								<span th:each="i :${pageInfo.navigatepageNums}"> <span
 									th:if="${i==pageInfo.pageNum}">
@@ -185,22 +185,22 @@ var categoryMac='[[${board.categoryMac}]]';
 											th:text="${i}"></span></li>
 								</span> <span th:if="${i!=pageInfo.pageNum}"> <a
 										class="page-link" th:text='${i}'
-										th:href="'/board/ads/detail/'+ ${board.numMac}+'?page='+(${i})"></a>
+										th:href="'/boardDTO/ads/detail/'+ ${boardDTO.numMac}+'?page='+(${i})"></a>
 								</span>
 								</span>
 								<span th:if="${page}!=${pageInfo.getNavigateLastPage}"> <a
 									class="page-link"
-									th:href="@{'/board/ads/detail/'+ ${board.numMac}+'?page='+${page+1}}">Next</a>
+									th:href="@{'/boardDTO/ads/detail/'+ ${boardDTO.numMac}+'?page='+${page+1}}">Next</a>
 								</span>
 								<span th:unless="${page}!=${pageInfo.getNavigateLastPage}">
 									<li class="page-item disabled"><a class="page-link"
-										th:href="@{'/board/ads/detail/'+ ${board.numMac}+'?page='+${page+1}}">Next</a></li>
+										th:href="@{'/boardDTO/ads/detail/'+ ${boardDTO.numMac}+'?page='+${page+1}}">Next</a></li>
 								</span>
 							</ul>
 						</div>
 						
-						<div th:if="${idMac}==${board.idMac}" id="board_del">
-									<a th:href="@{'/board/ads/update/' + ${board.numMac}}" class="btn btn-primary py-2 px-4 ms-3">수정하기</a> &nbsp;&nbsp;
+						<div th:if="${idMac}==${boardDTO.idMac}" id="board_del">
+									<a th:href="@{'/boardDTO/ads/update/' + ${boardDTO.numMac}}" class="btn btn-primary py-2 px-4 ms-3">수정하기</a> &nbsp;&nbsp;
 									<a href="javascript:remove();" class="btn btn-primary py-2 px-4 ms-3">삭제</a>
 								</div>
 					</div>
@@ -225,7 +225,7 @@ var categoryMac='[[${board.categoryMac}]]';
 
     <!-- Template Javascript -->
     <script src="/main/js/main.js"></script>
-    <script src="/main/js/board.js"></script>
+    <script src="/main/js/boardDTO.js"></script>
 </body>
 
 </html>

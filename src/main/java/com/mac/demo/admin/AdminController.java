@@ -2,10 +2,10 @@ package com.mac.demo.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.Attach;
-import com.mac.demo.dto.Board;
-import com.mac.demo.dto.Comment;
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.AttachDTO;
+import com.mac.demo.dto.BoardDTO;
+import com.mac.demo.dto.CommentDTO;
+import com.mac.demo.dto.MemberDTO;
 import com.mac.demo.service.AttachService;
 import com.mac.demo.service.BoardService;
 import com.mac.demo.service.CommentService;
@@ -73,7 +73,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 5);
-			PageInfo<User> pageInfo = userSvc.getList();
+			PageInfo<MemberDTO> pageInfo = userSvc.getList();
 			mav.addObject("pageInfo", pageInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 5);
-			PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(categorymac));
+			PageInfo<BoardDTO> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(categorymac));
 			mav.addObject("pageInfo", pageInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,12 +141,12 @@ public class AdminController {
 	
 	//공지사항 저장
 	@PostMapping("/admin/save")
-	public Map<String, Object> save(Board board, @RequestParam("files") MultipartFile[] mfiles, HttpServletRequest request) {
+	public Map<String, Object> save(BoardDTO boardDTO, @RequestParam("files") MultipartFile[] mfiles, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		ServletContext context = request.getServletContext();
 		String savePath = context.getRealPath("/WEB-INF/files");
-		map.put("saved",boardSvc.save(board, mfiles, savePath)>0);
+		map.put("saved",boardSvc.save(boardDTO, mfiles, savePath)>0);
 
 		return map;
 	}
@@ -160,7 +160,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 5);
-			PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory("notice"));
+			PageInfo<BoardDTO> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory("notice"));
 
 			mav.addObject("pageInfo", pageInfo);
 		} catch (Exception e) {
@@ -189,7 +189,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 5);
-			PageInfo<Comment> pageInfo = new PageInfo<>(commentSvc.getCommentList());
+			PageInfo<CommentDTO> pageInfo = new PageInfo<>(commentSvc.getCommentList());
 			mav.addObject("pageInfo", pageInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -216,7 +216,7 @@ public class AdminController {
 
 		ModelAndView mav = new ModelAndView("/admin/allFreeBoard");
 
-		PageInfo<Board> pageInfo = null;
+		PageInfo<BoardDTO> pageInfo = null;
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -244,7 +244,7 @@ public class AdminController {
 
 		ModelAndView mav = new ModelAndView("/admin/allAdsBoard");
 
-		PageInfo<Board> pageInfo = null;
+		PageInfo<BoardDTO> pageInfo = null;
 		try {
 			if (category.equals("contents")) {
 				pageInfo = new PageInfo<>(boardSvc.getListByKeyword(keyword, category));
@@ -268,7 +268,7 @@ public class AdminController {
 									 @RequestParam(name = "keyword", required = false) String keyword) {
 
 		ModelAndView mav = new ModelAndView("/admin/allNoticeBoard");
-		PageInfo<Board> pageInfo = null;
+		PageInfo<BoardDTO> pageInfo = null;
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -291,7 +291,7 @@ public class AdminController {
 
 		ModelAndView mav = new ModelAndView("/admin/allComment");
 
-		PageInfo<Comment> pageInfo = null;
+		PageInfo<CommentDTO> pageInfo = null;
 
 		try {
 			PageHelper.startPage(page, 5);
@@ -323,7 +323,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 5);
-			PageInfo<User> pageInfo = new PageInfo<>(userSvc.findByUsernameContaining(keyword));
+			PageInfo<MemberDTO> pageInfo = new PageInfo<>(userSvc.findByUsernameContaining(keyword));
 			mav.addObject("pageInfo", pageInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -341,7 +341,7 @@ public class AdminController {
 
 		try {
 			PageHelper.startPage(page, 10);
-			PageInfo<Board> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(category));
+			PageInfo<BoardDTO> pageInfo = new PageInfo<>(boardSvc.findBoardByCategory(category));
 
 			mav.addObject("pageInfo", pageInfo);
 			mav.addObject("page", page);
@@ -366,8 +366,8 @@ public class AdminController {
 		String idMac = (String) session.getAttribute("idMac");
 		mav.addObject("idMac", idMac);
 
-		Board board = boardSvc.getDetail(num, category);
-		List<Attach> fileList = attachSvc.getFileList(num);
+		BoardDTO boardDTO = boardSvc.getDetail(num, category);
+		List<AttachDTO> fileList = attachSvc.getFileList(num);
 
 		mav.addObject("board", boardSvc.getDetail(num, category));
 		mav.addObject("filelist", attachSvc.getFileList(num));
@@ -396,7 +396,7 @@ public class AdminController {
 		ModelAndView mav = new ModelAndView("/board/notice_boardList");
 
 		PageHelper.startPage(page, 10);
-		PageInfo<Board> pageInfo = null;
+		PageInfo<BoardDTO> pageInfo = null;
 
 		pageInfo = new PageInfo<>(boardSvc.getListByKeyword(category, keyword));
 

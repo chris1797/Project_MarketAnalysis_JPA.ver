@@ -1,17 +1,17 @@
 package com.mac.demo.service;
 
-import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.CommentDTO;
 
 import java.util.List;
 
 public interface CommentService {
 
-    Comment getComment(Long board_num, String user_id, String nickname);
-    boolean commentSave(Comment comment);
+    CommentDTO getComment(Long board_num, String user_id, String nickname);
+    boolean commentSave(CommentDTO commentDTO);
     boolean commentDelete(Long comment_num);
-    List<Comment> getCommentList();
-    List<Comment> getCommentList(Long board_num);
-    List<Comment> getCommentListByComment(String keyword);
-    List<Comment> getCommentListByNickName(String Nickname);
+    List<CommentDTO> getCommentList();
+    List<CommentDTO> getCommentList(Long board_num);
+    List<CommentDTO> getCommentListByComment(String keyword);
+    List<CommentDTO> getCommentListByNickName(String Nickname);
 
 }

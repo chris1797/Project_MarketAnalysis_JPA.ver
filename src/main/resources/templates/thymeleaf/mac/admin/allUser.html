@@ -51,7 +51,7 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="/manager/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="/manager/img/memberDTO.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -89,7 +89,7 @@
                        &nbsp;&nbsp;
                     </div>
                     <div class="nav-item dropdown">
-                            <img class="rounded-circle me-lg-2" src="/manager/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="/manager/img/memberDTO.jpg" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">admin</span>
                      
                     </div>
@@ -124,20 +124,20 @@
                                     </tr>
                                 </thead>
 <tbody class="text-center">
-    <tr th:each="user : ${pageInfo.list}">                                
-    <td th:text="${user.numMac}" id="numMac"></td>
-	<td th:text="${user.idMac}"></td>
-	<td th:text="${user.pwMac}"></td>
-	<td th:text="${user.nickNameMac}"></td>
-	<td th:text="${user.emailMac}"></td>
-	<td th:text="${user.genderMac}"></td>
-	<td th:text="${user.birthMac}"></td>
-	<td th:text="${user.phoneNumMac}"></td>
-	<td th:text="${user.cityMac}"></td>
-	<td th:text="${user.townMac}"></td>
-	<td th:text="${user.villageMac}"></td>
-	<td th:text="${user.nameMac}"></td>
-	<td><button th:onclick="javascript:userDelete([[${user.numMac}]]);" class="btn btn-primary">삭제</button></td>
+    <tr th:each="memberDTO : ${pageInfo.list}">
+    <td th:text="${memberDTO.numMac}" id="numMac"></td>
+	<td th:text="${memberDTO.idMac}"></td>
+	<td th:text="${memberDTO.pwMac}"></td>
+	<td th:text="${memberDTO.nickNameMac}"></td>
+	<td th:text="${memberDTO.emailMac}"></td>
+	<td th:text="${memberDTO.genderMac}"></td>
+	<td th:text="${memberDTO.birthMac}"></td>
+	<td th:text="${memberDTO.phoneNumMac}"></td>
+	<td th:text="${memberDTO.cityMac}"></td>
+	<td th:text="${memberDTO.townMac}"></td>
+	<td th:text="${memberDTO.villageMac}"></td>
+	<td th:text="${memberDTO.nameMac}"></td>
+	<td><button th:onclick="javascript:userDelete([[${memberDTO.numMac}]]);" class="btn btn-primary">삭제</button></td>
     </tr>
 
 </table>

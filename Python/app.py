@@ -12,7 +12,7 @@ CORS(app, resources={r'*': {'origins': '*'}})
 cx_Oracle.init_oracle_client(
     lib_dir=r"/Users/ijaehun/Downloads/instantclient_19_8")
 connection = cx_Oracle.connect(
-    user='admin', password='Chldudcjf12!', dsn='db20220709105045_low')
+    memberDTO='admin', password='Chldudcjf12!', dsn='db20220709105045_low')
 cursor = connection.cursor()
 
 

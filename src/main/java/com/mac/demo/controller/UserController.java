@@ -1,7 +1,7 @@
 package com.mac.demo.controller;
 
-import com.mac.demo.dto.Board;
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.BoardDTO;
+import com.mac.demo.dto.MemberDTO;
 import com.mac.demo.service.BoardService;
 import com.mac.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserController {
 
 		ModelAndView mav = new ModelAndView("/User/addForm");
 
-		mav.addObject("user", new User());
+		mav.addObject("user", new MemberDTO());
 
 		return mav;
 	}
@@ -42,11 +42,11 @@ public class UserController {
 
 		ModelAndView mav = new ModelAndView("/User/addForm");
 
-		User user = User.builder()
+		MemberDTO memberDTO = MemberDTO.builder()
 						.user_id(idMac)
 						.build();
 
-		mav.addObject("user", user);
+		mav.addObject("user", memberDTO);
 
 		return mav;
 	}
@@ -59,14 +59,14 @@ public class UserController {
 
 		ModelAndView mav = new ModelAndView("/home/home");
 
-		User user = User.builder()
+		MemberDTO memberDTO = MemberDTO.builder()
 						.user_id(idMac)
 						.email(emailMac)
 						.build();
 
 		if (check == 1) {
 			mav.setViewName("/User/addForm");
-			mav.addObject("user", user);
+			mav.addObject("user", memberDTO);
 			return mav;
 		}
 
@@ -75,9 +75,9 @@ public class UserController {
 	
 //	계정추가
 	@PostMapping("/add")
-	public Map<String,Object> add(User user) {
+	public Map<String,Object> add(MemberDTO memberDTO) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("result", userSvc.add(user));
+		map.put("result", userSvc.add(memberDTO));
 		return map;
 	}
 	
@@ -101,7 +101,7 @@ public class UserController {
 
 		ModelAndView mav = new ModelAndView("/User/myPage");
 
-		User user = userSvc.getOne(user_id);
+		MemberDTO memberDTO = userSvc.getOne(user_id);
 
 		if(!user_id.equals((String)session.getAttribute("idMac"))) {
 			mav.setViewName("redirect:/home");
@@ -113,9 +113,9 @@ public class UserController {
 			return mav;
 		}
 
-		mav.addObject("user", user);
+		mav.addObject("user", memberDTO);
 		
-		Page<Board> boardPage = boardSvc.findByUser_id(pageable);
+		Page<BoardDTO> boardPage = boardSvc.findByUser_id(pageable);
 
 		mav.addObject("pageInfo", boardPage);
 
@@ -125,9 +125,9 @@ public class UserController {
 	
 //	계정 삭제
 	@DeleteMapping("/deleted")
-	public Map<String,Object> deleted(com.mac.demo.dto.User user, HttpSession session) {
+	public Map<String,Object> deleted(MemberDTO memberDTO, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		Long user_idx = user.getUser_num();
+		Long user_idx = memberDTO.getUser_num();
 		boolean result = userSvc.delete(user_idx);
 		map.put("result", result);
 		
@@ -145,23 +145,23 @@ public class UserController {
 	
 //  유저 업데이트폼
 	@GetMapping("/updateForm")
-	public ModelAndView update(User user) {
+	public ModelAndView update(MemberDTO memberDTO) {
 
 		ModelAndView mav = new ModelAndView("/User/updateForm");
 
-		User user2 = userSvc.getOne(user.getUser_id());
-		mav.addObject("user", user2);
+		MemberDTO memberDTO2 = userSvc.getOne(memberDTO.getUser_id());
+		mav.addObject("user", memberDTO2);
 
 		return mav;
 	}
 	
 //  유저 정보 수정
 	@PutMapping("/updated")
-	public Map<String, Object> edit(User user, HttpSession session) {
+	public Map<String, Object> edit(MemberDTO memberDTO, HttpSession session) {
 
 		Map<String, Object> map = new HashMap<>();
 
-		boolean result = userSvc.updated(user);
+		boolean result = userSvc.updated(memberDTO);
 		map.put("result", result);
 
 		return map;

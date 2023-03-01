@@ -1,13 +1,13 @@
 package com.mac.demo.repository;
 
-import com.mac.demo.dto.Comment;
+import com.mac.demo.dto.CommentDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long>{
+public interface CommentRepository extends JpaRepository<CommentDTO, Long>{
 
 	/*
 	 * Generic type은 관리하는 Entity와 그 Entity의 primary type
@@ -18,11 +18,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 	 */
 	
 //	게시판 글번호를 받아 해당 번호에 달린 댓글리스트 얻어오기
-	List<Comment> findByPcode(Long pcode);
+	List<CommentDTO> findByPcode(Long pcode);
 	
 	int deleteByComment_num(Long comment_num);
-	List<Comment> findByComment(String comment);
-	List<Comment> findByNickname(String nickName);
+	List<CommentDTO> findByComment(String comment);
+	List<CommentDTO> findByNickname(String nickName);
 	
 
 }

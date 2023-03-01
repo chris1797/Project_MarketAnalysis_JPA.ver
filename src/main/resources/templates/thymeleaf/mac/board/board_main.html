@@ -54,11 +54,11 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <div class="nav-item dropdown">
-                        <a href="/board/main" class="nav-link dropdown-toggle">커뮤니티</a>
+                        <a href="/boardDTO/main" class="nav-link dropdown-toggle">커뮤니티</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/board/free/list" class="dropdown-item">자유게시판</a>
-                            <a href="/board/ads/list" class="dropdown-item">광고게시판</a>
-                            <a href="/board/notice/list" class="dropdown-item">공지사항</a>
+                            <a href="/boardDTO/free/list" class="dropdown-item">자유게시판</a>
+                            <a href="/boardDTO/ads/list" class="dropdown-item">광고게시판</a>
+                            <a href="/boardDTO/notice/list" class="dropdown-item">공지사항</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -81,12 +81,12 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div th:if="${idMac==null}">
                 <a href="/login/loginForm" class="btn btn-primary py-2 px-4 ms-3">로그인</a>
-                <a href="/user/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
+                <a href="/memberDTO/addForm" class="btn btn-primary py-2 px-4 ms-3">회원가입</a>
          </div></div>
          <div th:if="${idMac !=null}">
          <h5 th:text="${idMac}+'님 환영합니다'" th:style="'color:gray'"></h5>
           <a href="" class="btn btn-primary py-2 px-4 ms-3" id="logout">로그아웃</a>
-          <a th:href="'/user/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
+          <a th:href="'/memberDTO/detail/'+${idMac}" class="btn btn-primary py-2 px-4 ms-3">마이페이지</a>
          </div>
             </div>
         </nav>
@@ -109,7 +109,7 @@
 				<div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
 					<div class="swiper-slide swiper-slide-active" style="width: 420.55555555555554px;">
 						<div class="box best">
-							<a href="/board/notice/list">
+							<a href="/boardDTO/notice/list">
 								<dl>
 									<div>
 										<img src="/main/img/il_best.svg" height="160px">
@@ -126,7 +126,7 @@
 
 					<div class="swiper-slide swiper-slide-next" style="width: 420.55555555555554px;">
 						<div class="box business">
-							<a href="/board/free/list">
+							<a href="/boardDTO/free/list">
 								<dl>
 									<img src="/main/img/il_start.svg" height="160px">
 									<div>
@@ -141,7 +141,7 @@
 
 					<div class="swiper-slide" style="width: 420.55555555555554px;">
 						<div class="box start">
-							<a href="/board/ads/list">
+							<a href="/boardDTO/ads/list">
 								<dl>
 									<img src="/main/img/il_business.svg" height="160px">
 									<div>

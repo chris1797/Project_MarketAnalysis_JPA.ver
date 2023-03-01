@@ -1,6 +1,6 @@
 package com.ezen.demo;
 
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.MemberDTO;
 import com.mac.demo.repository.UserRepository;
 import org.junit.After;
 import org.junit.Test;
@@ -25,12 +25,12 @@ public class UserRepositoryTest {
     @Test
     public void savetest() throws Exception {
         String id = "user1";
-        User user = User.builder()
+        MemberDTO memberDTO = MemberDTO.builder()
                 .user_id(id)
                 .user_pw("123")
                 .phonenum("010-1234-1234")
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(memberDTO);
     }
 }

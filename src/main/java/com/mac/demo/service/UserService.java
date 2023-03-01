@@ -1,23 +1,23 @@
 package com.mac.demo.service;
 
 import com.github.pagehelper.PageInfo;
-import com.mac.demo.dto.User;
+import com.mac.demo.dto.MemberDTO;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> findByUsernameContaining(String userName);
-    PageInfo<User> getList();
+    List<MemberDTO> findByUsernameContaining(String userName);
+    PageInfo<MemberDTO> getList();
 
     boolean delete(Long user_num);
 
-    boolean add(User user);
+    boolean add(MemberDTO memberDTO);
 
     // Impl 수정 필요
 
-    User getOne(String user_id);
+    MemberDTO getOne(String user_id);
 
-    boolean updated(User user);
+    boolean updated(MemberDTO memberDTO);
 
     boolean idcheck(String idMac);
 
